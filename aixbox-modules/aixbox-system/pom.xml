@@ -5,16 +5,17 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.aixbox</groupId>
-        <artifactId>Springboot-Biz-Template</artifactId>
+        <artifactId>aixbox-modules</artifactId>
         <version>${revision}</version>
     </parent>
 
-    <artifactId>aixbox-admin</artifactId>
+    <artifactId>aixbox-system</artifactId>
 
     <dependencies>
+
         <dependency>
             <groupId>com.aixbox</groupId>
-            <artifactId>aixbox-system</artifactId>
+            <artifactId>aixbox-common-web</artifactId>
         </dependency>
     </dependencies>
 

@@ -10,6 +10,11 @@
     </parent>
 
     <artifactId>aixbox-common</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>aixbox-common-web</module>
+        <module>aixbox-common-bom</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
