@@ -1,6 +1,7 @@
 package com.aixbox.common.mybatis.config;
 
 
+import com.aixbox.common.mybatis.core.handler.DefaultDBFieldHandler;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.parser.JsqlParserGlobal;
@@ -38,10 +39,9 @@ public class MybatisAutoConfiguration {
         return mybatisPlusInterceptor;
     }
 
-    //todo 添加字段填充
-    //@Bean
-    //public MetaObjectHandler defaultMetaObjectHandler() {
-    //    return new DefaultDBFieldHandler(); // 自动填充参数类
-    //}
+    @Bean
+    public MetaObjectHandler defaultMetaObjectHandler() {
+        return new DefaultDBFieldHandler(); // 自动填充参数类
+    }
 
 }
