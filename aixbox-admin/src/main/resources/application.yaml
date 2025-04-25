@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: aixbox-admin
+  profiles:
+    active: local
+
+aixbox:
+  info:
+    version: 1.0.0
+    base-package: com.aixbox

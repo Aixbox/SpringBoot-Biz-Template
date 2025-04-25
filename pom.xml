@@ -19,13 +19,17 @@
         <mybatis-plus-join.version>1.4.13</mybatis-plus-join.version>
         <springdoc.version>2.8.5</springdoc.version>
         <therapi-javadoc.version>0.15.0</therapi-javadoc.version>
+
         <hutool.version>5.8.35</hutool.version>
         <guava.version>33.4.0-jre</guava.version>
 
-
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>17</java.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
     </properties>
 
     <!--依赖声明-->
@@ -130,5 +134,24 @@
         <module>aixbox-common</module>
         <module>aixbox-modules</module>
     </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <parameters>true</parameters>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

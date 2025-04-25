@@ -17,6 +17,17 @@
             <groupId>com.aixbox</groupId>
             <artifactId>aixbox-common-web</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.aixbox</groupId>
+            <artifactId>aixbox-common-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aixbox</groupId>
+            <artifactId>aixbox-common-mybatis</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

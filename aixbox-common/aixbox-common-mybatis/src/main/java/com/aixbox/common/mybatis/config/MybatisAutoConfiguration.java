@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  * Mybatis 配置类
  */
 @AutoConfiguration(before = MybatisPlusAutoConfiguration.class) // 目的：先于 MyBatis Plus 自动配置，避免 @MapperScan 可能扫描不到 Mapper 打印 warn 日志
-@MapperScan(value = "${aixbox.info.base-package}", annotationClass = Mapper.class,
+@MapperScan(value = "${aixbox.info.base-package}.**.mapper", annotationClass = Mapper.class,
         lazyInitialization = "${mybatis.lazy-initialization:false}") // Mapper 懒加载，目前仅用于单元测试
 public class MybatisAutoConfiguration {
 
