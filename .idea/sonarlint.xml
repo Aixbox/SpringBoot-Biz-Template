@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SonarLintProjectSettings">
+    <option name="moduleMapping">
+      <map>
+        <entry key="aixbox-common-doc" value="ruoyi-common-doc" />
+      </map>
+    </option>
+  </component>
+</project>

@@ -16,10 +16,37 @@
     <dependencyManagement>
         <dependencies>
 
+            <!-- 核心模块 -->
+            <dependency>
+                <groupId>com.aixbox</groupId>
+                <artifactId>aixbox-common-core</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
             <!-- web服务 -->
             <dependency>
                 <groupId>com.aixbox</groupId>
                 <artifactId>aixbox-common-web</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <!-- 数据库服务 -->
+            <dependency>
+                <groupId>com.aixbox</groupId>
+                <artifactId>aixbox-common-mybatis</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <!-- 接口模块 -->
+            <dependency>
+                <groupId>com.aixbox</groupId>
+                <artifactId>aixbox-common-doc</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.aixbox</groupId>
+                <artifactId>aixbox-common-json</artifactId>
                 <version>${revision}</version>
             </dependency>
 
