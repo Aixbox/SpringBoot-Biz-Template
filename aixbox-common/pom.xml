@@ -18,6 +18,7 @@
         <module>aixbox-common-core</module>
         <module>aixbox-common-doc</module>
         <module>aixbox-common-json</module>
+        <module>aixbox-common-test</module>
     </modules>
 
     <properties>
