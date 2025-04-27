@@ -13,6 +13,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>aixbox-system</module>
+        <module>aixbox-generator</module>
+        <module>aixbox-demo</module>
     </modules>
 
     <properties>
