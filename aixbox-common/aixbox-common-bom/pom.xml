@@ -50,6 +50,18 @@
                 <version>${revision}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.aixbox</groupId>
+                <artifactId>aixbox-common-redis</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.aixbox</groupId>
+                <artifactId>aixbox-common-mybatis</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

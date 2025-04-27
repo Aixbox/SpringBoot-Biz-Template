@@ -1,2 +1,2 @@
-com.aixbox.common.datasource.config.DataSourceAutoConfiguration
+com.aixbox.common.datasource.config.AixboxDataSourceAutoConfiguration
 com.aixbox.common.mybatis.config.MybatisAutoConfiguration
