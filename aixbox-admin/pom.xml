@@ -12,10 +12,17 @@
     <artifactId>aixbox-admin</artifactId>
 
     <dependencies>
+
         <dependency>
             <groupId>com.aixbox</groupId>
             <artifactId>aixbox-system</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.aixbox</groupId>
+            <artifactId>aixbox-demo</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

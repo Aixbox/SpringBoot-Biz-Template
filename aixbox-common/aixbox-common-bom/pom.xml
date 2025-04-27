@@ -58,7 +58,7 @@
 
             <dependency>
                 <groupId>com.aixbox</groupId>
-                <artifactId>aixbox-common-mybatis</artifactId>
+                <artifactId>aixbox-common-test</artifactId>
                 <version>${revision}</version>
             </dependency>
 

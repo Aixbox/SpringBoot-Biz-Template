@@ -1,7 +1,9 @@
 package com.aixbox.demo.domain.vo.request;
 
 
+import com.aixbox.demo.domain.entity.TestDemo;
 import com.baomidou.mybatisplus.annotation.TableId;
+import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import org.wildfly.common.annotation.NotNull;
 
@@ -9,6 +11,7 @@ import org.wildfly.common.annotation.NotNull;
  *
  */
 @Data
+@AutoMapper(target = TestDemo.class)
 public class TestDemoUpdateReqVO {
 
     /**
