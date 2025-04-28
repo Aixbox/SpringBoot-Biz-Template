@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * TestDemo服务测试类
  */
 @DisplayName("TestDemo服务测试")
-@Import({TestDemoServiceImpl.class, Converter.class})
+@Import({TestDemoServiceImpl.class})
 class TestDemoServiceImplTest extends BaseDbUnitTest {
 
     @Resource
