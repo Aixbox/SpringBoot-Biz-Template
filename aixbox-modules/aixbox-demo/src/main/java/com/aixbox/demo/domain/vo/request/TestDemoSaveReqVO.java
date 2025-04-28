@@ -6,7 +6,7 @@ import lombok.Data;
 import org.wildfly.common.annotation.NotNull;
 
 /**
- *
+ * demo 新增参数
  */
 @Data
 public class TestDemoSaveReqVO {

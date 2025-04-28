@@ -3,12 +3,11 @@ package com.aixbox.demo.domain.entity;
 import com.aixbox.common.mybatis.core.dataobject.BaseDO;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.util.Date;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * demo测试对象
+ * demo对象
  */
 @TableName(value ="test_demo")
 @Data

@@ -9,13 +9,17 @@ import com.aixbox.demo.domain.vo.request.TestDemoPageReqVO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
-* demo测试Mapper接口
+* demo Mapper接口
 */
 @Mapper
 public interface TestDemoMapper extends BaseMapperX<TestDemo> {
 
+    /**
+    * 分页查询
+    * @param reqVO 请求参数
+    * @return demo分页对象
+    */
     default PageResult<TestDemo> selectPage(TestDemoPageReqVO reqVO) {
-
         return selectPage(reqVO, new LambdaQueryWrapperX<TestDemo>()
                 .likeIfPresent(TestDemo::getValue, reqVO.getValue())
                 .likeIfPresent(TestDemo::getTestKey, reqVO.getTestKey())

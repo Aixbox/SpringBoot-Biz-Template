@@ -2,12 +2,11 @@ package com.aixbox.demo.domain.vo.request;
 
 
 import com.aixbox.common.core.pojo.PageParam;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * TestDemo Request VO
+ * TestDemo 分页参数
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

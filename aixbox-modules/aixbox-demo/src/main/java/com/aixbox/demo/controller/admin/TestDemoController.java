@@ -28,7 +28,7 @@ import java.util.Arrays;
 import static com.aixbox.common.core.pojo.CommonResult.success;
 
 /**
- *
+ * demo Controller
  */
 @RequiredArgsConstructor
 @RestController
@@ -38,7 +38,9 @@ public class TestDemoController {
     private final TestDemoService testDemoService;
 
     /**
-     * 新增测试单表
+     * 新增demo
+     * @param addReqVO 新增参数
+     * @return 新增数据id
      */
     @PostMapping("/add")
     public CommonResult<Long> add(@Valid @RequestBody TestDemoSaveReqVO addReqVO) {
@@ -47,7 +49,9 @@ public class TestDemoController {
     }
 
     /**
-     * 修改测试单表
+     * 修改demo
+     * @param updateReqVO 修改参数
+     * @return 是否成功
      */
     @PutMapping("/update")
     public CommonResult<Boolean> edit(@Valid @RequestBody TestDemoUpdateReqVO updateReqVO) {
@@ -56,9 +60,9 @@ public class TestDemoController {
     }
 
     /**
-     * 删除测试单表
-     *
-     * @param ids 测试ID串
+     * 删除demo
+     * @param ids 删除id数组
+     * @return 是否成功
      */
     @DeleteMapping("/{ids}")
     public CommonResult<Boolean> remove(@NotEmpty(message = "主键不能为空")
@@ -68,9 +72,9 @@ public class TestDemoController {
     }
 
     /**
-     * 获取测试单表详细信息
-     *
-     * @param id 测试ID
+     * 获取demo详细信息
+     * @param id 数据id
+     * @return demo对象
      */
     @GetMapping("/{id}")
     public CommonResult<TestDemoRespVO> getTestDemo(@NotNull(message = "主键不能为空")
@@ -80,7 +84,9 @@ public class TestDemoController {
     }
 
     /**
-     * 自定义分页查询
+     * 分页查询demo
+     * @param pageReqVO 分页参数
+     * @return demo分页对象
      */
     @GetMapping("/page")
     public CommonResult<PageResult<TestDemoRespVO>> getTestDemoPage(@Valid TestDemoPageReqVO pageReqVO) {

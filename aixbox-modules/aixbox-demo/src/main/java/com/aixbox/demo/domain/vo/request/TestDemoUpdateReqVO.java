@@ -8,7 +8,7 @@ import lombok.Data;
 import org.wildfly.common.annotation.NotNull;
 
 /**
- *
+ * demo 更新参数
  */
 @Data
 @AutoMapper(target = TestDemo.class)
