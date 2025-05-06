@@ -26,4 +26,12 @@ public class SpringUtils extends SpringUtil {
         return Threading.VIRTUAL.isActive(getBean(Environment.class));
     }
 
+    /**
+     * 获取aop代理对象
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T getAopProxy(T invoker) {
+        return (T) getBean(invoker.getClass());
+    }
+
 }

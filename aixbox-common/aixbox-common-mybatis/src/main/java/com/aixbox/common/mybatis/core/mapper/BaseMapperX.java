@@ -196,6 +196,16 @@ public interface BaseMapperX<T> extends MPJBaseMapper<T> {
         return Db.saveBatch(entities, size);
     }
 
+    /**
+     * 批量插入或更新实体对象集合
+     *
+     * @param entityList 实体对象集合
+     * @return 插入或更新操作是否成功的布尔值
+     */
+    default boolean insertOrUpdateBatch(Collection<T> entityList) {
+        return Db.saveOrUpdateBatch(entityList);
+    }
+
     default int updateBatch(T update) {
         return update(update, new QueryWrapper<>());
     }

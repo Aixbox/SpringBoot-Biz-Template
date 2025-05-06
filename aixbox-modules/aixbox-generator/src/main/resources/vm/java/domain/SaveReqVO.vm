@@ -1,0 +1,30 @@
+package com.aixbox.demo.domain.vo.request;
+
+
+import lombok.Data;
+import org.wildfly.common.annotation.NotNull;
+
+/**
+ * demo 新增参数
+ */
+@Data
+public class SaveReqVO {
+
+    /**
+     * 用户id
+     */
+    @NotNull
+    private Long userId;
+
+    /**
+     * key键
+     */
+    @NotNull
+    private String testKey;
+
+    /**
+     * 值
+     */
+    private String value;
+
+}

@@ -40,6 +40,10 @@ public class ServiceException extends RuntimeException {
         this.message = message;
     }
 
+    public ServiceException(String message) {
+        this.message = message;
+    }
+
     public Integer getCode() {
         return code;
     }

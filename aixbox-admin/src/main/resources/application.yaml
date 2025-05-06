@@ -8,3 +8,8 @@ aixbox:
   info:
     version: 1.0.0
     base-package: com.aixbox
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true # 驼峰命名转换
+    auto-mapping-behavior: full # 字段映射

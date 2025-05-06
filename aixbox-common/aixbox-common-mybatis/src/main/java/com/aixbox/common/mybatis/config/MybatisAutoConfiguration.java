@@ -1,9 +1,12 @@
 package com.aixbox.common.mybatis.config;
 
 
+import cn.hutool.core.net.NetUtil;
 import com.aixbox.common.mybatis.core.handler.DefaultDBFieldHandler;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
+import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import com.baomidou.mybatisplus.extension.parser.JsqlParserGlobal;
 import com.baomidou.mybatisplus.extension.parser.cache.JdkSerialCaffeineJsqlParseCache;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -42,6 +45,15 @@ public class MybatisAutoConfiguration {
     @Bean
     public MetaObjectHandler defaultMetaObjectHandler() {
         return new DefaultDBFieldHandler(); // 自动填充参数类
+    }
+
+    /**
+     * 使用网卡信息绑定雪花生成器
+     * 防止集群雪花ID重复
+     */
+    @Bean
+    public IdentifierGenerator idGenerator() {
+        return new DefaultIdentifierGenerator(NetUtil.getLocalhost());
     }
 
 }

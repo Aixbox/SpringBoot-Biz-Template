@@ -23,6 +23,11 @@
             <artifactId>aixbox-demo</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.aixbox</groupId>
+            <artifactId>aixbox-generator</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

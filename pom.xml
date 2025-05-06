@@ -20,6 +20,8 @@
         <springdoc.version>2.8.5</springdoc.version>
         <therapi-javadoc.version>0.15.0</therapi-javadoc.version>
         <velocity.version>2.3</velocity.version>
+        <!-- 面向运行时的D-ORM依赖 -->
+        <anyline.version>8.7.2-20250101</anyline.version>
         <hutool.version>5.8.35</hutool.version>
         <guava.version>33.4.0-jre</guava.version>
         <mapstruct-plus.version>1.4.6</mapstruct-plus.version>
@@ -116,6 +118,18 @@
                 <groupId>org.apache.velocity</groupId>
                 <artifactId>velocity-engine-core</artifactId>
                 <version>${velocity.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.anyline</groupId>
+                <artifactId>anyline-environment-spring-data-jdbc</artifactId>
+                <version>${anyline.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.anyline</groupId>
+                <artifactId>anyline-data-jdbc-mysql</artifactId>
+                <version>${anyline.version}</version>
             </dependency>
 
             <dependency>
