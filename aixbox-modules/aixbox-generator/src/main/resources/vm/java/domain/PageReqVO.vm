@@ -1,25 +1,23 @@
-package com.aixbox.demo.domain.vo.request;
+package ${packageName}.domain.vo.request;
 
 
 import com.aixbox.common.core.pojo.PageParam;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+#foreach ($import in $importList)
+import ${import};
+#end
 
 /**
  * TestDemo 分页参数
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class PageReqVO extends PageParam {
+public class ${ClassName}PageReqVO extends PageParam {
 
     /**
-     * key键
+     * 关键字
      */
-    private String testKey;
-
-    /**
-     * 值
-     */
-    private String value;
+    private String keyword;
 
 }

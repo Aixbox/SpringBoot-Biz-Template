@@ -1,37 +1,39 @@
-package com.aixbox.demo.domain.entity;
+package ${packageName}.domain.entity;
 
 import com.aixbox.common.mybatis.core.dataobject.BaseDO;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+#foreach ($import in $importList)
+import ${import};
+#end
 
 /**
- * demo对象
+ * ${functionName}对象
  */
-@TableName(value ="test_demo")
+@TableName(value ="${tableName}")
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class entity extends BaseDO {
+public class ${ClassName} extends BaseDO {
 
+#foreach ($column in $columns)
+    #if(!$table.isSuperColumn($column.javaField))
     /**
-     * 主键
-     */
-    @TableId
-    private Long id;
+    * $column.columnComment
+    */
+    #if($column.javaField=='delFlag')
+    @TableLogic
+    #end
+    #if($column.javaField=='version')
+    @Version
+    #end
+    #if($column.isPk==1)
+    @TableId(value = "$column.columnName")
+    #end
+    private #if($column.javaType == 'Date')LocalDateTime#else${column.javaType}#end $column.javaField;
 
-    /**
-     * 用户id
-     */
-    private Long userId;
+    #end
+#end
 
-    /**
-     * key键
-     */
-    private String testKey;
-
-    /**
-     * 值
-     */
-    private String value;
 }

@@ -1,12 +1,12 @@
-package com.aixbox.demo.service.impl;
+package ${packageName}.service.impl;
 
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.test.core.ut.BaseDbUnitTest;
-import com.aixbox.demo.domain.entity.TestDemo;
-import com.aixbox.demo.domain.vo.request.TestDemoPageReqVO;
-import com.aixbox.demo.domain.vo.request.TestDemoSaveReqVO;
-import com.aixbox.demo.domain.vo.request.TestDemoUpdateReqVO;
-import com.aixbox.demo.mapper.TestDemoMapper;
+import ${packageName}.domain.entity.${ClassName};
+import ${packageName}.domain.vo.request.${ClassName}PageReqVO;
+import ${packageName}.domain.vo.request.${ClassName}SaveReqVO;
+import ${packageName}.domain.vo.request.${ClassName}UpdateReqVO;
+import ${packageName}.mapper.${ClassName}Mapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -23,30 +23,30 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * TestDemo服务测试类
+ * ${ClassName}服务测试类
  */
-@DisplayName("TestDemo服务测试")
-@Import({TestDemoServiceImpl.class})
-class TestDemoServiceImplTest extends BaseDbUnitTest {
+@DisplayName("${ClassName}服务测试")
+@Import({${ClassName}ServiceImpl.class})
+class ${ClassName}ServiceImplTest extends BaseDbUnitTest {
 
     @Resource
-    private TestDemoServiceImpl testDemoService;
+    private ${ClassName}ServiceImpl ${className}Service;
 
     @Resource
-    private TestDemoMapper testDemoMapper;
+    private ${ClassName}Mapper ${className}Mapper;
 
     @Nested
-    @DisplayName("新增TestDemo测试")
-    class AddTestDemoTests {
+    @DisplayName("新增${ClassName}测试")
+    class Add${ClassName}Tests {
 
         @Test
-        @DisplayName("新增TestDemo - 正常情况 - 应成功")
-        void addTestDemo_WhenNormal_ShouldSuccess() {
+        @DisplayName("新增${ClassName} - 正常情况 - 应成功")
+        void add${ClassName}_WhenNormal_ShouldSuccess() {
             // 准备测试数据
-            TestDemoSaveReqVO addReqVO = randomPojo(TestDemoSaveReqVO.class);
+            ${ClassName}SaveReqVO addReqVO = randomPojo(${ClassName}SaveReqVO.class);
 
             // 执行测试
-            Long resultId = testDemoService.addTestDemo(addReqVO);
+            Long resultId = ${className}Service.add${ClassName}(addReqVO);
 
             // 验证结果
             assertNotNull(resultId);
@@ -54,22 +54,22 @@ class TestDemoServiceImplTest extends BaseDbUnitTest {
     }
 
     @Nested
-    @DisplayName("更新TestDemo测试")
-    class UpdateTestDemoTests {
+    @DisplayName("更新${ClassName}测试")
+    class Update${ClassName}Tests {
 
         @Test
-        @DisplayName("更新TestDemo - 存在数据 - 应成功")
-        void updateTestDemo_WhenExists_ShouldSuccess() {
+        @DisplayName("更新${ClassName} - 存在数据 - 应成功")
+        void update${ClassName}_WhenExists_ShouldSuccess() {
             //准备参数
-            TestDemo testDemo = randomPojo(TestDemo.class);
-            testDemoMapper.insert(testDemo);
+            ${ClassName} ${className} = randomPojo(${ClassName}.class);
+            ${className}Mapper.insert(${className});
 
             // 准备测试数据
-            TestDemoUpdateReqVO testDemoUpdateReqVO = randomPojo(TestDemoUpdateReqVO.class);
-            testDemoUpdateReqVO.setId(testDemo.getId());
+            ${ClassName}UpdateReqVO ${className}UpdateReqVO = randomPojo(${ClassName}UpdateReqVO.class);
+            ${className}UpdateReqVO.setId(${className}.getId());
 
             // 执行测试
-            Boolean result = testDemoService.updateTestDemo(testDemoUpdateReqVO);
+            Boolean result = ${className}Service.update${ClassName}(${className}UpdateReqVO);
 
             // 验证结果
             assertTrue(result);
@@ -77,20 +77,20 @@ class TestDemoServiceImplTest extends BaseDbUnitTest {
     }
 
     @Nested
-    @DisplayName("删除TestDemo测试")
-    class DeleteTestDemoTests {
+    @DisplayName("删除${ClassName}测试")
+    class Delete${ClassName}Tests {
 
         @Test
-        @DisplayName("删除TestDemo - 存在数据 - 应成功")
-        void deleteTestDemo_WhenExists_ShouldSuccess() {
+        @DisplayName("删除${ClassName} - 存在数据 - 应成功")
+        void delete${ClassName}_WhenExists_ShouldSuccess() {
             // 准备测试数据
-            TestDemo testDemo1 = randomPojo(TestDemo.class);
-            TestDemo testDemo2 = randomPojo(TestDemo.class);
-            testDemoMapper.insertBatch(Arrays.asList(testDemo1, testDemo2));
-            List<Long> ids = Arrays.asList(testDemo1.getId(), testDemo2.getId());
+            ${ClassName} ${className}1 = randomPojo(${ClassName}.class);
+            ${ClassName} ${className}2 = randomPojo(${ClassName}.class);
+            ${className}Mapper.insertBatch(Arrays.asList(${className}1, ${className}2));
+            List<Long> ids = Arrays.asList(${className}1.getId(), ${className}2.getId());
 
             // 执行测试
-            Boolean result = testDemoService.deleteTestDemo(ids);
+            Boolean result = ${className}Service.delete${ClassName}(ids);
 
             // 验证结果
             assertTrue(result);
@@ -98,47 +98,47 @@ class TestDemoServiceImplTest extends BaseDbUnitTest {
     }
 
     @Nested
-    @DisplayName("获取TestDemo测试")
-    class GetTestDemoTests {
+    @DisplayName("获取${ClassName}测试")
+    class Get${ClassName}Tests {
 
         @Test
-        @DisplayName("获取TestDemo - 存在数据 - 应成功返回")
-        void getTestDemo_WhenExists_ShouldReturnData() {
+        @DisplayName("获取${ClassName} - 存在数据 - 应成功返回")
+        void get${ClassName}_WhenExists_ShouldReturnData() {
             // 准备测试数据
-            TestDemo testDemo = randomPojo(TestDemo.class);
-            testDemoMapper.insert(testDemo);
+            ${ClassName} ${className} = randomPojo(${ClassName}.class);
+            ${className}Mapper.insert(${className});
 
             // 执行测试
-            TestDemo result = testDemoService.getTestDemo(testDemo.getId());
+            ${ClassName} result = ${className}Service.get${ClassName}(${className}.getId());
 
             // 验证结果
             assertNotNull(result);
-            assertEquals(testDemo.getId(), result.getId());
+            assertEquals(${className}.getId(), result.getId());
         }
     }
 
     @Nested
-    @DisplayName("分页查询TestDemo测试")
-    class GetTestDemoPageTests {
+    @DisplayName("分页查询${ClassName}测试")
+    class Get${ClassName}PageTests {
 
         @Test
-        @DisplayName("分页查询TestDemo - 有数据 - 应成功返回")
-        void getTestDemoPage_WhenHasData_ShouldReturnPage() {
+        @DisplayName("分页查询${ClassName} - 有数据 - 应成功返回")
+        void get${ClassName}Page_WhenHasData_ShouldReturnPage() {
             // 准备测试数据
-            TestDemo testDemo1 = randomPojo(TestDemo.class);
-            testDemoMapper.insert(testDemo1);
+            ${ClassName} ${className}1 = randomPojo(${ClassName}.class);
+            ${className}Mapper.insert(${className}1);
 
 
-            TestDemoPageReqVO testDemoPageReqVO = new TestDemoPageReqVO();
-            testDemoPageReqVO.setPageNo(1);
-            testDemoPageReqVO.setPageSize(10);
+            ${ClassName}PageReqVO ${className}PageReqVO = new ${ClassName}PageReqVO();
+            ${className}PageReqVO.setPageNo(1);
+            ${className}PageReqVO.setPageSize(10);
             // 执行测试
-            PageResult<TestDemo> result = testDemoService.getTestDemoPage(testDemoPageReqVO);
+            PageResult<${ClassName}> result = ${className}Service.get${ClassName}Page(${className}PageReqVO);
 
             // 验证结果
             assertNotNull(result);
             assertEquals(1, result.getTotal());
-            assertEquals(testDemo1.getId(), result.getList().get(0).getId());
+            assertEquals(${className}1.getId(), result.getList().get(0).getId());
         }
     }
 }

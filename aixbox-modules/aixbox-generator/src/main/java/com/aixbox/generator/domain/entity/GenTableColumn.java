@@ -188,7 +188,7 @@ public class GenTableColumn extends BaseDO {
     public static boolean isSuperColumn(String javaField) {
         return StrUtils.equalsAnyIgnoreCase(javaField,
             // BaseEntity
-            "createBy", "createTime", "updateBy", "updateTime",
+            "creator", "createTime", "updater", "updateTime",
             // TreeEntity
             "parentName", "parentId");
     }

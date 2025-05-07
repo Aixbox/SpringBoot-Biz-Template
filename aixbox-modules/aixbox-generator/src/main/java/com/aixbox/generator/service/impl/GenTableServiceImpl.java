@@ -112,7 +112,7 @@ public class GenTableServiceImpl implements GenTableService {
         // 查询表信息
         GenTable table = genTableMapper.selectGenTableById(tableId);
 
-        String baseDir = new File(System.getProperty("user.dir")).getParentFile().getAbsolutePath();// 当前项目目录
+        String baseDir = new File(System.getProperty("user.dir")).getParentFile().getParentFile().getAbsolutePath();// 当前项目目录
         String dir = "\\generator";
         String basePath  = baseDir + dir;
         String fileName = StrUtils.format("{}Code.zip", table.getClassName());

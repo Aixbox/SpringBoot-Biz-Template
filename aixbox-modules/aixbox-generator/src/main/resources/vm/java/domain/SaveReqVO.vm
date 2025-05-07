@@ -1,30 +1,30 @@
-package com.aixbox.demo.domain.vo.request;
+package ${packageName}.domain.vo.request;
 
 
 import lombok.Data;
 import org.wildfly.common.annotation.NotNull;
+#foreach ($import in $importList)
+import ${import};
+#end
 
 /**
- * demo 新增参数
+ * ${functionName} 新增参数
  */
 @Data
-public class SaveReqVO {
+public class ${ClassName}SaveReqVO {
 
+#foreach ($column in $columns)
+    #set($skipFields = ["updateTime", "creator", "updater", "deleted", "createTime"])
+    #set($isSkipField = $skipFields.contains($column.javaField))
+    #set($isPk = $column.isPk==1)
+    #if($isSkipField || $isPk)
+        ## 跳过这些字段
+    #else
     /**
-     * 用户id
-     */
-    @NotNull
-    private Long userId;
-
-    /**
-     * key键
-     */
-    @NotNull
-    private String testKey;
-
-    /**
-     * 值
-     */
-    private String value;
+    * $column.columnComment
+    */
+    private #if($column.javaType == 'Date')LocalDateTime#else${column.javaType}#end $column.javaField;
+    #end
+#end
 
 }

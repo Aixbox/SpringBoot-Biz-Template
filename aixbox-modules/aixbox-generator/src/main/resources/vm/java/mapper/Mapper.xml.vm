@@ -2,23 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.aixbox.demo.mapper.TestDemoMapper">
+<mapper namespace="${packageName}.mapper.${ClassName}Mapper">
 
-    <resultMap id="BaseResultMap" type="com.aixbox.demo.domain.entity.TestDemo">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="userId" column="user_id" jdbcType="BIGINT"/>
-            <result property="testKey" column="test_key" jdbcType="VARCHAR"/>
-            <result property="value" column="value" jdbcType="VARCHAR"/>
-            <result property="creator" column="creator" jdbcType="VARCHAR"/>
-            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="updater" column="updater" jdbcType="VARCHAR"/>
-            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
-            <result property="deleted" column="deleted" jdbcType="BIT"/>
-    </resultMap>
 
-    <sql id="Base_Column_List">
-        id,user_id,test_key,
-        value,creator,create_time,
-        updater,update_time,deleted
-    </sql>
 </mapper>

@@ -1,37 +1,36 @@
-package com.aixbox.demo.domain.vo.request;
+package ${packageName}.domain.vo.request;
 
-
+import ${packageName}.domain.entity.${ClassName};
 import com.aixbox.demo.domain.entity.TestDemo;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import org.wildfly.common.annotation.NotNull;
+#foreach ($import in $importList)
+import ${import};
+#end
+
 
 /**
- * demo 更新参数
+ * ${functionName} 更新参数
  */
 @Data
-@AutoMapper(target = TestDemo.class)
-public class UpdateReqVO {
+@AutoMapper(target = ${ClassName}.class)
+public class ${ClassName}UpdateReqVO {
 
+#foreach ($column in $columns)
+    #set($skipFields = ["updateTime", "creator", "updater", "deleted", "createTime"])
+    #set($isSkipField = $skipFields.contains($column.javaField))
+    #if($isSkipField)
+        ## 跳过这些字段
+    #else
     /**
-     * 主键
-     */
+    * $column.columnComment
+    */
+    #if($column.isPk==1)
     @NotNull
-    private Long id;
-
-    /**
-     * 用户id
-     */
-    private Long userId;
-
-    /**
-     * key键
-     */
-    private String testKey;
-
-    /**
-     * 值
-     */
-    private String value;
+    #end
+    private #if($column.javaType == 'Date')LocalDateTime#else${column.javaType}#end $column.javaField;
+    #end
+#end
 
 }
