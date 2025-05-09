@@ -86,7 +86,7 @@ public class SysClientController {
     /**
      * 分页查询demo
      * @param pageReqVO 分页参数
-     * @return demo分页对象
+     * @return demo 分页对象
      */
     @GetMapping("/page")
     public CommonResult<PageResult<SysClientRespVO>> getSysClientPage(@Valid SysClientPageReqVO pageReqVO) {

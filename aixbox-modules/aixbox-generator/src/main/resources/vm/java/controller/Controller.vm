@@ -74,7 +74,7 @@ public class ${ClassName}Controller {
     /**
      * 获取${functionName}详细信息
      * @param id 数据id
-     * @return demo对象
+     * @return ${functionName}对象
      */
     @GetMapping("/{id}")
     public CommonResult<${ClassName}RespVO> get${ClassName}(@NotNull(message = "主键不能为空")
@@ -86,7 +86,7 @@ public class ${ClassName}Controller {
     /**
      * 分页查询demo
      * @param pageReqVO 分页参数
-     * @return demo分页对象
+     * @return ${functionName}分页对象
      */
     @GetMapping("/page")
     public CommonResult<PageResult<${ClassName}RespVO>> get${ClassName}Page(@Valid ${ClassName}PageReqVO pageReqVO) {

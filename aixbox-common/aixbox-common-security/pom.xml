@@ -5,23 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.aixbox</groupId>
-        <artifactId>Springboot-Biz-Template</artifactId>
+        <artifactId>aixbox-common</artifactId>
         <version>${revision}</version>
     </parent>
 
-    <artifactId>aixbox-common</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>aixbox-common-bom</module>
-        <module>aixbox-common-web</module>
-        <module>aixbox-common-core</module>
-        <module>aixbox-common-mybatis</module>
-        <module>aixbox-common-doc</module>
-        <module>aixbox-common-json</module>
-        <module>aixbox-common-test</module>
-        <module>aixbox-common-redis</module>
-        <module>aixbox-common-security</module>
-    </modules>
+    <artifactId>aixbox-common-security</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
