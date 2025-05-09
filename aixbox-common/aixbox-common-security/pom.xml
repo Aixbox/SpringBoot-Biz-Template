@@ -11,10 +11,34 @@
 
     <artifactId>aixbox-common-security</artifactId>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <dependencies>
+
+        <dependency>
+            <groupId>com.aixbox</groupId>
+            <artifactId>aixbox-common-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aixbox</groupId>
+            <artifactId>aixbox-common-redis</artifactId>
+        </dependency>
+
+        <!-- Sa-Token 权限认证, 在线文档：http://sa-token.dev33.cn/ -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot3-starter</artifactId>
+        </dependency>
+
+        <!-- Sa-Token 整合 jwt -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-jwt</artifactId>
+        </dependency>
+
+
+
+
+
+    </dependencies>
 
 </project>

@@ -1,0 +1,3 @@
+com.aixbox.common.security.config.SaTokenConfig
+com.aixbox.common.security.handler.AllUrlHandler
+com.aixbox.common.security.config.SecurityConfig
