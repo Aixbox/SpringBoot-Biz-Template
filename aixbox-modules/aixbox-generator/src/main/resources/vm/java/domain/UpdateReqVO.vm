@@ -1,7 +1,6 @@
 package ${packageName}.domain.vo.request;
 
 import ${packageName}.domain.entity.${ClassName};
-import com.aixbox.demo.domain.entity.TestDemo;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import org.wildfly.common.annotation.NotNull;

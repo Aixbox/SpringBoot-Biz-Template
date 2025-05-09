@@ -30,13 +30,13 @@ public class GeneratorCode {
         //数据源
         String dataName = "master";
         //表名
-        String[] tableNames = {"demo_test"};
+        String[] tableNames = {"sys_user_role"};
         //包路径
-        String packageName = "com.aixbox.demo";
+        String packageName = "com.aixbox.system";
         //模块名
-        String moduleName = "demo";
+        String moduleName = "system";
         //功能名
-        String functionName = "测试";
+        String functionName = "用户和角色关联";
 
 
         //查询数据库是否存在表
@@ -57,7 +57,8 @@ public class GeneratorCode {
         GenTable genTable = new GenTable()
                 .setTableId(tableId)
                 .setPackageName(packageName)
-                .setModuleName(moduleName);
+                .setModuleName(moduleName)
+                .setFunctionName(functionName);
         genTableService.updateGenTable(genTable);
 
         //生成代码

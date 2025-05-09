@@ -1,0 +1,99 @@
+package com.aixbox.system.controller.admin;
+
+
+import com.aixbox.common.core.pojo.CommonResult;
+import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.common.core.utils.object.BeanUtils;
+import com.aixbox.system.domain.entity.SysRole;
+import com.aixbox.system.domain.vo.request.SysRolePageReqVO;
+import com.aixbox.system.domain.vo.request.SysRoleSaveReqVO;
+import com.aixbox.system.domain.vo.request.SysRoleUpdateReqVO;
+import com.aixbox.system.domain.vo.response.SysRoleRespVO;
+import com.aixbox.system.service.SysRoleService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Arrays;
+
+import static com.aixbox.common.core.pojo.CommonResult.success;
+
+/**
+ * 角色 Controller
+ */
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/system/role")
+public class SysRoleController {
+
+    private final SysRoleService sysRoleService;
+
+    /**
+     * 新增角色
+     * @param addReqVO 新增参数
+     * @return 新增数据id
+     */
+    @PostMapping("/add")
+    public CommonResult<Long> add(@Valid @RequestBody SysRoleSaveReqVO addReqVO) {
+        Long sysRoleId = sysRoleService.addSysRole(addReqVO);
+        return success(sysRoleId);
+    }
+
+    /**
+     * 修改角色
+     * @param updateReqVO 修改参数
+     * @return 是否成功
+     */
+    @PutMapping("/update")
+    public CommonResult<Boolean> edit(@Valid @RequestBody SysRoleUpdateReqVO updateReqVO) {
+        Boolean result = sysRoleService.updateSysRole(updateReqVO);
+        return success(result);
+    }
+
+    /**
+     * 删除角色
+     * @param ids 删除id数组
+     * @return 是否成功
+     */
+    @DeleteMapping("/{ids}")
+    public CommonResult<Boolean> remove(@NotEmpty(message = "主键不能为空")
+                                     @PathVariable Long[] ids) {
+        Boolean result = sysRoleService.deleteSysRole(Arrays.asList(ids));
+        return success(result);
+    }
+
+    /**
+     * 获取角色详细信息
+     * @param id 数据id
+     * @return demo对象
+     */
+    @GetMapping("/{id}")
+    public CommonResult<SysRoleRespVO> getSysRole(@NotNull(message = "主键不能为空")
+                                                    @PathVariable("id") Long id) {
+        SysRole sysRole = sysRoleService.getSysRole(id);
+        return success(BeanUtils.toBean(sysRole, SysRoleRespVO.class));
+    }
+
+    /**
+     * 分页查询demo
+     * @param pageReqVO 分页参数
+     * @return demo分页对象
+     */
+    @GetMapping("/page")
+    public CommonResult<PageResult<SysRoleRespVO>> getSysRolePage(@Valid SysRolePageReqVO pageReqVO) {
+        PageResult<SysRole> pageResult = sysRoleService.getSysRolePage(pageReqVO);
+        return success(BeanUtils.toBean(pageResult, SysRoleRespVO.class));
+    }
+
+
+
+}
