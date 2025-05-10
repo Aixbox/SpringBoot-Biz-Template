@@ -30,6 +30,11 @@
             <artifactId>spring-boot-starter-undertow</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.aixbox</groupId>
+            <artifactId>aixbox-common-core</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
