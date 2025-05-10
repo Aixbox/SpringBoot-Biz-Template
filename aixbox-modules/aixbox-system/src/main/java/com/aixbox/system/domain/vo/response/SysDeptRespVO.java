@@ -54,6 +54,11 @@ public class SysDeptRespVO {
     * 创建时间
     */
     private LocalDateTime createTime;
+
+    /**
+     * 父部门名称
+     */
+    private String parentName;
                         
 
 }

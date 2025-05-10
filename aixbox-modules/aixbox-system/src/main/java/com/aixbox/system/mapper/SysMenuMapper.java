@@ -5,8 +5,11 @@ import com.aixbox.common.mybatis.core.dataobject.BaseDO;
 import com.aixbox.common.mybatis.core.mapper.BaseMapperX;
 import com.aixbox.common.mybatis.core.query.LambdaQueryWrapperX;
 import com.aixbox.system.domain.entity.SysMenu;
+import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.vo.request.SysMenuPageReqVO;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
 * 菜单 Mapper接口
@@ -33,6 +36,14 @@ public interface SysMenuMapper extends BaseMapperX<SysMenu> {
                 .likeIfPresent(SysMenu::getRemark, reqVO.getKeyword())
                 .orderByDesc(BaseDO::getCreateTime));
     }
+
+    /**
+     * 根据用户ID查询权限
+     *
+     * @param userId 用户ID
+     * @return 权限列表
+     */
+    List<String> selectMenuPermsByUserId(Long userId);
 
 }
 

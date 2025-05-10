@@ -31,6 +31,11 @@ public class ServiceExceptionUtil {
         return new ServiceException(code, message);
     }
 
+    public static ServiceException exception0(ErrorCode errorCode, String messagePattern, Object... params) {
+        String message = doFormat(errorCode.getCode(), messagePattern, params);
+        return new ServiceException(errorCode.getCode(), message);
+    }
+
     public static ServiceException invalidParamException(String messagePattern, Object... params) {
         return exception0(GlobalErrorCodeConstants.BAD_REQUEST.getCode(), messagePattern, params);
     }

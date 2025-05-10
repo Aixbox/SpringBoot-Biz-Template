@@ -1,10 +1,12 @@
 package com.aixbox.system.service;
 
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.system.constant.CacheNames;
 import com.aixbox.system.domain.entity.SysClient;
 import com.aixbox.system.domain.vo.request.SysClientPageReqVO;
 import com.aixbox.system.domain.vo.request.SysClientSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysClientUpdateReqVO;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -47,4 +49,7 @@ public interface SysClientService {
      * @return 客户端分页对象
      */
     PageResult<SysClient> getSysClientPage(SysClientPageReqVO pageReqVO);
+
+    @Cacheable(cacheNames = CacheNames.SYS_CLIENT, key = "#clientId")
+    SysClient queryByClientId(String clientId);
 }

@@ -3,13 +3,16 @@ package com.aixbox.system.service.impl;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
+import com.aixbox.system.constant.CacheNames;
 import com.aixbox.system.domain.entity.SysClient;
 import com.aixbox.system.domain.vo.request.SysClientPageReqVO;
 import com.aixbox.system.domain.vo.request.SysClientSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysClientUpdateReqVO;
 import com.aixbox.system.mapper.SysClientMapper;
 import com.aixbox.system.service.SysClientService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -75,6 +78,16 @@ public class SysClientServiceImpl implements SysClientService {
     public PageResult<SysClient> getSysClientPage(SysClientPageReqVO pageReqVO) {
         return sysClientMapper.selectPage(pageReqVO);
     }
+
+    /**
+     * 查询客户端管理
+     */
+    @Cacheable(cacheNames = CacheNames.SYS_CLIENT, key = "#clientId")
+    @Override
+    public SysClient queryByClientId(String clientId) {
+        return sysClientMapper.selectOne(new LambdaQueryWrapper<SysClient>().eq(SysClient::getClientId, clientId));
+    }
+
 }
 
 

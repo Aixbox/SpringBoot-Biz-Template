@@ -5,6 +5,7 @@ import com.aixbox.system.domain.entity.SysPost;
 import com.aixbox.system.domain.vo.request.SysPostPageReqVO;
 import com.aixbox.system.domain.vo.request.SysPostSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysPostUpdateReqVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -47,4 +48,12 @@ public interface SysPostService {
      * @return 岗位分页对象
      */
     PageResult<SysPost> getSysPostPage(SysPostPageReqVO pageReqVO);
+
+    /**
+     * 查询用户所属岗位组
+     *
+     * @param userId 用户ID
+     * @return 岗位ID
+     */
+    List<SysPost> selectPostsByUserId(@Param("userId") Long userId);
 }

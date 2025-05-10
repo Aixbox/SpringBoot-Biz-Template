@@ -1,6 +1,7 @@
 package com.aixbox.system.service.impl;
 
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.common.core.utils.StrUtils;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
 import com.aixbox.system.domain.entity.SysMenu;
@@ -12,7 +13,9 @@ import com.aixbox.system.service.SysMenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
 * 菜单 Service实现类
@@ -75,6 +78,26 @@ public class SysMenuServiceImpl implements SysMenuService {
     public PageResult<SysMenu> getSysMenuPage(SysMenuPageReqVO pageReqVO) {
         return sysMenuMapper.selectPage(pageReqVO);
     }
+
+
+    /**
+     * 根据用户ID查询权限
+     *
+     * @param userId 用户ID
+     * @return 权限列表
+     */
+    @Override
+    public Set<String> selectMenuPermsByUserId(Long userId) {
+        List<String> perms = sysMenuMapper.selectMenuPermsByUserId(userId);
+        Set<String> permsSet = new HashSet<>();
+        for (String perm : perms) {
+            if (StrUtils.isNotEmpty(perm)) {
+                permsSet.addAll(StrUtils.splitList(perm.trim()));
+            }
+        }
+        return permsSet;
+    }
+
 }
 
 

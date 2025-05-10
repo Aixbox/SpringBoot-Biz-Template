@@ -8,6 +8,8 @@ import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.vo.request.SysRolePageReqVO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
 * 角色 Mapper接口
 */
@@ -28,6 +30,14 @@ public interface SysRoleMapper extends BaseMapperX<SysRole> {
                 .likeIfPresent(SysRole::getRemark, reqVO.getKeyword())
                 .orderByDesc(BaseDO::getCreateTime));
     }
+
+    /**
+     * 根据用户ID查询角色
+     *
+     * @param userId 用户ID
+     * @return 角色列表
+     */
+    List<SysRole> selectRolesByUserId(Long userId);
 
 }
 

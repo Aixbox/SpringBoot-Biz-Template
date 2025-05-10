@@ -7,6 +7,7 @@ import com.aixbox.system.domain.vo.request.SysMenuSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysMenuUpdateReqVO;
 
 import java.util.List;
+import java.util.Set;
 
 /**
 * 菜单 Service接口
@@ -47,4 +48,6 @@ public interface SysMenuService {
      * @return 菜单分页对象
      */
     PageResult<SysMenu> getSysMenuPage(SysMenuPageReqVO pageReqVO);
+
+    Set<String> selectMenuPermsByUserId(Long userId);
 }

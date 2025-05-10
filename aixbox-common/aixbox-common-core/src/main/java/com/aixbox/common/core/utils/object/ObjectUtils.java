@@ -7,11 +7,12 @@ import cn.hutool.core.util.ReflectUtil;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Object 工具类
  */
-public class ObjectUtils {
+public class ObjectUtils extends ObjectUtil {
 
     /**
      * 复制对象，并忽略 Id 编号
@@ -57,6 +58,20 @@ public class ObjectUtils {
     @SafeVarargs
     public static <T> boolean equalsAny(T obj, T... array) {
         return Arrays.asList(array).contains(obj);
+    }
+
+    /**
+     * 如果对象不为空，则获取对象中的某个字段 ObjectUtils.notNullGetter(user, User::getName);
+     *
+     * @param obj 对象
+     * @param func 获取方法
+     * @return 对象字段
+     */
+    public static <T, E> E notNullGetter(T obj, Function<T, E> func) {
+        if (isNotNull(obj) && isNotNull(func)) {
+            return func.apply(obj);
+        }
+        return null;
     }
 
 }

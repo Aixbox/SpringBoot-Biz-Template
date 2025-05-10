@@ -7,6 +7,7 @@ import com.aixbox.system.domain.vo.request.SysRoleSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysRoleUpdateReqVO;
 
 import java.util.List;
+import java.util.Set;
 
 /**
 * 角色 Service接口
@@ -47,4 +48,14 @@ public interface SysRoleService {
      * @return 角色分页对象
      */
     PageResult<SysRole> getSysRolePage(SysRolePageReqVO pageReqVO);
+
+    Set<String> selectRolePermissionByUserId(Long userId);
+
+    /**
+     * 根据用户ID查询角色列表
+     *
+     * @param userId 用户ID
+     * @return 角色列表
+     */
+    List<SysRole> selectRolesByUserId(Long userId);
 }

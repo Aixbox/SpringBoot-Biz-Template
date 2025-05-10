@@ -47,4 +47,13 @@ public interface SysUserService {
      * @return 用户分页对象
      */
     PageResult<SysUser> getSysUserPage(SysUserPageReqVO pageReqVO);
+
+    /**
+     * 注册用户信息
+     *
+     * @param user 用户信息
+     * @return 结果
+     */
+    boolean registerUser(SysUser user);
+
 }

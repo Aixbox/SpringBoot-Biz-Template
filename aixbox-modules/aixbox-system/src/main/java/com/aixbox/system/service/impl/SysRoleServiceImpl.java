@@ -1,6 +1,8 @@
 package com.aixbox.system.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.common.core.utils.StrUtils;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
 import com.aixbox.system.domain.entity.SysRole;
@@ -12,7 +14,9 @@ import com.aixbox.system.service.SysRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
 * 角色 Service实现类
@@ -74,6 +78,35 @@ public class SysRoleServiceImpl implements SysRoleService {
     @Override
     public PageResult<SysRole> getSysRolePage(SysRolePageReqVO pageReqVO) {
         return sysRoleMapper.selectPage(pageReqVO);
+    }
+
+    /**
+     * 根据用户ID查询权限
+     *
+     * @param userId 用户ID
+     * @return 权限列表
+     */
+    @Override
+    public Set<String> selectRolePermissionByUserId(Long userId) {
+        List<SysRole> perms = sysRoleMapper.selectRolesByUserId(userId);
+        Set<String> permsSet = new HashSet<>();
+        for (SysRole perm : perms) {
+            if (ObjectUtil.isNotNull(perm)) {
+                permsSet.addAll(StrUtils.splitList(perm.getRoleKey().trim()));
+            }
+        }
+        return permsSet;
+    }
+
+    /**
+     * 根据用户ID查询角色
+     *
+     * @param userId 用户ID
+     * @return 角色列表
+     */
+    @Override
+    public List<SysRole> selectRolesByUserId(Long userId) {
+        return sysRoleMapper.selectRolesByUserId(userId);
     }
 }
 

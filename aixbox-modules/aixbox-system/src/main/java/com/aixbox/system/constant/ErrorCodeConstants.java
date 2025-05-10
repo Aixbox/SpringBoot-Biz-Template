@@ -1,0 +1,28 @@
+package com.aixbox.system.constant;
+
+
+import com.aixbox.common.core.exception.ErrorCode;
+
+/**
+ * System 错误码枚举类
+ *
+ * system 系统，使用 1-          002-        000-        000 段
+ *                 业务级异常    系统模块     业务类型      错误码
+ */
+public interface ErrorCodeConstants {
+
+    // ========== Auth模块 模块 1-002-000-??? ==========
+    ErrorCode AUTH_GRANT_TYPE_ERROR = new ErrorCode(1_002_000_000, "认证权限类型错误");
+    ErrorCode AUTH_GRANT_TYPE_BLOCKED = new ErrorCode(1_002_000_001, "认证权限类型已禁用");
+    ErrorCode AUTH_TYPE_ERROR = new ErrorCode(1_002_000_002, "授权类型不正确!");
+    ErrorCode AUTH_PASSWORD_ERROR = new ErrorCode(1_002_000_003, "密码输入错误{}次，帐户锁定{}分钟");
+    ErrorCode AUTH_PASSWORD_ERROR_RETRY_LIMIT_EXCEED = new ErrorCode(1_002_000_004, "密码输入错误{}次");
+    ErrorCode AUTH_REGISTER_ERROR = new ErrorCode(1_002_000_004, "注册失败，请联系系统管理人员");
+
+    // ========== 用户模块 模块 1-002-001-??? ==========
+    ErrorCode USERNAME_NOT_EXIST = new ErrorCode(1_002_001_000, "对不起, 您的账号：{} 不存在");
+    ErrorCode USERNAME_DISABLED = new ErrorCode(1_002_001_001, "对不起，您的账号：{} 已禁用，请联系管理员");
+    ErrorCode USERNAME_EXIST = new ErrorCode(1_002_001_002, "保存用户 {} 失败，注册账号已存在");
+
+
+}

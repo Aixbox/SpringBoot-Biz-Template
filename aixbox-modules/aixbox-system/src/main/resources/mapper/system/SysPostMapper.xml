@@ -4,5 +4,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aixbox.system.mapper.SysPostMapper">
 
+    <resultMap type="com.aixbox.system.domain.entity.SysPost" id="SysPostResult">
+    </resultMap>
+
+    <select id="selectPostsByUserId" parameterType="Long" resultMap="SysPostResult">
+        select p.id, p.dept_id, p.post_name, p.post_code, p.post_category
+        from sys_post p
+                 left join sys_user_post up on up.post_id = p.id
+                 left join sys_user u on u.id = up.user_id
+        where u.id = #{userId}
+    </select>
 
 </mapper>

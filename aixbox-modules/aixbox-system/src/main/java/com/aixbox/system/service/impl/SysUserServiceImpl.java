@@ -75,6 +75,20 @@ public class SysUserServiceImpl implements SysUserService {
     public PageResult<SysUser> getSysUserPage(SysUserPageReqVO pageReqVO) {
         return sysUserMapper.selectPage(pageReqVO);
     }
+
+    /**
+     * 注册用户信息
+     *
+     * @param user 用户信息
+     * @return 结果
+     */
+    @Override
+    public boolean registerUser(SysUser user) {
+        user.setCreator("0");
+        user.setUpdater("0");
+        return sysUserMapper.insert(user) > 0;
+
+    }
 }
 
 

@@ -75,6 +75,17 @@ public class SysPostServiceImpl implements SysPostService {
     public PageResult<SysPost> getSysPostPage(SysPostPageReqVO pageReqVO) {
         return sysPostMapper.selectPage(pageReqVO);
     }
+
+    /**
+     * 查询用户所属岗位组
+     *
+     * @param userId 用户ID
+     * @return 岗位ID
+     */
+    @Override
+    public List<SysPost> selectPostsByUserId(Long userId) {
+        return sysPostMapper.selectPostsByUserId(userId);
+    }
 }
 
 

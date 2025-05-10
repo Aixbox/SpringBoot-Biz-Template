@@ -8,6 +8,8 @@ import com.aixbox.system.domain.entity.SysPost;
 import com.aixbox.system.domain.vo.request.SysPostPageReqVO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
 * 岗位 Mapper接口
 */
@@ -28,6 +30,14 @@ public interface SysPostMapper extends BaseMapperX<SysPost> {
                 .likeIfPresent(SysPost::getRemark, reqVO.getKeyword())
                 .orderByDesc(BaseDO::getCreateTime));
     }
+
+    /**
+     * 查询用户所属岗位组
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    List<SysPost> selectPostsByUserId(Long userId);
 
 }
 

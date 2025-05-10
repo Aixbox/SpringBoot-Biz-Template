@@ -1,15 +1,22 @@
 package com.aixbox.system.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
+import com.aixbox.common.core.utils.object.ObjectUtils;
+import com.aixbox.system.constant.CacheNames;
 import com.aixbox.system.domain.entity.SysDept;
 import com.aixbox.system.domain.vo.request.SysDeptPageReqVO;
 import com.aixbox.system.domain.vo.request.SysDeptSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysDeptUpdateReqVO;
+import com.aixbox.system.domain.vo.response.SysDeptRespVO;
 import com.aixbox.system.mapper.SysDeptMapper;
 import com.aixbox.system.service.SysDeptService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -74,6 +81,27 @@ public class SysDeptServiceImpl implements SysDeptService {
     @Override
     public PageResult<SysDept> getSysDeptPage(SysDeptPageReqVO pageReqVO) {
         return sysDeptMapper.selectPage(pageReqVO);
+    }
+
+    /**
+     * 根据部门ID查询信息
+     *
+     * @param deptId 部门ID
+     * @return 部门信息
+     */
+    @Cacheable(cacheNames = CacheNames.SYS_DEPT, key = "#deptId")
+    @Override
+    public SysDeptRespVO selectDeptById(Long deptId) {
+        SysDept dept = sysDeptMapper.selectById(deptId);
+        if (ObjectUtil.isNull(dept)) {
+            return null;
+        }
+        SysDept parentDept = sysDeptMapper.selectOne(new LambdaQueryWrapper<SysDept>()
+                .select(SysDept::getDeptName).eq(SysDept::getId, dept.getParentId()));
+
+        SysDeptRespVO respVO = BeanUtils.toBean(dept, SysDeptRespVO.class);
+        respVO.setParentName(ObjectUtils.notNullGetter(parentDept, SysDept::getDeptName));
+        return respVO;
     }
 }
 

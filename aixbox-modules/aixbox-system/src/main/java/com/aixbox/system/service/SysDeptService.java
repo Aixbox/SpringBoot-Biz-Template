@@ -1,10 +1,13 @@
 package com.aixbox.system.service;
 
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.system.constant.CacheNames;
 import com.aixbox.system.domain.entity.SysDept;
 import com.aixbox.system.domain.vo.request.SysDeptPageReqVO;
 import com.aixbox.system.domain.vo.request.SysDeptSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysDeptUpdateReqVO;
+import com.aixbox.system.domain.vo.response.SysDeptRespVO;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -47,4 +50,7 @@ public interface SysDeptService {
      * @return 部门分页对象
      */
     PageResult<SysDept> getSysDeptPage(SysDeptPageReqVO pageReqVO);
+
+    @Cacheable(cacheNames = CacheNames.SYS_DEPT, key = "#deptId")
+    SysDeptRespVO selectDeptById(Long deptId);
 }

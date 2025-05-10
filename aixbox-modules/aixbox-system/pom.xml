@@ -28,6 +28,16 @@
             <artifactId>aixbox-common-mybatis</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.aixbox</groupId>
+            <artifactId>aixbox-common-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aixbox</groupId>
+            <artifactId>aixbox-common-security</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
