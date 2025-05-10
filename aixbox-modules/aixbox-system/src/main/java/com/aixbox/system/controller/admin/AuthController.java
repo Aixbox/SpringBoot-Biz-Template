@@ -43,7 +43,6 @@ public class AuthController {
     private final SysRegisterService registerService;
 
 
-    @SaIgnore
     @PostMapping("/login")
     public CommonResult<LoginVO> login(@RequestBody String body) {
         LoginBody loginBody = JsonUtils.parseObject(body, LoginBody.class);
@@ -83,7 +82,6 @@ public class AuthController {
     /**
      * 用户注册
      */
-    @SaIgnore
     @PostMapping("/register")
     public CommonResult<String> register(@Validated @RequestBody RegisterBody user) {
         //添加参数配置

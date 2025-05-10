@@ -7,16 +7,20 @@ import cn.hutool.http.HttpStatus;
 import com.aixbox.common.core.pojo.CommonResult;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
  * SaToken异常处理器
+ * 使用@Order在全局异常处理器之前运行
  *
  * @author Lion Li
  */
 @Slf4j
 @RestControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class SaTokenExceptionHandler {
 
     /**

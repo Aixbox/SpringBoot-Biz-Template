@@ -35,11 +35,13 @@ sa-token:
   # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
   is-share: false
   # jwt秘钥
-  jwt-secret-key: abcdefghijklmnopqrstuvwxyz
+  jwt-secret-key: gojpiomcaaergghasfy
 
 # security配置
 security:
   # 排除路径
   excludes:
     - /*.html
-    - /**/auth/**
+    - /system/auth/register
+    - /system/auth/login
+
