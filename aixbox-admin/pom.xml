@@ -28,6 +28,11 @@
             <artifactId>aixbox-generator</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.aixbox</groupId>
+            <artifactId>aixbox-common-doc</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

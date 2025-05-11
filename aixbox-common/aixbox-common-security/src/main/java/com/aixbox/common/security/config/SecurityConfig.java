@@ -1,19 +1,23 @@
 package com.aixbox.common.security.config;
 
 import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.exception.RequestPathInvalidException;
 import cn.dev33.satoken.filter.SaServletFilter;
 import cn.dev33.satoken.httpauth.basic.SaHttpBasicUtil;
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
+import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.constant.HttpStatus;
+import com.aixbox.common.core.enums.UserType;
 import com.aixbox.common.core.exception.SseException;
 import com.aixbox.common.core.utils.ServletUtils;
 import com.aixbox.common.core.utils.spring.SpringUtils;
 import com.aixbox.common.security.config.properties.SecurityProperties;
 import com.aixbox.common.security.handler.AllUrlHandler;
 import com.aixbox.common.security.utils.LoginHelper;
+import com.aixbox.common.web.utils.WebUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +27,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.nio.file.AccessDeniedException;
+
+import static com.aixbox.common.core.exception.util.ServiceExceptionUtil.exception;
 
 /**
  * 权限安全配置
@@ -73,6 +81,18 @@ public class SecurityConfig implements WebMvcConfigurer {
                             throw NotLoginException.newInstance(StpUtil.getLoginType(),
                                 "-100", "客户端ID与Token不匹配",
                                 StpUtil.getTokenValue());
+                        }
+
+                        //检查用户类型，如果是app用户只能访问前缀为app-api的路径，amdin用户只能访问前缀为admin-api的路径
+                        UserType userType = WebUtils.getLoginUserTypeByPath(request);
+                        // 用户类型不匹配，无权限
+                        // 注意：只有 /admin-api/* 和 /app-api/* 有 userType，才需要比对用户类型
+                        // 类似 WebSocket 的 /ws/* 连接地址，是不需要比对用户类型的
+                        if (userType != null
+                                && ObjectUtil.notEqual(LoginHelper.getUserType(), userType)) {
+                            throw NotLoginException.newInstance(StpUtil.getLoginType(),
+                                    "-100", "错误的用户类型",
+                                    StpUtil.getTokenValue());
                         }
 
                         // 有效率影响 用于临时测试

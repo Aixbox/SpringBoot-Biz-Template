@@ -35,6 +35,11 @@
             <artifactId>sa-token-jwt</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.aixbox</groupId>
+            <artifactId>aixbox-common-web</artifactId>
+        </dependency>
+
 
 
 

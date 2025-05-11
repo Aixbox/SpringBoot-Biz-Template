@@ -42,6 +42,45 @@ security:
   # 排除路径
   excludes:
     - /*.html
-    - /system/auth/register
-    - /system/auth/login
+    - /admin-api/system/auth/register
+    - /admin-api/system/auth/login
+    - /v3/api-docs
+    - /swagger-ui.html
+
+
+springdoc:
+  api-docs:
+    # 是否开启接口文档
+    enabled: true
+    # OpenAPI文档的路径
+    path: /v3/api-docs
+  swagger-ui:
+    # swagger-ui路径
+    path: /swagger-ui.html
+    # 持久化认证数据
+    persistAuthorization: true
+  info:
+    title: '接口文档'
+    description: '服务接口文档'
+    version: '版本号:1.0'
+    contact:
+      name: 地址服务
+      email: keppelfei@gmail.com
+      url: https://www.v2ss.cn
+  components:
+    # 鉴权方式配置
+    security-schemes:
+      apiKey:
+        type: APIKEY
+        in: HEADER
+        name: cim-plus
+  group-configs:
+    - group: 用户端接口文档
+      packages-to-scan: com.aixbox.system
+      paths-to-match:
+        - /app-api/**
+        - /admin-api/**
+    - group: 管理端接口文档
+      packages-to-scan: net.xdclass
+      paths-to-match: /admin/**
 
