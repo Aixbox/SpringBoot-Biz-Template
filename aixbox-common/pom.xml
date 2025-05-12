@@ -21,6 +21,7 @@
         <module>aixbox-common-test</module>
         <module>aixbox-common-redis</module>
         <module>aixbox-common-security</module>
+        <module>aixbox-common-social</module>
     </modules>
 
     <properties>

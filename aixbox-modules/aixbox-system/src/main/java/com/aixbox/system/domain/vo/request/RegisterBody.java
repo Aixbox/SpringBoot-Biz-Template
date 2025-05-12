@@ -1,6 +1,5 @@
-package com.aixbox.system.domain.vo.response;
+package com.aixbox.system.domain.vo.request;
 
-import com.aixbox.system.domain.vo.request.LoginBody;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

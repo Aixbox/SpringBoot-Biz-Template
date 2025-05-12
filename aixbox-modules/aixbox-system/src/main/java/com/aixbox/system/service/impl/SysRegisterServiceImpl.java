@@ -7,7 +7,7 @@ import com.aixbox.common.core.enums.UserType;
 import com.aixbox.common.core.utils.ServletUtils;
 import com.aixbox.common.core.utils.spring.SpringUtils;
 import com.aixbox.system.domain.entity.SysUser;
-import com.aixbox.system.domain.vo.response.RegisterBody;
+import com.aixbox.system.domain.vo.request.RegisterBody;
 import com.aixbox.system.event.LogininforEvent;
 import com.aixbox.system.mapper.SysUserMapper;
 import com.aixbox.system.service.SysRegisterService;

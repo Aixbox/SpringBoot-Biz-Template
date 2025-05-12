@@ -33,6 +33,7 @@
         <mapstruct-plus.lombok.version>0.2.0</mapstruct-plus.lombok.version>
         <lombok.version>1.18.36</lombok.version>
         <satoken.version>1.40.0</satoken.version>
+        <justauth.version>1.16.7</justauth.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
@@ -221,6 +222,14 @@
                 <groupId>cn.dev33</groupId>
                 <artifactId>sa-token-core</artifactId>
                 <version>${satoken.version}</version>
+            </dependency>
+
+
+            <!-- JustAuth 的依赖配置-->
+            <dependency>
+                <groupId>me.zhyd.oauth</groupId>
+                <artifactId>JustAuth</artifactId>
+                <version>${justauth.version}</version>
             </dependency>
 
 

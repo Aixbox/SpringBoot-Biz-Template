@@ -47,4 +47,12 @@ public interface SysSocialService {
      * @return 社交用户分页对象
      */
     PageResult<SysSocial> getSysSocialPage(SysSocialPageReqVO pageReqVO);
+
+    List<SysSocial> selectByAuthId(String authId);
+
+    List<SysSocial> queryList(SysSocial params);
+
+    Boolean insertByBo(SysSocial bo);
+
+    Boolean updateByBo(SysSocial bo);
 }

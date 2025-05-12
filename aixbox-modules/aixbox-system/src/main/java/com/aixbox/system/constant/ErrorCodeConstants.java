@@ -17,7 +17,12 @@ public interface ErrorCodeConstants {
     ErrorCode AUTH_TYPE_ERROR = new ErrorCode(1_002_000_002, "授权类型不正确!");
     ErrorCode AUTH_PASSWORD_ERROR = new ErrorCode(1_002_000_003, "密码输入错误{}次，帐户锁定{}分钟");
     ErrorCode AUTH_PASSWORD_ERROR_RETRY_LIMIT_EXCEED = new ErrorCode(1_002_000_004, "密码输入错误{}次");
-    ErrorCode AUTH_REGISTER_ERROR = new ErrorCode(1_002_000_004, "注册失败，请联系系统管理人员");
+    ErrorCode AUTH_REGISTER_ERROR = new ErrorCode(1_002_000_005, "注册失败，请联系系统管理人员");
+    ErrorCode AUTH_PLATFORM_ERROR = new ErrorCode(1_002_000_006, "平台账号暂不支持");
+    ErrorCode AUTH_RESPONSE_ERROR = new ErrorCode(1_002_000_007, "授权响应失败");
+    ErrorCode AUTH_LOGIN_ERROR = new ErrorCode(1_002_000_008, "登录失败");
+    ErrorCode AUTH_SOCIAL_ERROR = new ErrorCode(1_002_000_009, "你还没有绑定第三方账号，绑定后才可以登录！");
+    ErrorCode AUTH_SOCIAL_ERROR = new ErrorCode(1_002_000_010, "");
 
     // ========== 用户模块 模块 1-002-001-??? ==========
     ErrorCode USERNAME_NOT_EXIST = new ErrorCode(1_002_001_000, "对不起, 您的账号：{} 不存在");

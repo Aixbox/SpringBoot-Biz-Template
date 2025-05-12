@@ -3,13 +3,9 @@ package com.aixbox.system.service.strategy;
 
 import cn.dev33.satoken.stp.SaLoginModel;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.lang.Opt;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import com.aixbox.common.core.constant.SystemConstants;
-import com.aixbox.common.core.domain.dto.PostDTO;
-import com.aixbox.common.core.domain.dto.RoleDTO;
 import com.aixbox.common.core.domain.model.LoginUser;
 import com.aixbox.common.core.utils.ValidatorUtils;
 import com.aixbox.common.core.utils.json.JsonUtils;
@@ -17,23 +13,18 @@ import com.aixbox.common.security.utils.LoginHelper;
 import com.aixbox.system.domain.entity.SysClient;
 import com.aixbox.system.domain.entity.SysUser;
 import com.aixbox.system.domain.vo.response.LoginVO;
-import com.aixbox.system.domain.vo.response.PasswordLoginBody;
+import com.aixbox.system.domain.vo.request.PasswordLoginBody;
 import com.aixbox.system.enums.LoginType;
 import com.aixbox.system.mapper.SysUserMapper;
 import com.aixbox.system.service.SysLoginService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import jdk.jshell.spi.ExecutionControl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 import static com.aixbox.common.core.exception.util.ServiceExceptionUtil.exception;
 import static com.aixbox.system.constant.ErrorCodeConstants.USERNAME_DISABLED;
 import static com.aixbox.system.constant.ErrorCodeConstants.USERNAME_NOT_EXIST;
-import static net.sf.jsqlparser.util.validation.metadata.NamedObject.user;
 
 /**
 * 密码认证策略

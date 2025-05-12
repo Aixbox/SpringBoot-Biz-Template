@@ -5,27 +5,22 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.aixbox</groupId>
-        <artifactId>aixbox-modules</artifactId>
+        <artifactId>aixbox-common</artifactId>
         <version>${revision}</version>
     </parent>
 
-    <artifactId>aixbox-system</artifactId>
+    <artifactId>aixbox-common-social</artifactId>
 
     <dependencies>
 
         <dependency>
-            <groupId>com.aixbox</groupId>
-            <artifactId>aixbox-common-web</artifactId>
+            <groupId>me.zhyd.oauth</groupId>
+            <artifactId>JustAuth</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.aixbox</groupId>
-            <artifactId>aixbox-common-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.aixbox</groupId>
-            <artifactId>aixbox-common-mybatis</artifactId>
+            <artifactId>aixbox-common-json</artifactId>
         </dependency>
 
         <dependency>
@@ -33,15 +28,7 @@
             <artifactId>aixbox-common-redis</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.aixbox</groupId>
-            <artifactId>aixbox-common-security</artifactId>
-        </dependency>
 
-        <dependency>
-            <groupId>com.aixbox</groupId>
-            <artifactId>aixbox-common-social</artifactId>
-        </dependency>
 
     </dependencies>
 
