@@ -1,12 +1,17 @@
 package com.aixbox.system.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
+import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.entity.SysUser;
 import com.aixbox.system.domain.vo.request.SysUserPageReqVO;
 import com.aixbox.system.domain.vo.request.SysUserSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysUserUpdateReqVO;
+import com.aixbox.system.domain.vo.response.SysRoleResp;
+import com.aixbox.system.domain.vo.response.SysUserResp;
+import com.aixbox.system.mapper.SysRoleMapper;
 import com.aixbox.system.mapper.SysUserMapper;
 import com.aixbox.system.service.SysUserService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +27,7 @@ import java.util.List;
 public class SysUserServiceImpl implements SysUserService {
 
     private final SysUserMapper sysUserMapper;
+    private final SysRoleMapper sysRoleMapper;
 
     /**
      * 新增用户
@@ -88,6 +94,25 @@ public class SysUserServiceImpl implements SysUserService {
         user.setUpdater("0");
         return sysUserMapper.insert(user) > 0;
 
+    }
+
+    /**
+     * 通过用户ID查询用户
+     *
+     * @param userId 用户ID
+     * @return 用户对象信息
+     */
+    @Override
+    public SysUserResp selectUserById(Long userId) {
+        SysUser user = sysUserMapper.selectById(userId);
+        if (ObjectUtil.isNull(user)) {
+            return null;
+        }
+        SysUserResp userResp = BeanUtils.toBean(user, SysUserResp.class);
+        List<SysRole> sysRoles = sysRoleMapper.selectRolesByUserId(user.getId());
+        List<SysRoleResp> sysRoleResp = MapstructUtils.convert(sysRoles, SysRoleResp.class);
+        userResp.setRoles(sysRoleResp);
+        return userResp;
     }
 }
 

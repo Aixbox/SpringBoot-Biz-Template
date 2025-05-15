@@ -8,7 +8,7 @@ import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.vo.request.SysRolePageReqVO;
 import com.aixbox.system.domain.vo.request.SysRoleSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysRoleUpdateReqVO;
-import com.aixbox.system.domain.vo.response.SysRoleRespVO;
+import com.aixbox.system.domain.vo.response.SysRoleResp;
 import com.aixbox.system.service.SysRoleService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -77,10 +77,10 @@ public class SysRoleController {
      * @return demo对象
      */
     @GetMapping("/{id}")
-    public CommonResult<SysRoleRespVO> getSysRole(@NotNull(message = "主键不能为空")
+    public CommonResult<SysRoleResp> getSysRole(@NotNull(message = "主键不能为空")
                                                     @PathVariable("id") Long id) {
         SysRole sysRole = sysRoleService.getSysRole(id);
-        return success(BeanUtils.toBean(sysRole, SysRoleRespVO.class));
+        return success(BeanUtils.toBean(sysRole, SysRoleResp.class));
     }
 
     /**
@@ -89,9 +89,9 @@ public class SysRoleController {
      * @return demo分页对象
      */
     @GetMapping("/page")
-    public CommonResult<PageResult<SysRoleRespVO>> getSysRolePage(@Valid SysRolePageReqVO pageReqVO) {
+    public CommonResult<PageResult<SysRoleResp>> getSysRolePage(@Valid SysRolePageReqVO pageReqVO) {
         PageResult<SysRole> pageResult = sysRoleService.getSysRolePage(pageReqVO);
-        return success(BeanUtils.toBean(pageResult, SysRoleRespVO.class));
+        return success(BeanUtils.toBean(pageResult, SysRoleResp.class));
     }
 
 

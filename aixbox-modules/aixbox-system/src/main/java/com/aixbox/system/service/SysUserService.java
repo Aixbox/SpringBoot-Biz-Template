@@ -5,6 +5,7 @@ import com.aixbox.system.domain.entity.SysUser;
 import com.aixbox.system.domain.vo.request.SysUserPageReqVO;
 import com.aixbox.system.domain.vo.request.SysUserSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysUserUpdateReqVO;
+import com.aixbox.system.domain.vo.response.SysUserResp;
 
 import java.util.List;
 
@@ -56,4 +57,11 @@ public interface SysUserService {
      */
     boolean registerUser(SysUser user);
 
+    /**
+     * 通过用户ID查询用户
+     *
+     * @param userId 用户ID
+     * @return 用户对象信息
+     */
+    SysUserResp selectUserById(Long userId);
 }

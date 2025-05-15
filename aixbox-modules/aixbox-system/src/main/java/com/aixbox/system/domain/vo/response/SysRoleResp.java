@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
  * 角色 返回参数
  */
 @Data
-public class SysRoleRespVO {
+public class SysRoleResp {
 
     /**
     * 角色ID

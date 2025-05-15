@@ -22,12 +22,12 @@ public interface ErrorCodeConstants {
     ErrorCode AUTH_RESPONSE_ERROR = new ErrorCode(1_002_000_007, "授权响应失败");
     ErrorCode AUTH_LOGIN_ERROR = new ErrorCode(1_002_000_008, "登录失败");
     ErrorCode AUTH_SOCIAL_ERROR = new ErrorCode(1_002_000_009, "你还没有绑定第三方账号，绑定后才可以登录！");
-    ErrorCode AUTH_SOCIAL_ERROR = new ErrorCode(1_002_000_010, "");
 
     // ========== 用户模块 模块 1-002-001-??? ==========
     ErrorCode USERNAME_NOT_EXIST = new ErrorCode(1_002_001_000, "对不起, 您的账号：{} 不存在");
     ErrorCode USERNAME_DISABLED = new ErrorCode(1_002_001_001, "对不起，您的账号：{} 已禁用，请联系管理员");
     ErrorCode USERNAME_EXIST = new ErrorCode(1_002_001_002, "保存用户 {} 失败，注册账号已存在");
+    ErrorCode USERNAME_NO_PERMISSION = new ErrorCode(1_002_001_003, "没有权限访问用户数据!");
 
 
 }

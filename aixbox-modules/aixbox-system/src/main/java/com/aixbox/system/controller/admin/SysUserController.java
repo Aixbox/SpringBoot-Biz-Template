@@ -1,14 +1,18 @@
 package com.aixbox.system.controller.admin;
 
 
+import cn.hutool.core.util.ObjectUtil;
+import com.aixbox.common.core.domain.model.LoginUser;
 import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
+import com.aixbox.common.security.utils.LoginHelper;
 import com.aixbox.system.domain.entity.SysUser;
 import com.aixbox.system.domain.vo.request.SysUserPageReqVO;
 import com.aixbox.system.domain.vo.request.SysUserSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysUserUpdateReqVO;
-import com.aixbox.system.domain.vo.response.SysUserRespVO;
+import com.aixbox.system.domain.vo.response.SysUserResp;
+import com.aixbox.system.domain.vo.response.UserInfoResp;
 import com.aixbox.system.service.SysUserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -25,7 +29,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
 
+import static com.aixbox.common.core.pojo.CommonResult.error;
 import static com.aixbox.common.core.pojo.CommonResult.success;
+import static com.aixbox.system.constant.ErrorCodeConstants.USERNAME_NO_PERMISSION;
 
 /**
  * 用户 Controller
@@ -36,6 +42,41 @@ import static com.aixbox.common.core.pojo.CommonResult.success;
 public class SysUserController {
 
     private final SysUserService sysUserService;
+
+
+
+
+
+
+    /**
+     * 获取用户信息
+     *
+     * @return 用户信息
+     */
+    @GetMapping("/getInfo")
+    public CommonResult<UserInfoResp> getInfo() {
+        UserInfoResp userInfoVo = new UserInfoResp();
+        LoginUser loginUser = LoginHelper.getLoginUser();
+        SysUserResp user = sysUserService.selectUserById(loginUser.getUserId());
+        if (ObjectUtil.isNull(user)) {
+            return error(USERNAME_NO_PERMISSION);
+        }
+        userInfoVo.setUser(user);
+        userInfoVo.setPermissions(loginUser.getMenuPermission());
+        userInfoVo.setRoles(loginUser.getRolePermission());
+        return success(userInfoVo);
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * 新增用户
@@ -77,10 +118,10 @@ public class SysUserController {
      * @return demo对象
      */
     @GetMapping("/{id}")
-    public CommonResult<SysUserRespVO> getSysUser(@NotNull(message = "主键不能为空")
+    public CommonResult<SysUserResp> getSysUser(@NotNull(message = "主键不能为空")
                                                     @PathVariable("id") Long id) {
         SysUser sysUser = sysUserService.getSysUser(id);
-        return success(BeanUtils.toBean(sysUser, SysUserRespVO.class));
+        return success(BeanUtils.toBean(sysUser, SysUserResp.class));
     }
 
     /**
@@ -89,9 +130,9 @@ public class SysUserController {
      * @return demo分页对象
      */
     @GetMapping("/page")
-    public CommonResult<PageResult<SysUserRespVO>> getSysUserPage(@Valid SysUserPageReqVO pageReqVO) {
+    public CommonResult<PageResult<SysUserResp>> getSysUserPage(@Valid SysUserPageReqVO pageReqVO) {
         PageResult<SysUser> pageResult = sysUserService.getSysUserPage(pageReqVO);
-        return success(BeanUtils.toBean(pageResult, SysUserRespVO.class));
+        return success(BeanUtils.toBean(pageResult, SysUserResp.class));
     }
 
 

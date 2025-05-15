@@ -1,16 +1,15 @@
 package com.aixbox.system.domain.vo.response;
 
 import lombok.Data;
-import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 用户 返回参数
  */
 @Data
-public class SysUserRespVO {
+public class SysUserResp {
 
     /**
     * 用户ID
@@ -53,11 +52,7 @@ public class SysUserRespVO {
     */
     private Long avatar;
     /**
-    * 密码
-    */
-    private String password;
-    /**
-    * 帐号状态（0正常 1停用）
+    * 账号状态（0正常 1停用）
     */
     private String status;
     /**
@@ -68,14 +63,19 @@ public class SysUserRespVO {
     * 最后登录时间
     */
     private LocalDateTime loginDate;
-            /**
+    /**
     * 创建时间
     */
     private LocalDateTime createTime;
-                            /**
+    /**
     * 备注
     */
     private String remark;
+
+    /**
+     * 角色对象
+     */
+    private List<SysRoleResp> roles;
 
 
 }
