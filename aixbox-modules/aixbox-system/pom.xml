@@ -43,6 +43,13 @@
             <artifactId>aixbox-common-social</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.github.linpeilie</groupId>
+            <artifactId>mapstruct-plus-processor</artifactId>
+            <version>1.4.6</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
 </project>

@@ -9,7 +9,7 @@ import com.aixbox.system.domain.entity.SysUser;
 import com.aixbox.system.domain.vo.request.SysUserPageReqVO;
 import com.aixbox.system.domain.vo.request.SysUserSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysUserUpdateReqVO;
-import com.aixbox.system.domain.vo.response.SysRoleResp;
+import com.aixbox.system.domain.vo.response.SysRoleVO;
 import com.aixbox.system.domain.vo.response.SysUserResp;
 import com.aixbox.system.mapper.SysRoleMapper;
 import com.aixbox.system.mapper.SysUserMapper;
@@ -110,8 +110,8 @@ public class SysUserServiceImpl implements SysUserService {
         }
         SysUserResp userResp = BeanUtils.toBean(user, SysUserResp.class);
         List<SysRole> sysRoles = sysRoleMapper.selectRolesByUserId(user.getId());
-        List<SysRoleResp> sysRoleResp = MapstructUtils.convert(sysRoles, SysRoleResp.class);
-        userResp.setRoles(sysRoleResp);
+        List<SysRoleVO> sysRoleVO = MapstructUtils.convert(sysRoles, SysRoleVO.class);
+        userResp.setRoles(sysRoleVO);
         return userResp;
     }
 }

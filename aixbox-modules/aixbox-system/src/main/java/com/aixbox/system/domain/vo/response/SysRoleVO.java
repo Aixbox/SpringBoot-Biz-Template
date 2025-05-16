@@ -1,5 +1,7 @@
 package com.aixbox.system.domain.vo.response;
 
+import com.aixbox.system.domain.entity.SysRole;
+import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -8,7 +10,7 @@ import java.time.LocalDateTime;
  * 角色 返回参数
  */
 @Data
-public class SysRoleResp {
+public class SysRoleVO {
 
     /**
     * 角色ID
@@ -46,7 +48,7 @@ public class SysRoleResp {
     * 创建时间
     */
     private LocalDateTime createTime;
-                            /**
+    /**
     * 备注
     */
     private String remark;

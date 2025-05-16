@@ -1,5 +1,6 @@
 package com.aixbox.system.mapper;
 
+import com.aixbox.common.core.constant.SystemConstants;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.mybatis.core.dataobject.BaseDO;
 import com.aixbox.common.mybatis.core.mapper.BaseMapperX;
@@ -7,6 +8,7 @@ import com.aixbox.common.mybatis.core.query.LambdaQueryWrapperX;
 import com.aixbox.system.domain.entity.SysMenu;
 import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.vo.request.SysMenuPageReqVO;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -44,6 +46,30 @@ public interface SysMenuMapper extends BaseMapperX<SysMenu> {
      * @return 权限列表
      */
     List<String> selectMenuPermsByUserId(Long userId);
+
+    /**
+     * 查询所有菜单
+     *
+     * @return 菜单列表
+     */
+    default List<SysMenu> selectMenuTreeAll() {
+        LambdaQueryWrapper<SysMenu> lqw = new LambdaQueryWrapper<SysMenu>()
+                .in(SysMenu::getMenuType, SystemConstants.TYPE_DIR, SystemConstants.TYPE_MENU)
+                .eq(SysMenu::getStatus, SystemConstants.NORMAL)
+                .orderByAsc(SysMenu::getParentId)
+                .orderByAsc(SysMenu::getOrderNum);
+        return this.selectList(lqw);
+    }
+
+    /**
+     * 根据用户ID查询菜单
+     *
+     * @param userId 用户ID
+     * @return 菜单列表
+     */
+    List<SysMenu> selectMenuTreeByUserId(Long userId);
+
+
 
 }
 

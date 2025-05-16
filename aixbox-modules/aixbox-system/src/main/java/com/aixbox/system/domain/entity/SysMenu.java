@@ -1,10 +1,18 @@
 package com.aixbox.system.domain.entity;
 
+import com.aixbox.common.core.constant.Constants;
+import com.aixbox.common.core.constant.SystemConstants;
+import com.aixbox.common.core.utils.StrUtils;
 import com.aixbox.common.mybatis.core.dataobject.BaseDO;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 菜单对象
@@ -89,6 +97,95 @@ public class SysMenu extends BaseDO {
     * 备注
     */
     private String remark;
+
+    /**
+     * 父菜单名称
+     */
+    @TableField(exist = false)
+    private String parentName;
+
+    /**
+     * 子菜单
+     */
+    @TableField(exist = false)
+    private List<SysMenu> children = new ArrayList<>();
+
+    /**
+     * 获取路由名称
+     */
+    public String getRouteName() {
+        String routerName = StringUtils.capitalize(path);
+        // 非外链并且是一级目录（类型为目录）
+        if (isMenuFrame()) {
+            routerName = StringUtils.EMPTY;
+        }
+        return routerName;
+    }
+
+    /**
+     * 是否为菜单内部跳转
+     */
+    public boolean isMenuFrame() {
+        return getParentId() == 0L && SystemConstants.TYPE_MENU.equals(menuType) && isFrame.equals(SystemConstants.NO_FRAME);
+    }
+
+    /**
+     * 获取路由地址
+     */
+    public String getRouterPath() {
+        String routerPath = this.path;
+        // 内链打开外网方式
+        if (getParentId() != 0L && isInnerLink()) {
+            routerPath = innerLinkReplaceEach(routerPath);
+        }
+        // 非外链并且是一级目录（类型为目录）
+        if (0L == getParentId() && SystemConstants.TYPE_DIR.equals(getMenuType())
+                && SystemConstants.NO_FRAME.equals(getIsFrame())) {
+            routerPath = "/" + this.path;
+        }
+        // 非外链并且是一级目录（类型为菜单）
+        else if (isMenuFrame()) {
+            routerPath = "/";
+        }
+        return routerPath;
+    }
+
+    /**
+     * 是否为内链组件
+     */
+    public boolean isInnerLink() {
+        return isFrame.equals(SystemConstants.NO_FRAME) && StrUtils.ishttp(path);
+    }
+
+    /**
+     * 内链域名特殊字符替换
+     */
+    public static String innerLinkReplaceEach(String path) {
+        return StringUtils.replaceEach(path, new String[]{Constants.HTTP, Constants.HTTPS, Constants.WWW, ".", ":"},
+                new String[]{"", "", "", "/", "/"});
+    }
+
+    /**
+     * 获取组件信息
+     */
+    public String getComponentInfo() {
+        String component = SystemConstants.LAYOUT;
+        if (StringUtils.isNotEmpty(this.component) && !isMenuFrame()) {
+            component = this.component;
+        } else if (StringUtils.isEmpty(this.component) && getParentId() != 0L && isInnerLink()) {
+            component = SystemConstants.INNER_LINK;
+        } else if (StringUtils.isEmpty(this.component) && isParentView()) {
+            component = SystemConstants.PARENT_VIEW;
+        }
+        return component;
+    }
+
+    /**
+     * 是否为parent_view组件
+     */
+    public boolean isParentView() {
+        return getParentId() != 0L && SystemConstants.TYPE_DIR.equals(menuType);
+    }
 
 
 }

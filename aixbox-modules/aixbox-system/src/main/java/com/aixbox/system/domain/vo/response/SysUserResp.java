@@ -75,7 +75,7 @@ public class SysUserResp {
     /**
      * 角色对象
      */
-    private List<SysRoleResp> roles;
+    private List<SysRoleVO> roles;
 
 
 }

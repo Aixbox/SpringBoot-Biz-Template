@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * 启动程序
  */
-@SpringBootApplication(scanBasePackages = {"${aixbox.info.base-package}"})
+@SpringBootApplication(scanBasePackages = {"${aixbox.info.base-package}", "io.github.linpeilie"})
 public class AixboxApplication {
 
     public static void main(String[] args) {

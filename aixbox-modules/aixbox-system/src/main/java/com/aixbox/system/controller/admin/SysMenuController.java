@@ -4,10 +4,12 @@ package com.aixbox.system.controller.admin;
 import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
+import com.aixbox.common.security.utils.LoginHelper;
 import com.aixbox.system.domain.entity.SysMenu;
 import com.aixbox.system.domain.vo.request.SysMenuPageReqVO;
 import com.aixbox.system.domain.vo.request.SysMenuSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysMenuUpdateReqVO;
+import com.aixbox.system.domain.vo.response.RouterVO;
 import com.aixbox.system.domain.vo.response.SysMenuRespVO;
 import com.aixbox.system.service.SysMenuService;
 import jakarta.validation.Valid;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static com.aixbox.common.core.pojo.CommonResult.success;
 
@@ -36,6 +39,29 @@ import static com.aixbox.common.core.pojo.CommonResult.success;
 public class SysMenuController {
 
     private final SysMenuService sysMenuService;
+
+
+
+    /**
+     * 获取路由信息
+     *
+     * @return 路由信息
+     */
+    @GetMapping("/getRouters")
+    public CommonResult<List<RouterVO>> getRouters() {
+        List<SysMenu> menus = sysMenuService.selectMenuTreeByUserId(LoginHelper.getUserId());
+        return success(sysMenuService.buildMenus(menus));
+    }
+
+
+
+
+
+
+
+
+
+
 
     /**
      * 新增菜单
