@@ -13,7 +13,7 @@ import ${import};
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ${ClassName}PageReqVO extends PageParam {
+public class ${ClassName}PageReq extends PageParam {
 
     /**
      * 关键字

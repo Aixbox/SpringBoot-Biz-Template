@@ -5,7 +5,7 @@ import com.aixbox.common.mybatis.core.dataobject.BaseDO;
 import com.aixbox.common.mybatis.core.mapper.BaseMapperX;
 import com.aixbox.common.mybatis.core.query.LambdaQueryWrapperX;
 import ${packageName}.domain.entity.${ClassName};
-import ${packageName}.domain.vo.request.${ClassName}PageReqVO;
+import ${packageName}.domain.vo.request.${ClassName}PageReq;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -16,17 +16,17 @@ public interface ${ClassName}Mapper extends BaseMapperX<${ClassName}> {
 
     /**
     * 分页查询
-    * @param reqVO 请求参数
+    * @param req 请求参数
     * @return demo分页对象
     */
-    default PageResult<${ClassName}> selectPage(${ClassName}PageReqVO reqVO) {
-        return selectPage(reqVO, new LambdaQueryWrapperX<${ClassName}>()
+    default PageResult<${ClassName}> selectPage(${ClassName}PageReq req) {
+        return selectPage(req, new LambdaQueryWrapperX<${ClassName}>()
 #foreach ($column in $columns)
     #set($skipFields = ["updateTime", "creator", "updater", "deleted", "createTime"])
     #set($isSkipField = $skipFields.contains($column.javaField))
     #if(!$column.javaType.equals("String") || $isSkipField)
     #else
-                .likeIfPresent(${ClassName}::get${column.javaField.substring(0,1).toUpperCase()}${column.javaField.substring(1)}, reqVO.getKeyword())
+                .likeIfPresent(${ClassName}::get${column.javaField.substring(0,1).toUpperCase()}${column.javaField.substring(1)}, req.getKeyword())
     #end
 #end
                 .orderByDesc(BaseDO::getCreateTime));

@@ -1,5 +1,7 @@
 package com.aixbox.system.domain.vo.response;
 
+import com.aixbox.system.domain.entity.SysMenu;
+import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -8,7 +10,8 @@ import java.time.LocalDateTime;
  * 菜单 返回参数
  */
 @Data
-public class SysMenuRespVO {
+@AutoMapper(target = SysMenu.class)
+public class SysMenuResp {
 
     /**
     * 菜单ID

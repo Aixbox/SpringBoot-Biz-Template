@@ -14,7 +14,7 @@ import ${import};
  */
 @Data
 @AutoMapper(target = ${ClassName}.class)
-public class ${ClassName}UpdateReqVO {
+public class ${ClassName}UpdateReq {
 
 #foreach ($column in $columns)
     #set($skipFields = ["updateTime", "creator", "updater", "deleted", "createTime"])

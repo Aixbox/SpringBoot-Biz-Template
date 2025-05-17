@@ -4,9 +4,9 @@ import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
 import ${packageName}.domain.entity.${ClassName};
-import ${packageName}.domain.vo.request.${ClassName}PageReqVO;
-import ${packageName}.domain.vo.request.${ClassName}SaveReqVO;
-import ${packageName}.domain.vo.request.${ClassName}UpdateReqVO;
+import ${packageName}.domain.vo.request.${ClassName}PageReq;
+import ${packageName}.domain.vo.request.${ClassName}SaveReq;
+import ${packageName}.domain.vo.request.${ClassName}UpdateReq;
 import ${packageName}.mapper.${ClassName}Mapper;
 import ${packageName}.service.${ClassName}Service;
 import lombok.RequiredArgsConstructor;
@@ -25,24 +25,24 @@ public class ${ClassName}ServiceImpl implements ${ClassName}Service {
 
     /**
      * 新增${functionName}
-     * @param addReqVO 新增参数
+     * @param addReq 新增参数
      * @return 新增数据id
      */
     @Override
-    public Long add${ClassName}(${ClassName}SaveReqVO addReqVO) {
-        ${ClassName} ${className} = BeanUtils.toBean(addReqVO, ${ClassName}.class);
+    public Long add${ClassName}(${ClassName}SaveReq addReq) {
+        ${ClassName} ${className} = BeanUtils.toBean(addReq, ${ClassName}.class);
         ${className}Mapper.insert(${className});
         return ${className}.getId();
     }
 
     /**
      * 修改${functionName}
-     * @param updateReqVO 修改参数
+     * @param updateReq 修改参数
      * @return 是否成功
      */
     @Override
-    public Boolean update${ClassName}(${ClassName}UpdateReqVO updateReqVO) {
-        ${ClassName} ${className} = MapstructUtils.convert(updateReqVO, ${ClassName}.class);
+    public Boolean update${ClassName}(${ClassName}UpdateReq updateReq) {
+        ${ClassName} ${className} = MapstructUtils.convert(updateReq, ${ClassName}.class);
         return ${className}Mapper.updateById(${className}) > 0;
     }
 
@@ -68,12 +68,12 @@ public class ${ClassName}ServiceImpl implements ${ClassName}Service {
 
     /**
      * 分页查询${functionName}
-     * @param pageReqVO 分页查询参数
+     * @param pageReq 分页查询参数
      * @return ${functionName}分页对象
      */
     @Override
-    public PageResult<${ClassName}> get${ClassName}Page(${ClassName}PageReqVO pageReqVO) {
-        return ${className}Mapper.selectPage(pageReqVO);
+    public PageResult<${ClassName}> get${ClassName}Page(${ClassName}PageReq pageReq) {
+        return ${className}Mapper.selectPage(pageReq);
     }
 }
 

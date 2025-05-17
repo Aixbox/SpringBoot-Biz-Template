@@ -1,22 +1,23 @@
-package ${packageName}.domain.vo.response;
+package ${packageName}.domain.vo.request;
+
 
 import lombok.Data;
+import org.wildfly.common.annotation.NotNull;
 #foreach ($import in $importList)
 import ${import};
 #end
 
-import java.time.LocalDateTime;
-
 /**
- * ${functionName} 返回参数
+ * ${functionName} 新增参数
  */
 @Data
-public class ${ClassName}RespVO {
+public class ${ClassName}SaveReq {
 
 #foreach ($column in $columns)
-    #set($skipFields = ["updateTime", "creator", "updater", "deleted"])
+    #set($skipFields = ["updateTime", "creator", "updater", "deleted", "createTime"])
     #set($isSkipField = $skipFields.contains($column.javaField))
-    #if($isSkipField)
+    #set($isPk = $column.isPk==1)
+    #if($isSkipField || $isPk)
         ## 跳过这些字段
     #else
     /**
@@ -25,6 +26,5 @@ public class ${ClassName}RespVO {
     private #if($column.javaType == 'Date')LocalDateTime#else${column.javaType}#end $column.javaField;
     #end
 #end
-
 
 }

@@ -3,9 +3,9 @@ package ${packageName}.service.impl;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.test.core.ut.BaseDbUnitTest;
 import ${packageName}.domain.entity.${ClassName};
-import ${packageName}.domain.vo.request.${ClassName}PageReqVO;
-import ${packageName}.domain.vo.request.${ClassName}SaveReqVO;
-import ${packageName}.domain.vo.request.${ClassName}UpdateReqVO;
+import ${packageName}.domain.vo.request.${ClassName}PageReq;
+import ${packageName}.domain.vo.request.${ClassName}SaveReq;
+import ${packageName}.domain.vo.request.${ClassName}UpdateReq;
 import ${packageName}.mapper.${ClassName}Mapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -43,10 +43,10 @@ class ${ClassName}ServiceImplTest extends BaseDbUnitTest {
         @DisplayName("新增${ClassName} - 正常情况 - 应成功")
         void add${ClassName}_WhenNormal_ShouldSuccess() {
             // 准备测试数据
-            ${ClassName}SaveReqVO addReqVO = randomPojo(${ClassName}SaveReqVO.class);
+            ${ClassName}SaveReq addReq = randomPojo(${ClassName}SaveReq.class);
 
             // 执行测试
-            Long resultId = ${className}Service.add${ClassName}(addReqVO);
+            Long resultId = ${className}Service.add${ClassName}(addReq);
 
             // 验证结果
             assertNotNull(resultId);
@@ -65,11 +65,11 @@ class ${ClassName}ServiceImplTest extends BaseDbUnitTest {
             ${className}Mapper.insert(${className});
 
             // 准备测试数据
-            ${ClassName}UpdateReqVO ${className}UpdateReqVO = randomPojo(${ClassName}UpdateReqVO.class);
-            ${className}UpdateReqVO.setId(${className}.getId());
+            ${ClassName}UpdateReq ${className}UpdateReq = randomPojo(${ClassName}UpdateReq.class);
+            ${className}UpdateReq.setId(${className}.getId());
 
             // 执行测试
-            Boolean result = ${className}Service.update${ClassName}(${className}UpdateReqVO);
+            Boolean result = ${className}Service.update${ClassName}(${className}UpdateReq);
 
             // 验证结果
             assertTrue(result);
@@ -129,11 +129,11 @@ class ${ClassName}ServiceImplTest extends BaseDbUnitTest {
             ${className}Mapper.insert(${className}1);
 
 
-            ${ClassName}PageReqVO ${className}PageReqVO = new ${ClassName}PageReqVO();
-            ${className}PageReqVO.setPageNo(1);
-            ${className}PageReqVO.setPageSize(10);
+            ${ClassName}PageReq ${className}PageReq = new ${ClassName}PageReq();
+            ${className}PageReq.setPageNo(1);
+            ${className}PageReq.setPageSize(10);
             // 执行测试
-            PageResult<${ClassName}> result = ${className}Service.get${ClassName}Page(${className}PageReqVO);
+            PageResult<${ClassName}> result = ${className}Service.get${ClassName}Page(${className}PageReq);
 
             // 验证结果
             assertNotNull(result);

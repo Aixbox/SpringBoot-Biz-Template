@@ -1,21 +1,28 @@
 package com.aixbox.system.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.tree.Tree;
 import com.aixbox.common.core.constant.SystemConstants;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.StrUtils;
 import com.aixbox.common.core.utils.StreamUtils;
+import com.aixbox.common.core.utils.TreeBuildUtils;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
 import com.aixbox.common.security.utils.LoginHelper;
 import com.aixbox.system.domain.entity.SysMenu;
+import com.aixbox.system.domain.vo.request.SysMenuListReq;
 import com.aixbox.system.domain.vo.request.SysMenuPageReqVO;
 import com.aixbox.system.domain.vo.request.SysMenuSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysMenuUpdateReqVO;
 import com.aixbox.system.domain.vo.response.MetaVO;
 import com.aixbox.system.domain.vo.response.RouterVO;
+import com.aixbox.system.domain.vo.response.SysMenuResp;
 import com.aixbox.system.mapper.SysMenuMapper;
 import com.aixbox.system.service.SysMenuService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -180,6 +187,71 @@ public class SysMenuServiceImpl implements SysMenuService {
         }
         return routers;
 
+    }
+
+    /**
+     * 查询系统菜单列表
+     *
+     * @param menu 菜单信息
+     * @return 菜单列表
+     */
+    @Override
+    public List<SysMenuResp> selectMenuList(SysMenuListReq menu, Long userId) {
+        List<SysMenu> menuList;
+        // 管理员显示所有菜单信息
+        if (LoginHelper.isSuperAdmin(userId)) {
+            menuList = sysMenuMapper.selectList(new LambdaQueryWrapper<SysMenu>()
+                    .like(StrUtils.isNotBlank(menu.getMenuName()), SysMenu::getMenuName, menu.getMenuName())
+                    .eq(StrUtils.isNotBlank(menu.getVisible()), SysMenu::getVisible, menu.getVisible())
+                    .eq(StrUtils.isNotBlank(menu.getStatus()), SysMenu::getStatus, menu.getStatus())
+                    .orderByAsc(SysMenu::getParentId)
+                    .orderByAsc(SysMenu::getOrderNum));
+        } else {
+            QueryWrapper<SysMenu> wrapper = Wrappers.query();
+            wrapper.inSql("r.id", "select role_id from sys_user_role where user_id = " + userId)
+                   .like(StrUtils.isNotBlank(menu.getMenuName()), "m.menu_name", menu.getMenuName())
+                   .eq(StrUtils.isNotBlank(menu.getVisible()), "m.visible", menu.getVisible())
+                   .eq(StrUtils.isNotBlank(menu.getStatus()), "m.status", menu.getStatus())
+                   .orderByAsc("m.parent_id")
+                   .orderByAsc("m.order_num");
+            menuList = sysMenuMapper.selectMenuListByUserId(wrapper);
+        }
+        return MapstructUtils.convert(menuList, SysMenuResp.class);
+
+
+    }
+
+    /**
+     * 根据菜单ID查询信息
+     *
+     * @param menuId 菜单ID
+     * @return 菜单信息
+     */
+    @Override
+    public SysMenuResp selectMenuById(Long menuId) {
+        SysMenu sysMenu = sysMenuMapper.selectById(menuId);
+        return MapstructUtils.convert(sysMenu, SysMenuResp.class);
+    }
+
+    /**
+     * 构建前端所需要下拉树结构
+     *
+     * @param menus 菜单列表
+     * @return 下拉树结构列表
+     */
+    @Override
+    public List<Tree<Long>> buildMenuTreeSelect(List<SysMenuResp> menus) {
+        if (CollUtil.isEmpty(menus)) {
+            return CollUtil.newArrayList();
+        }
+        return TreeBuildUtils.build(menus, (menu, tree) -> {
+            Tree<Long> menuTree = tree.setId(menu.getId())
+                                      .setParentId(menu.getParentId())
+                                      .setName(menu.getMenuName())
+                                      .setWeight(menu.getOrderNum());
+            menuTree.put("menuType", menu.getMenuType());
+            menuTree.put("icon", menu.getIcon());
+        });
     }
 
     /**

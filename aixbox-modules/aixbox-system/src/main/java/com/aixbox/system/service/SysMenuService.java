@@ -1,11 +1,14 @@
 package com.aixbox.system.service;
 
+import cn.hutool.core.lang.tree.Tree;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.system.domain.entity.SysMenu;
+import com.aixbox.system.domain.vo.request.SysMenuListReq;
 import com.aixbox.system.domain.vo.request.SysMenuPageReqVO;
 import com.aixbox.system.domain.vo.request.SysMenuSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysMenuUpdateReqVO;
 import com.aixbox.system.domain.vo.response.RouterVO;
+import com.aixbox.system.domain.vo.response.SysMenuResp;
 
 import java.util.List;
 import java.util.Set;
@@ -67,4 +70,30 @@ public interface SysMenuService {
      * @return 路由列表
      */
     List<RouterVO> buildMenus(List<SysMenu> menus);
+
+    /**
+     * 根据用户查询系统菜单列表
+     *
+     * @param menu   查询信息
+     * @param userId 用户ID
+     * @return 菜单列表
+     */
+    List<SysMenuResp> selectMenuList(SysMenuListReq menu, Long userId);
+
+    /**
+     * 根据菜单ID查询信息
+     *
+     * @param menuId 菜单ID
+     * @return 菜单信息
+     */
+    SysMenuResp selectMenuById(Long menuId);
+
+    /**
+     * 构建前端所需要下拉树结构
+     *
+     * @param menus 菜单列表
+     * @return 下拉树结构列表
+     */
+    List<Tree<Long>> buildMenuTreeSelect(List<SysMenuResp> menus);
+
 }

@@ -9,6 +9,7 @@ import com.aixbox.system.domain.entity.SysMenu;
 import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.vo.request.SysMenuPageReqVO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -70,7 +71,13 @@ public interface SysMenuMapper extends BaseMapperX<SysMenu> {
     List<SysMenu> selectMenuTreeByUserId(Long userId);
 
 
-
+    /**
+     * 根据用户查询系统菜单列表
+     *
+     * @param queryWrapper 查询条件
+     * @return 菜单列表
+     */
+    List<SysMenu> selectMenuListByUserId(QueryWrapper<SysMenu> queryWrapper);
 }
 
 

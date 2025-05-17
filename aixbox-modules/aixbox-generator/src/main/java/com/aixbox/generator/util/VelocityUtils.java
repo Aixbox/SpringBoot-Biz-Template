@@ -271,10 +271,10 @@ public class VelocityUtils {
         List<String> templates = new ArrayList<>();
         templates.add("vm/java/controller/Controller.vm");
         templates.add("vm/java/domain/entity.vm");
-        templates.add("vm/java/domain/PageReqVO.vm");
-        templates.add("vm/java/domain/RespVO.vm");
-        templates.add("vm/java/domain/SaveReqVO.vm");
-        templates.add("vm/java/domain/UpdateReqVO.vm");
+        templates.add("vm/java/domain/PageReq.vm");
+        templates.add("vm/java/domain/Resp.vm");
+        templates.add("vm/java/domain/SaveReq.vm");
+        templates.add("vm/java/domain/UpdateReq.vm");
         templates.add("vm/java/mapper/Mapper.vm");
         templates.add("vm/java/mapper/Mapper.xml.vm");
         templates.add("vm/java/service/Service.vm");
@@ -326,14 +326,14 @@ public class VelocityUtils {
             fileName = StrUtils.format("{}/controller/admin/{}Controller.java", javaPath, className);
         } else if (template.contains("entity.vm")) {
             fileName = StrUtils.format("{}/domain/entity/{}.java", javaPath, className);
-        } else if (template.contains("PageReqVO.vm")) {
-            fileName = StrUtils.format("{}/domain/vo/request/{}PageReqVO.java", javaPath, className);
-        } else if (template.contains("RespVO.vm")) {
-            fileName = StrUtils.format("{}/domain/vo/response/{}RespVO.java", javaPath, className);
-        } else if (template.contains("SaveReqVO.vm")) {
-            fileName = StrUtils.format("{}/domain/vo/request/{}SaveReqVO.java", javaPath, className);
-        } else if (template.contains("UpdateReqVO.vm")) {
-            fileName = StrUtils.format("{}/domain/vo/request/{}UpdateReqVO.java", javaPath, className);
+        } else if (template.contains("PageReq.vm")) {
+            fileName = StrUtils.format("{}/domain/vo/request/{}PageReq.java", javaPath, className);
+        } else if (template.contains("Resp.vm")) {
+            fileName = StrUtils.format("{}/domain/vo/response/{}Resp.java", javaPath, className);
+        } else if (template.contains("SaveReq.vm")) {
+            fileName = StrUtils.format("{}/domain/vo/request/{}SaveReq.java", javaPath, className);
+        } else if (template.contains("UpdateReq.vm")) {
+            fileName = StrUtils.format("{}/domain/vo/request/{}UpdateReq.java", javaPath, className);
         } else if (template.contains("Mapper.vm")) {
             fileName = StrUtils.format("{}/mapper/{}Mapper.java", javaPath, className);
         } else if (template.contains("Mapper.xml.vm")) {
