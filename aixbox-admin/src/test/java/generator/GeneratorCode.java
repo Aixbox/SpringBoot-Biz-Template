@@ -30,13 +30,13 @@ public class GeneratorCode {
         //数据源
         String dataName = "master";
         //表名
-        String[] tableNames = {"sys_social"};
+        String[] tableNames = {"sys_dict_data"};
         //包路径
         String packageName = "com.aixbox.system";
         //模块名
         String moduleName = "system";
         //功能名
-        String functionName = "社交用户";
+        String functionName = "字典数据";
 
 
         //查询数据库是否存在表
