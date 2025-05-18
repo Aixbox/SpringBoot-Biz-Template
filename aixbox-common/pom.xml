@@ -22,6 +22,7 @@
         <module>aixbox-common-redis</module>
         <module>aixbox-common-security</module>
         <module>aixbox-common-social</module>
+        <module>aixbox-common-excel</module>
     </modules>
 
     <properties>

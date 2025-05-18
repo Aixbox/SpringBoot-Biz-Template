@@ -11,6 +11,7 @@ import com.aixbox.system.domain.vo.request.SysDictTypeSaveReq;
 import com.aixbox.system.domain.vo.request.SysDictTypeUpdateReq;
 import com.aixbox.system.domain.vo.response.SysDictTypeResp;
 import com.aixbox.system.service.SysDictTypeService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static com.aixbox.common.core.pojo.CommonResult.success;
 
@@ -60,6 +62,7 @@ public class SysDictTypeController {
         sysDictTypeService.resetDictCache();
         return success();
     }
+
 
 
 
