@@ -4,6 +4,8 @@ import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.StrUtils;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
+import com.aixbox.common.redis.utils.CacheUtils;
+import com.aixbox.system.constant.CacheNames;
 import com.aixbox.system.domain.entity.SysDictType;
 import com.aixbox.system.domain.vo.request.SysDictTypePageReq;
 import com.aixbox.system.domain.vo.request.SysDictTypeSaveReq;
@@ -85,6 +87,12 @@ public class SysDictTypeServiceImpl implements SysDictTypeService {
     public PageResult<SysDictType> selectPageDictTypeList(SysDictTypePageReq pageQuery) {
         LambdaQueryWrapper<SysDictType> lqw = buildQueryWrapper(pageQuery);
         return sysDictTypeMapper.selectPage(pageQuery, lqw);
+    }
+
+    @Override
+    public void resetDictCache() {
+        CacheUtils.clear(CacheNames.SYS_DICT);
+        CacheUtils.clear(CacheNames.SYS_DICT_TYPE);
     }
 
 

@@ -28,4 +28,14 @@ public interface CacheNames {
      */
     String SYS_DEPT = "sys_dept#30d";
 
+    /**
+     * 数据字典
+     */
+    String SYS_DICT = "sys_dict";
+
+    /**
+     * 数据字典类型
+     */
+    String SYS_DICT_TYPE = "sys_dict_type";
+
 }

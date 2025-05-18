@@ -50,4 +50,10 @@ public interface SysDictTypeService {
     PageResult<SysDictType> getSysDictTypePage(SysDictTypePageReq pageReq);
 
     PageResult<SysDictType> selectPageDictTypeList(@Valid SysDictTypePageReq pageQuery);
+
+    /**
+     * 重置字典缓存数据
+     */
+    void resetDictCache();
+
 }

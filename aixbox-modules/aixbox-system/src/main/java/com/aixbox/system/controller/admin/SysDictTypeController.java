@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,6 +48,17 @@ public class SysDictTypeController {
     public CommonResult<PageResult<SysDictTypeResp>> list(@Valid SysDictTypePageReq pageQuery) {
         PageResult<SysDictType> pageResult = sysDictTypeService.selectPageDictTypeList(pageQuery);
         return success(BeanUtils.toBean(pageResult, SysDictTypeResp.class));
+    }
+
+
+    /**
+     * 刷新字典缓存
+     */
+    @SaCheckPermission("system:dict:remove")
+    @DeleteMapping("/refreshCache")
+    public CommonResult<Void> refreshCache() {
+        sysDictTypeService.resetDictCache();
+        return success();
     }
 
 
