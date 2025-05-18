@@ -5,6 +5,7 @@ import com.aixbox.system.domain.entity.SysDictType;
 import com.aixbox.system.domain.vo.request.SysDictTypePageReq;
 import com.aixbox.system.domain.vo.request.SysDictTypeSaveReq;
 import com.aixbox.system.domain.vo.request.SysDictTypeUpdateReq;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -47,4 +48,6 @@ public interface SysDictTypeService {
      * @return 字典类型分页对象
      */
     PageResult<SysDictType> getSysDictTypePage(SysDictTypePageReq pageReq);
+
+    PageResult<SysDictType> selectPageDictTypeList(@Valid SysDictTypePageReq pageQuery);
 }

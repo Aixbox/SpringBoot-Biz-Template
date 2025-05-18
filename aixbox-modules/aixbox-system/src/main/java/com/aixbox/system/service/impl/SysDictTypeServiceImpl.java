@@ -1,6 +1,7 @@
 package com.aixbox.system.service.impl;
 
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.common.core.utils.StrUtils;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
 import com.aixbox.system.domain.entity.SysDictType;
@@ -9,10 +10,14 @@ import com.aixbox.system.domain.vo.request.SysDictTypeSaveReq;
 import com.aixbox.system.domain.vo.request.SysDictTypeUpdateReq;
 import com.aixbox.system.mapper.SysDictTypeMapper;
 import com.aixbox.system.service.SysDictTypeService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
 * 字典类型 Service实现类
@@ -74,6 +79,21 @@ public class SysDictTypeServiceImpl implements SysDictTypeService {
     @Override
     public PageResult<SysDictType> getSysDictTypePage(SysDictTypePageReq pageReq) {
         return sysDictTypeMapper.selectPage(pageReq);
+    }
+
+    @Override
+    public PageResult<SysDictType> selectPageDictTypeList(SysDictTypePageReq pageQuery) {
+        LambdaQueryWrapper<SysDictType> lqw = buildQueryWrapper(pageQuery);
+        return sysDictTypeMapper.selectPage(pageQuery, lqw);
+    }
+
+
+    private LambdaQueryWrapper<SysDictType> buildQueryWrapper(SysDictTypePageReq bo) {
+        LambdaQueryWrapper<SysDictType> lqw = Wrappers.lambdaQuery();
+        lqw.like(StrUtils.isNotBlank(bo.getDictName()), SysDictType::getDictName, bo.getDictName());
+        lqw.like(StrUtils.isNotBlank(bo.getDictType()), SysDictType::getDictType, bo.getDictType());
+        lqw.orderByAsc(SysDictType::getId);
+        return lqw;
     }
 }
 

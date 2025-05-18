@@ -10,7 +10,7 @@ import org.wildfly.common.annotation.NotNull;
 @Data
 public class SysDictTypeSaveReq {
 
-            /**
+    /**
     * 字典名称
     */
     private String dictName;

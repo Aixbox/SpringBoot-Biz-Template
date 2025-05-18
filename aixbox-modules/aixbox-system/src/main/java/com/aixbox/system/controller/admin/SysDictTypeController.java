@@ -1,6 +1,7 @@
 package com.aixbox.system.controller.admin;
 
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
@@ -32,10 +33,29 @@ import static com.aixbox.common.core.pojo.CommonResult.success;
  */
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/system/dictType")
+@RequestMapping("/system/dict/type")
 public class SysDictTypeController {
 
     private final SysDictTypeService sysDictTypeService;
+
+
+    /**
+     * 查询字典类型列表
+     */
+    @SaCheckPermission("system:dict:list")
+    @GetMapping("/list")
+    public CommonResult<PageResult<SysDictTypeResp>> list(@Valid SysDictTypePageReq pageQuery) {
+        PageResult<SysDictType> pageResult = sysDictTypeService.selectPageDictTypeList(pageQuery);
+        return success(BeanUtils.toBean(pageResult, SysDictTypeResp.class));
+    }
+
+
+
+
+
+
+
+
 
     /**
      * 新增字典类型

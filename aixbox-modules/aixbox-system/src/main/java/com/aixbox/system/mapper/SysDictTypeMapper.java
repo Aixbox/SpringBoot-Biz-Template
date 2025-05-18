@@ -21,9 +21,6 @@ public interface SysDictTypeMapper extends BaseMapperX<SysDictType> {
     */
     default PageResult<SysDictType> selectPage(SysDictTypePageReq req) {
         return selectPage(req, new LambdaQueryWrapperX<SysDictType>()
-                .likeIfPresent(SysDictType::getDictName, req.getKeyword())
-                .likeIfPresent(SysDictType::getDictType, req.getKeyword())
-                .likeIfPresent(SysDictType::getRemark, req.getKeyword())
                 .orderByDesc(BaseDO::getCreateTime));
     }
 

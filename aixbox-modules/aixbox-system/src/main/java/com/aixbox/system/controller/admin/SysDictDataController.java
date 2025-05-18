@@ -32,7 +32,7 @@ import static com.aixbox.common.core.pojo.CommonResult.success;
  */
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/system/dictData")
+@RequestMapping("/system/dict/data")
 public class SysDictDataController {
 
     private final SysDictDataService sysDictDataService;

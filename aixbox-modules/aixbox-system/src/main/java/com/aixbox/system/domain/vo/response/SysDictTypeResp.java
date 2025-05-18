@@ -22,11 +22,11 @@ public class SysDictTypeResp {
     * 字典类型
     */
     private String dictType;
-            /**
+    /**
     * 创建时间
     */
     private LocalDateTime createTime;
-                            /**
+    /**
     * 备注
     */
     private String remark;
