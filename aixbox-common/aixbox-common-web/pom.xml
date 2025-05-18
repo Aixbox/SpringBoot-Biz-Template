@@ -35,6 +35,11 @@
             <artifactId>aixbox-common-core</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.aixbox</groupId>
+            <artifactId>aixbox-common-json</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
