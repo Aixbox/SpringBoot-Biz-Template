@@ -50,6 +50,11 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.aixbox</groupId>
+            <artifactId>aixbox-common-excel</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

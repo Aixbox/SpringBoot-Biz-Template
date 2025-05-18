@@ -1,11 +1,17 @@
 package com.aixbox.system.service;
 
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.system.constant.CacheNames;
+import com.aixbox.system.domain.entity.SysDictData;
 import com.aixbox.system.domain.entity.SysDictType;
 import com.aixbox.system.domain.vo.request.SysDictTypePageReq;
+import com.aixbox.system.domain.vo.request.SysDictTypeQueryReq;
 import com.aixbox.system.domain.vo.request.SysDictTypeSaveReq;
 import com.aixbox.system.domain.vo.request.SysDictTypeUpdateReq;
+import com.aixbox.system.domain.vo.response.SysDictDataResp;
+import com.aixbox.system.domain.vo.response.SysDictTypeResp;
 import jakarta.validation.Valid;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -56,4 +62,27 @@ public interface SysDictTypeService {
      */
     void resetDictCache();
 
+    /**
+     * 根据条件分页查询字典类型
+     *
+     * @param dictType 字典类型信息
+     * @return 字典类型集合信息
+     */
+    List<SysDictTypeResp> selectDictTypeList(SysDictTypeQueryReq dictType);
+
+    /**
+     * 根据字典类型查询信息
+     *
+     * @param dictType 字典类型
+     * @return 字典类型
+     */
+    SysDictType selectDictTypeByType(String dictType);
+
+    /**
+     * 根据字典类型查询字典数据
+     *
+     * @param dictType 字典类型
+     * @return 字典数据集合信息
+     */
+    List<SysDictData> selectDictDataByType(String dictType);
 }

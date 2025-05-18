@@ -5,8 +5,10 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
+import com.aixbox.common.excel.utils.ExcelUtil;
 import com.aixbox.system.domain.entity.SysDictType;
 import com.aixbox.system.domain.vo.request.SysDictTypePageReq;
+import com.aixbox.system.domain.vo.request.SysDictTypeQueryReq;
 import com.aixbox.system.domain.vo.request.SysDictTypeSaveReq;
 import com.aixbox.system.domain.vo.request.SysDictTypeUpdateReq;
 import com.aixbox.system.domain.vo.response.SysDictTypeResp;
@@ -63,6 +65,15 @@ public class SysDictTypeController {
         return success();
     }
 
+    /**
+     * 导出字典类型列表
+     */
+    @SaCheckPermission("system:dict:export")
+    @PostMapping("/export")
+    public void export(SysDictTypeQueryReq dictType, HttpServletResponse response) {
+        List<SysDictTypeResp> list = sysDictTypeService.selectDictTypeList(dictType);
+        ExcelUtil.exportExcel(list, "字典类型", SysDictTypeResp.class, response);
+    }
 
 
 
