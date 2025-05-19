@@ -163,6 +163,16 @@ public class SysDictTypeServiceImpl implements SysDictTypeService, DictService {
         return null;
     }
 
+    /**
+     * 根据所有字典类型
+     *
+     * @return 字典类型集合信息
+     */
+    @Override
+    public List<SysDictType> selectDictTypeAll() {
+        return sysDictTypeMapper.selectList();
+    }
+
 
     /**
      * 根据字典类型和字典值获取字典标签

@@ -75,6 +75,14 @@ public class SysDictTypeController {
         ExcelUtil.exportExcel(list, "字典类型", SysDictTypeResp.class, response);
     }
 
+    /**
+     * 获取字典选择框列表
+     */
+    @GetMapping("/optionselect")
+    public CommonResult<List<SysDictTypeResp>> optionselect() {
+        List<SysDictType> dictTypes = sysDictTypeService.selectDictTypeAll();
+        return success(BeanUtils.toBean(dictTypes, SysDictTypeResp.class));
+    }
 
 
 

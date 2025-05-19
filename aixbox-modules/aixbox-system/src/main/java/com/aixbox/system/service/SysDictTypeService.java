@@ -85,4 +85,11 @@ public interface SysDictTypeService {
      * @return 字典数据集合信息
      */
     List<SysDictData> selectDictDataByType(String dictType);
+
+    /**
+     * 根据所有字典类型
+     *
+     * @return 字典类型集合信息
+     */
+    List<SysDictType> selectDictTypeAll();
 }
