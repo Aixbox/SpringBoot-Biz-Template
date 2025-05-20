@@ -5,11 +5,16 @@ import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
 import com.aixbox.system.domain.entity.SysDictData;
 import com.aixbox.system.domain.vo.request.SysDictDataPageReq;
+import com.aixbox.system.domain.vo.request.SysDictDataQueryReq;
 import com.aixbox.system.domain.vo.request.SysDictDataSaveReq;
 import com.aixbox.system.domain.vo.request.SysDictDataUpdateReq;
+import com.aixbox.system.domain.vo.response.SysDictDataResp;
 import com.aixbox.system.mapper.SysDictDataMapper;
 import com.aixbox.system.service.SysDictDataService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -74,6 +79,22 @@ public class SysDictDataServiceImpl implements SysDictDataService {
     @Override
     public PageResult<SysDictData> getSysDictDataPage(SysDictDataPageReq pageReq) {
         return sysDictDataMapper.selectPage(pageReq);
+    }
+
+    @Override
+    public List<SysDictDataResp> selectDictDataList(SysDictDataQueryReq dictData) {
+        LambdaQueryWrapper<SysDictData> lqw = buildQueryWrapper(dictData);
+        List<SysDictData> sysDictData = sysDictDataMapper.selectList(lqw);
+        return BeanUtils.toBean(sysDictData, SysDictDataResp.class);
+    }
+
+    private LambdaQueryWrapper<SysDictData> buildQueryWrapper(SysDictDataQueryReq bo) {
+        LambdaQueryWrapper<SysDictData> lqw = Wrappers.lambdaQuery();
+        lqw.eq(bo.getDictSort() != null, SysDictData::getDictSort, bo.getDictSort());
+        lqw.like(StringUtils.isNotBlank(bo.getDictLabel()), SysDictData::getDictLabel, bo.getDictLabel());
+        lqw.eq(StringUtils.isNotBlank(bo.getDictType()), SysDictData::getDictType, bo.getDictType());
+        lqw.orderByAsc(SysDictData::getDictSort);
+        return lqw;
     }
 }
 

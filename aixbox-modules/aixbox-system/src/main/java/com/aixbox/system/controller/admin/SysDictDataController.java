@@ -1,19 +1,24 @@
 package com.aixbox.system.controller.admin;
 
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
+import com.aixbox.common.excel.utils.ExcelUtil;
 import com.aixbox.system.domain.entity.SysDictData;
 import com.aixbox.system.domain.vo.request.SysDictDataPageReq;
+import com.aixbox.system.domain.vo.request.SysDictDataQueryReq;
 import com.aixbox.system.domain.vo.request.SysDictDataSaveReq;
 import com.aixbox.system.domain.vo.request.SysDictDataUpdateReq;
 import com.aixbox.system.domain.vo.response.SysDictDataResp;
 import com.aixbox.system.service.SysDictDataService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static com.aixbox.common.core.pojo.CommonResult.success;
 
@@ -36,6 +42,22 @@ import static com.aixbox.common.core.pojo.CommonResult.success;
 public class SysDictDataController {
 
     private final SysDictDataService sysDictDataService;
+
+    /**
+     * 导出字典数据列表
+     */
+    @SaCheckPermission("system:dict:export")
+    @PostMapping("/export")
+    public void export(SysDictDataQueryReq dictData, HttpServletResponse response) {
+        List<SysDictDataResp> list = sysDictDataService.selectDictDataList(dictData);
+        ExcelUtil.exportExcel(list, "字典数据", SysDictDataResp.class, response);
+    }
+
+
+
+
+
+
 
     /**
      * 新增字典数据
