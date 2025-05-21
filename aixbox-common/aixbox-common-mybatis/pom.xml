@@ -52,6 +52,15 @@
             <artifactId>mybatis-plus-join-boot-starter</artifactId>
         </dependency>
 
+
+        <!--数据权限-->
+        <dependency>
+            <groupId>com.aixbox</groupId>
+            <artifactId>aixbox-common-security</artifactId>
+        </dependency>
+
+
+
     </dependencies>
 
 </project>

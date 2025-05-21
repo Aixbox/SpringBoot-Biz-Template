@@ -2,21 +2,21 @@ package com.aixbox.common.mybatis.config;
 
 
 import cn.hutool.core.net.NetUtil;
+import com.aixbox.common.core.utils.spring.SpringUtils;
+import com.aixbox.common.datePermission.aspect.DataPermissionAspect;
+import com.aixbox.common.datePermission.interceptor.DataPermissionInterceptor;
 import com.aixbox.common.mybatis.core.handler.DefaultDBFieldHandler;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
-import com.baomidou.mybatisplus.extension.parser.JsqlParserGlobal;
-import com.baomidou.mybatisplus.extension.parser.cache.JdkSerialCaffeineJsqlParseCache;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * Mybatis 配置类
@@ -38,10 +38,53 @@ public class MybatisAutoConfiguration {
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor mybatisPlusInterceptor = new MybatisPlusInterceptor();
-        mybatisPlusInterceptor.addInnerInterceptor(new PaginationInnerInterceptor()); // 分页插件
+        // 数据权限处理
+        mybatisPlusInterceptor.addInnerInterceptor(dataPermissionInterceptor());
+        // 分页插件
+        mybatisPlusInterceptor.addInnerInterceptor(paginationInnerInterceptor());
+        // 乐观锁插件
+        mybatisPlusInterceptor.addInnerInterceptor(optimisticLockerInnerInterceptor());
         return mybatisPlusInterceptor;
     }
 
+    /**
+     * 数据权限切面处理器
+     */
+    @Bean
+    public DataPermissionAspect dataPermissionAspect() {
+        return new DataPermissionAspect();
+    }
+
+
+    /**
+     * 数据权限拦截器
+     */
+    public DataPermissionInterceptor dataPermissionInterceptor() {
+        String property = SpringUtils.getProperty("aixbox.info.base-package");
+        return new DataPermissionInterceptor( property + ".**.mapper.*Mapper");
+    }
+
+
+    /**
+     * 分页插件，自动识别数据库类型
+     */
+    public PaginationInnerInterceptor paginationInnerInterceptor() {
+        PaginationInnerInterceptor paginationInnerInterceptor = new PaginationInnerInterceptor();
+        // 分页合理化
+        paginationInnerInterceptor.setOverflow(true);
+        return paginationInnerInterceptor;
+    }
+
+    /**
+     * 乐观锁插件
+     */
+    public OptimisticLockerInnerInterceptor optimisticLockerInnerInterceptor() {
+        return new OptimisticLockerInnerInterceptor();
+    }
+
+    /**
+     * 元对象字段填充控制器
+     */
     @Bean
     public MetaObjectHandler defaultMetaObjectHandler() {
         return new DefaultDBFieldHandler(); // 自动填充参数类
