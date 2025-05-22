@@ -3,9 +3,9 @@ package com.aixbox.system.service;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.system.constant.CacheNames;
 import com.aixbox.system.domain.entity.SysDept;
-import com.aixbox.system.domain.vo.request.SysDeptPageReqVO;
-import com.aixbox.system.domain.vo.request.SysDeptSaveReqVO;
-import com.aixbox.system.domain.vo.request.SysDeptUpdateReqVO;
+import com.aixbox.system.domain.vo.request.dept.SysDeptPageReqVO;
+import com.aixbox.system.domain.vo.request.dept.SysDeptSaveReqVO;
+import com.aixbox.system.domain.vo.request.dept.SysDeptUpdateReqVO;
 import com.aixbox.system.domain.vo.response.SysDeptRespVO;
 import org.springframework.cache.annotation.Cacheable;
 

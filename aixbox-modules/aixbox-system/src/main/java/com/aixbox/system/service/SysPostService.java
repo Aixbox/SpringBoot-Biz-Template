@@ -2,9 +2,9 @@ package com.aixbox.system.service;
 
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.system.domain.entity.SysPost;
-import com.aixbox.system.domain.vo.request.SysPostPageReqVO;
-import com.aixbox.system.domain.vo.request.SysPostSaveReqVO;
-import com.aixbox.system.domain.vo.request.SysPostUpdateReqVO;
+import com.aixbox.system.domain.vo.request.post.SysPostPageReqVO;
+import com.aixbox.system.domain.vo.request.post.SysPostSaveReqVO;
+import com.aixbox.system.domain.vo.request.post.SysPostUpdateReqVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

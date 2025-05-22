@@ -13,7 +13,7 @@ import com.aixbox.common.security.utils.LoginHelper;
 import com.aixbox.system.domain.entity.SysClient;
 import com.aixbox.system.domain.entity.SysUser;
 import com.aixbox.system.domain.vo.response.LoginVO;
-import com.aixbox.system.domain.vo.request.PasswordLoginBody;
+import com.aixbox.system.domain.vo.request.user.PasswordLoginBody;
 import com.aixbox.system.enums.LoginType;
 import com.aixbox.system.mapper.SysUserMapper;
 import com.aixbox.system.service.SysLoginService;

@@ -2,9 +2,9 @@ package com.aixbox.system.service;
 
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.system.domain.entity.SysSocial;
-import com.aixbox.system.domain.vo.request.SysSocialPageReqVO;
-import com.aixbox.system.domain.vo.request.SysSocialSaveReqVO;
-import com.aixbox.system.domain.vo.request.SysSocialUpdateReqVO;
+import com.aixbox.system.domain.vo.request.user.SysSocialPageReqVO;
+import com.aixbox.system.domain.vo.request.user.SysSocialSaveReqVO;
+import com.aixbox.system.domain.vo.request.user.SysSocialUpdateReqVO;
 
 import java.util.List;
 

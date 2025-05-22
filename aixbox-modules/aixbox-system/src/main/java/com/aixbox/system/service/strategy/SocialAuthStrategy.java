@@ -7,8 +7,6 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.constant.SystemConstants;
 import com.aixbox.common.core.domain.model.LoginUser;
-import com.aixbox.common.core.exception.ServiceException;
-import com.aixbox.common.core.utils.StreamUtils;
 import com.aixbox.common.core.utils.ValidatorUtils;
 import com.aixbox.common.core.utils.json.JsonUtils;
 import com.aixbox.common.security.utils.LoginHelper;
@@ -18,7 +16,7 @@ import com.aixbox.system.constant.ErrorCodeConstants;
 import com.aixbox.system.domain.entity.SysClient;
 import com.aixbox.system.domain.entity.SysSocial;
 import com.aixbox.system.domain.entity.SysUser;
-import com.aixbox.system.domain.vo.request.SocialLoginBody;
+import com.aixbox.system.domain.vo.request.user.SocialLoginBody;
 import com.aixbox.system.domain.vo.response.LoginVO;
 import com.aixbox.system.mapper.SysUserMapper;
 import com.aixbox.system.service.SysLoginService;
@@ -30,7 +28,6 @@ import me.zhyd.oauth.model.AuthUser;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.aixbox.common.core.exception.util.ServiceExceptionUtil.exception;
 

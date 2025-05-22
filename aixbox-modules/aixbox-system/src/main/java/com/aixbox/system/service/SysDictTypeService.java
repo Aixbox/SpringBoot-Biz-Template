@@ -1,17 +1,14 @@
 package com.aixbox.system.service;
 
 import com.aixbox.common.core.pojo.PageResult;
-import com.aixbox.system.constant.CacheNames;
 import com.aixbox.system.domain.entity.SysDictData;
 import com.aixbox.system.domain.entity.SysDictType;
-import com.aixbox.system.domain.vo.request.SysDictTypePageReq;
-import com.aixbox.system.domain.vo.request.SysDictTypeQueryReq;
-import com.aixbox.system.domain.vo.request.SysDictTypeSaveReq;
-import com.aixbox.system.domain.vo.request.SysDictTypeUpdateReq;
-import com.aixbox.system.domain.vo.response.SysDictDataResp;
+import com.aixbox.system.domain.vo.request.dict.SysDictTypePageReq;
+import com.aixbox.system.domain.vo.request.dict.SysDictTypeQueryReq;
+import com.aixbox.system.domain.vo.request.dict.SysDictTypeSaveReq;
+import com.aixbox.system.domain.vo.request.dict.SysDictTypeUpdateReq;
 import com.aixbox.system.domain.vo.response.SysDictTypeResp;
 import jakarta.validation.Valid;
-import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 

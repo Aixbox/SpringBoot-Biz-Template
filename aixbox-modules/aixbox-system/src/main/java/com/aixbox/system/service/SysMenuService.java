@@ -3,10 +3,10 @@ package com.aixbox.system.service;
 import cn.hutool.core.lang.tree.Tree;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.system.domain.entity.SysMenu;
-import com.aixbox.system.domain.vo.request.SysMenuListReq;
-import com.aixbox.system.domain.vo.request.SysMenuPageReqVO;
-import com.aixbox.system.domain.vo.request.SysMenuSaveReqVO;
-import com.aixbox.system.domain.vo.request.SysMenuUpdateReqVO;
+import com.aixbox.system.domain.vo.request.menu.SysMenuListReq;
+import com.aixbox.system.domain.vo.request.menu.SysMenuPageReqVO;
+import com.aixbox.system.domain.vo.request.menu.SysMenuSaveReqVO;
+import com.aixbox.system.domain.vo.request.menu.SysMenuUpdateReqVO;
 import com.aixbox.system.domain.vo.response.RouterVO;
 import com.aixbox.system.domain.vo.response.SysMenuResp;
 

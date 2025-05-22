@@ -2,10 +2,10 @@ package com.aixbox.system.service;
 
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.system.domain.entity.SysDictData;
-import com.aixbox.system.domain.vo.request.SysDictDataPageReq;
-import com.aixbox.system.domain.vo.request.SysDictDataQueryReq;
-import com.aixbox.system.domain.vo.request.SysDictDataSaveReq;
-import com.aixbox.system.domain.vo.request.SysDictDataUpdateReq;
+import com.aixbox.system.domain.vo.request.dict.SysDictDataPageReq;
+import com.aixbox.system.domain.vo.request.dict.SysDictDataQueryReq;
+import com.aixbox.system.domain.vo.request.dict.SysDictDataSaveReq;
+import com.aixbox.system.domain.vo.request.dict.SysDictDataUpdateReq;
 import com.aixbox.system.domain.vo.response.SysDictDataResp;
 
 import java.util.List;

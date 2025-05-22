@@ -5,7 +5,7 @@ import com.aixbox.common.mybatis.core.dataobject.BaseDO;
 import com.aixbox.common.mybatis.core.mapper.BaseMapperX;
 import com.aixbox.common.mybatis.core.query.LambdaQueryWrapperX;
 import com.aixbox.system.domain.entity.SysSocial;
-import com.aixbox.system.domain.vo.request.SysSocialPageReqVO;
+import com.aixbox.system.domain.vo.request.user.SysSocialPageReqVO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

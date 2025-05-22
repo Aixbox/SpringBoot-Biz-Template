@@ -1,15 +1,13 @@
 package com.aixbox.system.service;
 
-import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageParam;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.system.domain.entity.SysUser;
-import com.aixbox.system.domain.vo.request.SysUserPageReqVO;
-import com.aixbox.system.domain.vo.request.SysUserQueryReq;
-import com.aixbox.system.domain.vo.request.SysUserSaveReqVO;
-import com.aixbox.system.domain.vo.request.SysUserUpdateReqVO;
+import com.aixbox.system.domain.vo.request.user.SysUserPageReqVO;
+import com.aixbox.system.domain.vo.request.user.SysUserQueryReq;
+import com.aixbox.system.domain.vo.request.user.SysUserSaveReqVO;
+import com.aixbox.system.domain.vo.request.user.SysUserUpdateReqVO;
 import com.aixbox.system.domain.vo.response.SysUserResp;
-import jakarta.validation.Valid;
 
 import java.util.List;
 

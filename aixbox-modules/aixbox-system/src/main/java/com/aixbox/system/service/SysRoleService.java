@@ -4,12 +4,11 @@ import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.system.domain.bo.SysRoleBo;
 import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.entity.SysUserRole;
-import com.aixbox.system.domain.vo.request.SysRoleChangeStatusReq;
-import com.aixbox.system.domain.vo.request.SysRolePageReqVO;
-import com.aixbox.system.domain.vo.request.SysRoleQueryReq;
-import com.aixbox.system.domain.vo.request.SysRoleSaveReqVO;
-import com.aixbox.system.domain.vo.request.SysRoleUpdateDataScopeReq;
-import com.aixbox.system.domain.vo.request.SysRoleUpdateReq;
+import com.aixbox.system.domain.vo.request.role.SysRolePageReqVO;
+import com.aixbox.system.domain.vo.request.role.SysRoleQueryReq;
+import com.aixbox.system.domain.vo.request.role.SysRoleSaveReqVO;
+import com.aixbox.system.domain.vo.request.role.SysRoleUpdateDataScopeReq;
+import com.aixbox.system.domain.vo.request.role.SysRoleUpdateReq;
 
 import java.util.List;
 import java.util.Set;

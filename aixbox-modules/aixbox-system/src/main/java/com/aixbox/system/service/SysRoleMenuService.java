@@ -2,9 +2,9 @@ package com.aixbox.system.service;
 
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.system.domain.entity.SysRoleMenu;
-import com.aixbox.system.domain.vo.request.SysRoleMenuPageReqVO;
-import com.aixbox.system.domain.vo.request.SysRoleMenuSaveReqVO;
-import com.aixbox.system.domain.vo.request.SysRoleMenuUpdateReqVO;
+import com.aixbox.system.domain.vo.request.role.SysRoleMenuPageReqVO;
+import com.aixbox.system.domain.vo.request.role.SysRoleMenuSaveReqVO;
+import com.aixbox.system.domain.vo.request.role.SysRoleMenuUpdateReqVO;
 
 import java.util.List;
 
