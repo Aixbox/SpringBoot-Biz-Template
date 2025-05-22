@@ -4,27 +4,35 @@ import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.aixbox.common.core.constant.SystemConstants;
 import com.aixbox.common.core.domain.model.LoginUser;
+import com.aixbox.common.core.exception.ServiceException;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.StrUtils;
+import com.aixbox.common.core.utils.StreamUtils;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
 import com.aixbox.common.security.utils.LoginHelper;
 import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.entity.SysUserRole;
 import com.aixbox.system.domain.vo.request.SysRolePageReqVO;
+import com.aixbox.system.domain.vo.request.SysRoleQueryReq;
 import com.aixbox.system.domain.vo.request.SysRoleSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysRoleUpdateReqVO;
 import com.aixbox.system.mapper.SysRoleMapper;
 import com.aixbox.system.mapper.SysUserRoleMapper;
 import com.aixbox.system.service.SysRoleService;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -180,6 +188,77 @@ public class SysRoleServiceImpl implements SysRoleService {
         }
         return rows;
     }
+
+    @Override
+    public void checkRoleDataScope(Long roleId) {
+        if (ObjectUtil.isNull(roleId)) {
+            return;
+        }
+        if (LoginHelper.isSuperAdmin()) {
+            return;
+        }
+        List<SysRole> roles = this.selectRoleList(new SysRoleQueryReq(roleId));
+        if (CollUtil.isEmpty(roles)) {
+            throw new ServiceException("没有权限访问角色数据！");
+        }
+    }
+
+
+
+    /**
+     * 根据条件查询角色数据
+     *
+     * @param role 角色信息
+     * @return 角色数据集合信息
+     */
+    @Override
+    public List<SysRole> selectRoleList(SysRoleQueryReq role) {
+        return sysRoleMapper.selectRoleList(this.buildQueryWrapper(role));
+    }
+
+    /**
+     * 批量选择授权用户角色
+     *
+     * @param roleId  角色ID
+     * @param userIds 需要授权的用户数据ID
+     * @return 结果
+     */
+    @Override
+    public int insertAuthUsers(Long roleId, Long[] userIds) {
+        // 新增用户与角色管理
+        int rows = 1;
+        List<Long> ids = List.of(userIds);
+        List<SysUserRole> list = StreamUtils.toList(ids, userId -> {
+            SysUserRole ur = new SysUserRole();
+            ur.setUserId(userId);
+            ur.setRoleId(roleId);
+            return ur;
+        });
+        if (CollUtil.isNotEmpty(list)) {
+            rows = sysUserRoleMapper.insertBatch(list) ? list.size() : 0;
+        }
+        if (rows > 0) {
+            cleanOnlineUser(ids);
+        }
+        return rows;
+    }
+
+
+    private Wrapper<SysRole> buildQueryWrapper(SysRoleQueryReq bo) {
+        Map<String, Object> params = bo.getParams();
+        QueryWrapper<SysRole> wrapper = Wrappers.query();
+        wrapper.eq("r.deleted", SystemConstants.NORMAL)
+               .eq(ObjectUtil.isNotNull(bo.getRoleId()), "r.id", bo.getRoleId())
+               .like(StringUtils.isNotBlank(bo.getRoleName()), "r.role_name", bo.getRoleName())
+               .eq(StringUtils.isNotBlank(bo.getStatus()), "r.status", bo.getStatus())
+               .like(StringUtils.isNotBlank(bo.getRoleKey()), "r.role_key", bo.getRoleKey())
+               .between(params.get("beginTime") != null && params.get("endTime") != null,
+                       "r.create_time", params.get("beginTime"), params.get("endTime"))
+               .orderByAsc("r.role_sort").orderByAsc("r.create_time");
+        return wrapper;
+    }
+
+
 }
 
 

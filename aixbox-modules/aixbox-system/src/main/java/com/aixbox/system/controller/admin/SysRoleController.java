@@ -35,6 +35,7 @@ import java.util.Arrays;
 
 import static com.aixbox.common.core.pojo.CommonResult.success;
 import static com.aixbox.common.core.pojo.CommonResult.toAjax;
+import static com.aixbox.system.constant.ErrorCodeConstants.BULK_AUTH_USER_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.BULK_REVOKE_USER_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.REVOKE_USER_ERROR;
 
@@ -81,6 +82,20 @@ public class SysRoleController {
     @PutMapping("/authUser/cancelAll")
     public CommonResult<Void> cancelAuthUserAll(Long roleId, Long[] userIds) {
         return toAjax(sysRoleService.deleteAuthUsers(roleId, userIds), BULK_REVOKE_USER_ERROR);
+    }
+
+
+    /**
+     * 批量选择用户授权
+     *
+     * @param roleId  角色ID
+     * @param userIds 用户ID串
+     */
+    @SaCheckPermission("system:role:edit")
+    @PutMapping("/authUser/selectAll")
+    public CommonResult<Void> selectAuthUserAll(Long roleId, Long[] userIds) {
+        sysRoleService.checkRoleDataScope(roleId);
+        return toAjax(sysRoleService.insertAuthUsers(roleId, userIds), BULK_AUTH_USER_ERROR);
     }
 
 

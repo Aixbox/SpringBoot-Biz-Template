@@ -4,6 +4,7 @@ import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.entity.SysUserRole;
 import com.aixbox.system.domain.vo.request.SysRolePageReqVO;
+import com.aixbox.system.domain.vo.request.SysRoleQueryReq;
 import com.aixbox.system.domain.vo.request.SysRoleSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysRoleUpdateReqVO;
 
@@ -78,4 +79,30 @@ public interface SysRoleService {
      * @return 结果
      */
     int deleteAuthUser(SysUserRole userRole);
+
+    /**
+     * 校验角色是否有数据权限
+     *
+     * @param roleId 角色id
+     */
+    void checkRoleDataScope(Long roleId);
+
+
+    /**
+     * 根据条件查询角色数据
+     *
+     * @param role 角色信息
+     * @return 角色数据集合信息
+     */
+    List<SysRole> selectRoleList(SysRoleQueryReq role);
+
+
+    /**
+     * 批量选择授权用户角色
+     *
+     * @param roleId  角色ID
+     * @param userIds 需要删除的用户数据ID
+     * @return 结果
+     */
+    int insertAuthUsers(Long roleId, Long[] userIds);
 }
