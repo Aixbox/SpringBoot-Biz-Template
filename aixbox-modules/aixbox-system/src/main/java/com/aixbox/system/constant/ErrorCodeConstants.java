@@ -31,5 +31,6 @@ public interface ErrorCodeConstants {
 
     // ========== 角色模块 模块 1-002-002-??? ==========
     ErrorCode BULK_REVOKE_USER_ERROR = new ErrorCode(1_002_002_000, "批量取消授权用户失败");
+    ErrorCode REVOKE_USER_ERROR = new ErrorCode(1_002_002_001, "取消授权用户失败");
 
 }

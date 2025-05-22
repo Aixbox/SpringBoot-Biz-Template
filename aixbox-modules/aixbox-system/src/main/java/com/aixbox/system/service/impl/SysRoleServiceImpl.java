@@ -163,6 +163,23 @@ public class SysRoleServiceImpl implements SysRoleService {
             }
         });
     }
+
+    /**
+     * 取消授权用户角色
+     *
+     * @param userRole 用户和角色关联信息
+     * @return 结果
+     */
+    @Override
+    public int deleteAuthUser(SysUserRole userRole) {
+        int rows = sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>()
+                .eq(SysUserRole::getRoleId, userRole.getRoleId())
+                .eq(SysUserRole::getUserId, userRole.getUserId()));
+        if (rows > 0) {
+            cleanOnlineUser(List.of(userRole.getUserId()));
+        }
+        return rows;
+    }
 }
 
 

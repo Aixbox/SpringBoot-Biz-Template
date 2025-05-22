@@ -8,6 +8,7 @@ import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.entity.SysUser;
+import com.aixbox.system.domain.entity.SysUserRole;
 import com.aixbox.system.domain.vo.request.SysRolePageReqVO;
 import com.aixbox.system.domain.vo.request.SysRoleSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysRoleUpdateReqVO;
@@ -35,6 +36,7 @@ import java.util.Arrays;
 import static com.aixbox.common.core.pojo.CommonResult.success;
 import static com.aixbox.common.core.pojo.CommonResult.toAjax;
 import static com.aixbox.system.constant.ErrorCodeConstants.BULK_REVOKE_USER_ERROR;
+import static com.aixbox.system.constant.ErrorCodeConstants.REVOKE_USER_ERROR;
 
 /**
  * 角色 Controller
@@ -58,6 +60,16 @@ public class SysRoleController {
         PageResult<SysUserResp> pageResult = sysUserService.selectAllocatedList(user, pageQuery);
         return success(pageResult);
     }
+
+    /**
+     * 取消授权用户
+     */
+    @SaCheckPermission("system:role:edit")
+    @PutMapping("/authUser/cancel")
+    public CommonResult<Void> cancelAuthUser(@RequestBody SysUserRole userRole) {
+        return toAjax(sysRoleService.deleteAuthUser(userRole), REVOKE_USER_ERROR);
+    }
+
 
     /**
      * 批量取消授权用户

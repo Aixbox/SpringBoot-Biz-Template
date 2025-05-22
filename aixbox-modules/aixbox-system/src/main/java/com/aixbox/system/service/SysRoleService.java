@@ -2,6 +2,7 @@ package com.aixbox.system.service;
 
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.system.domain.entity.SysRole;
+import com.aixbox.system.domain.entity.SysUserRole;
 import com.aixbox.system.domain.vo.request.SysRolePageReqVO;
 import com.aixbox.system.domain.vo.request.SysRoleSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysRoleUpdateReqVO;
@@ -69,4 +70,12 @@ public interface SysRoleService {
     int deleteAuthUsers(Long roleId, Long[] userIds);
 
     void cleanOnlineUser(List<Long> userIds);
+
+    /**
+     * 取消授权用户角色
+     *
+     * @param userRole 用户和角色关联信息
+     * @return 结果
+     */
+    int deleteAuthUser(SysUserRole userRole);
 }
