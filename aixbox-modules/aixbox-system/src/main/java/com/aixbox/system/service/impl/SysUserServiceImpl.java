@@ -1,12 +1,16 @@
 package com.aixbox.system.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.aixbox.common.core.constant.SystemConstants;
+import com.aixbox.common.core.pojo.PageParam;
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.common.core.utils.StrUtils;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
 import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.entity.SysUser;
 import com.aixbox.system.domain.vo.request.SysUserPageReqVO;
+import com.aixbox.system.domain.vo.request.SysUserQueryReq;
 import com.aixbox.system.domain.vo.request.SysUserSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysUserUpdateReqVO;
 import com.aixbox.system.domain.vo.response.SysRoleVO;
@@ -14,6 +18,9 @@ import com.aixbox.system.domain.vo.response.SysUserResp;
 import com.aixbox.system.mapper.SysRoleMapper;
 import com.aixbox.system.mapper.SysUserMapper;
 import com.aixbox.system.service.SysUserService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -113,6 +120,26 @@ public class SysUserServiceImpl implements SysUserService {
         List<SysRoleVO> sysRoleVO = MapstructUtils.convert(sysRoles, SysRoleVO.class);
         userResp.setRoles(sysRoleVO);
         return userResp;
+    }
+
+    /**
+     * 根据条件分页查询已分配用户角色列表
+     *
+     * @param user 用户信息
+     * @return 用户信息集合信息
+     */
+    @Override
+    public PageResult<SysUserResp> selectAllocatedList(SysUserQueryReq user, PageParam pageQuery) {
+        QueryWrapper<SysUser> wrapper = Wrappers.query();
+        wrapper.eq("u.deleted", SystemConstants.NORMAL)
+               .eq(ObjectUtil.isNotNull(user.getRoleId()), "r.role_id", user.getRoleId())
+               .like(StrUtils.isNotBlank(user.getUserName()), "u.user_name", user.getUserName())
+               .eq(StrUtils.isNotBlank(user.getStatus()), "u.status", user.getStatus())
+               .like(StrUtils.isNotBlank(user.getPhonenumber()), "u.phonenumber", user.getPhonenumber())
+               .orderByAsc("u.id");
+        Page<SysUser> page = sysUserMapper.selectAllocatedList(new Page<>(pageQuery.getPageNo(),
+                pageQuery.getPageSize()), wrapper);
+        return new PageResult<>(BeanUtils.toBean(page.getRecords(), SysUserResp.class), page.getTotal());
     }
 }
 

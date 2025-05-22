@@ -1,15 +1,21 @@
 package com.aixbox.system.controller.admin;
 
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.aixbox.common.core.pojo.CommonResult;
+import com.aixbox.common.core.pojo.PageParam;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.system.domain.entity.SysRole;
+import com.aixbox.system.domain.entity.SysUser;
 import com.aixbox.system.domain.vo.request.SysRolePageReqVO;
 import com.aixbox.system.domain.vo.request.SysRoleSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysRoleUpdateReqVO;
+import com.aixbox.system.domain.vo.request.SysUserQueryReq;
 import com.aixbox.system.domain.vo.response.SysRoleVO;
+import com.aixbox.system.domain.vo.response.SysUserResp;
 import com.aixbox.system.service.SysRoleService;
+import com.aixbox.system.service.SysUserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -36,6 +42,37 @@ import static com.aixbox.common.core.pojo.CommonResult.success;
 public class SysRoleController {
 
     private final SysRoleService sysRoleService;
+    private final SysUserService sysUserService;
+
+
+    /**
+     * 查询已分配用户角色列表
+     */
+    @SaCheckPermission("system:role:list")
+    @GetMapping("/authUser/allocatedList")
+    public CommonResult<PageResult<SysUserResp>> allocatedList( SysUserQueryReq user,
+                                                               @Valid PageParam pageQuery) {
+        PageResult<SysUserResp> pageResult = sysUserService.selectAllocatedList(user, pageQuery);
+        return success(pageResult);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * 新增角色
@@ -91,7 +128,7 @@ public class SysRoleController {
     @GetMapping("/page")
     public CommonResult<PageResult<SysRoleVO>> getSysRolePage(@Valid SysRolePageReqVO pageReqVO) {
         PageResult<SysRole> pageResult = sysRoleService.getSysRolePage(pageReqVO);
-        return success(BeanUtils.toBean(pageResult, SysRoleVO.class));
+        return success();
     }
 
 

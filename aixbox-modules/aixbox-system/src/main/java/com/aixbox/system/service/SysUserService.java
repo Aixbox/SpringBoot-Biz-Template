@@ -1,11 +1,15 @@
 package com.aixbox.system.service;
 
+import com.aixbox.common.core.pojo.CommonResult;
+import com.aixbox.common.core.pojo.PageParam;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.system.domain.entity.SysUser;
 import com.aixbox.system.domain.vo.request.SysUserPageReqVO;
+import com.aixbox.system.domain.vo.request.SysUserQueryReq;
 import com.aixbox.system.domain.vo.request.SysUserSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysUserUpdateReqVO;
 import com.aixbox.system.domain.vo.response.SysUserResp;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -64,4 +68,14 @@ public interface SysUserService {
      * @return 用户对象信息
      */
     SysUserResp selectUserById(Long userId);
+
+
+    /**
+     * 根据条件分页查询已分配用户角色列表
+     *
+     * @param user      用户信息
+     * @param pageQuery 分页
+     * @return 用户信息集合信息
+     */
+    PageResult<SysUserResp> selectAllocatedList(SysUserQueryReq user, PageParam pageQuery);
 }

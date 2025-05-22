@@ -74,7 +74,7 @@ public class SysUserUpdateReqVO {
     * 最后登录时间
     */
     private LocalDateTime loginDate;
-                                            /**
+    /**
     * 备注
     */
     private String remark;

@@ -5,4 +5,20 @@
 <mapper namespace="com.aixbox.system.mapper.SysUserMapper">
 
 
+    <resultMap type="com.aixbox.system.domain.entity.SysUser" id="SysUserResult">
+        <id property="id" column="id"/>
+    </resultMap>
+
+
+    <select id="selectAllocatedList" resultMap="SysUserResult">
+        select distinct u.id, u.dept_id, u.user_name, u.nick_name, u.email, u.phonenumber,
+                        u.status, u.create_time
+        from sys_user u
+                 left join sys_dept d on u.dept_id = d.id
+                 left join sys_user_role sur on u.id = sur.user_id
+                 left join sys_role r on r.id = sur.role_id
+            ${ew.getCustomSqlSegment}
+    </select>
+
+
 </mapper>
