@@ -83,6 +83,18 @@ public class CommonResult<T> implements Serializable {
         return result;
     }
 
+    /**
+     * 响应返回结果
+     *
+     * @param rows 影响行数
+     * @return 操作结果
+     */
+    public static CommonResult<Void> toAjax(int rows, ErrorCode errorCode) {
+        return rows > 0 ? success() : error(errorCode);
+    }
+
+
+
     public static boolean isSuccess(Integer code) {
         return Objects.equals(code, GlobalErrorCodeConstants.SUCCESS.getCode());
     }

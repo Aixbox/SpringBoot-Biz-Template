@@ -20,6 +20,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Arrays;
 
 import static com.aixbox.common.core.pojo.CommonResult.success;
+import static com.aixbox.common.core.pojo.CommonResult.toAjax;
+import static com.aixbox.system.constant.ErrorCodeConstants.BULK_REVOKE_USER_ERROR;
 
 /**
  * 角色 Controller
@@ -54,6 +57,18 @@ public class SysRoleController {
                                                                @Valid PageParam pageQuery) {
         PageResult<SysUserResp> pageResult = sysUserService.selectAllocatedList(user, pageQuery);
         return success(pageResult);
+    }
+
+    /**
+     * 批量取消授权用户
+     *
+     * @param roleId  角色ID
+     * @param userIds 用户ID串
+     */
+    @SaCheckPermission("system:role:edit")
+    @PutMapping("/authUser/cancelAll")
+    public CommonResult<Void> cancelAuthUserAll(Long roleId, Long[] userIds) {
+        return toAjax(sysRoleService.deleteAuthUsers(roleId, userIds), BULK_REVOKE_USER_ERROR);
     }
 
 

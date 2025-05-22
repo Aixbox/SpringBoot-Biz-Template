@@ -29,5 +29,7 @@ public interface ErrorCodeConstants {
     ErrorCode USERNAME_EXIST = new ErrorCode(1_002_001_002, "保存用户 {} 失败，注册账号已存在");
     ErrorCode USERNAME_NO_PERMISSION = new ErrorCode(1_002_001_003, "没有权限访问用户数据!");
 
+    // ========== 角色模块 模块 1-002-002-??? ==========
+    ErrorCode BULK_REVOKE_USER_ERROR = new ErrorCode(1_002_002_000, "批量取消授权用户失败");
 
 }

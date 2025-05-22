@@ -1,17 +1,26 @@
 package com.aixbox.system.service.impl;
 
+import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.aixbox.common.core.domain.model.LoginUser;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.StrUtils;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
+import com.aixbox.common.security.utils.LoginHelper;
 import com.aixbox.system.domain.entity.SysRole;
+import com.aixbox.system.domain.entity.SysUserRole;
 import com.aixbox.system.domain.vo.request.SysRolePageReqVO;
 import com.aixbox.system.domain.vo.request.SysRoleSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysRoleUpdateReqVO;
 import com.aixbox.system.mapper.SysRoleMapper;
+import com.aixbox.system.mapper.SysUserRoleMapper;
 import com.aixbox.system.service.SysRoleService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -26,6 +35,7 @@ import java.util.Set;
 public class SysRoleServiceImpl implements SysRoleService {
 
     private final SysRoleMapper sysRoleMapper;
+    private final SysUserRoleMapper sysUserRoleMapper;
 
     /**
      * 新增角色
@@ -107,6 +117,51 @@ public class SysRoleServiceImpl implements SysRoleService {
     @Override
     public List<SysRole> selectRolesByUserId(Long userId) {
         return sysRoleMapper.selectRolesByUserId(userId);
+    }
+
+    /**
+     * 批量取消授权用户角色
+     *
+     * @param roleId  角色ID
+     * @param userIds 需要取消授权的用户数据ID
+     * @return 结果
+     */
+    @Override
+    public int deleteAuthUsers(Long roleId, Long[] userIds) {
+        List<Long> ids = List.of(userIds);
+        int rows = sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>()
+                .eq(SysUserRole::getRoleId, roleId)
+                .in(SysUserRole::getUserId, ids));
+        if (rows > 0) {
+            cleanOnlineUser(ids);
+        }
+        return rows;
+    }
+
+    @Override
+    public void cleanOnlineUser(List<Long> userIds) {
+        List<String> keys = StpUtil.searchTokenValue("", 0, -1, false);
+        if (CollUtil.isEmpty(keys)) {
+            return;
+        }
+        // 角色关联的在线用户量过大会导致redis阻塞卡顿 谨慎操作
+        keys.parallelStream().forEach(key -> {
+            String token = StringUtils.substringAfterLast(key, ":");
+            // 如果已经过期则跳过
+            if (StpUtil.stpLogic.getTokenActiveTimeoutByToken(token) < -1) {
+                return;
+            }
+            LoginUser loginUser = LoginHelper.getLoginUser(token);
+            if (ObjectUtil.isNull(loginUser)) {
+                return;
+            }
+            if (userIds.contains(loginUser.getUserId())) {
+                try {
+                    StpUtil.logoutByTokenValue(token);
+                } catch (NotLoginException ignored) {
+                }
+            }
+        });
     }
 }
 

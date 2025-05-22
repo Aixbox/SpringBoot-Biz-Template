@@ -58,4 +58,15 @@ public interface SysRoleService {
      * @return 角色列表
      */
     List<SysRole> selectRolesByUserId(Long userId);
+
+    /**
+     * 批量取消授权用户角色
+     *
+     * @param roleId  角色ID
+     * @param userIds 需要取消授权的用户数据ID
+     * @return 结果
+     */
+    int deleteAuthUsers(Long roleId, Long[] userIds);
+
+    void cleanOnlineUser(List<Long> userIds);
 }
