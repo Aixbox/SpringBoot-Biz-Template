@@ -78,6 +78,16 @@ public interface SysMenuMapper extends BaseMapperX<SysMenu> {
      * @return 菜单列表
      */
     List<SysMenu> selectMenuListByUserId(QueryWrapper<SysMenu> queryWrapper);
+
+
+    /**
+     * 根据角色ID查询菜单树信息
+     *
+     * @param roleId            角色ID
+     * @param menuCheckStrictly 菜单树选择项是否关联显示
+     * @return 选中菜单列表
+     */
+    List<Long> selectMenuListByRoleId(Long roleId, Long menuCheckStrictly);
 }
 
 

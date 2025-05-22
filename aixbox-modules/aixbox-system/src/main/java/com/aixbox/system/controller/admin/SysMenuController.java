@@ -15,6 +15,7 @@ import com.aixbox.system.domain.vo.request.SysMenuListReq;
 import com.aixbox.system.domain.vo.request.SysMenuPageReqVO;
 import com.aixbox.system.domain.vo.request.SysMenuSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysMenuUpdateReqVO;
+import com.aixbox.system.domain.vo.response.MenuTreeSelectResp;
 import com.aixbox.system.domain.vo.response.RouterVO;
 import com.aixbox.system.domain.vo.response.SysMenuResp;
 import com.aixbox.system.service.SysMenuService;
@@ -97,6 +98,21 @@ public class SysMenuController {
         return success(sysMenuService.buildMenuTreeSelect(menus));
     }
 
+
+    /**
+     * 加载对应角色菜单列表树
+     *
+     * @param roleId 角色ID
+     */
+    @SaCheckPermission("system:menu:query")
+    @GetMapping(value = "/roleMenuTreeSelect/{roleId}")
+    public CommonResult<MenuTreeSelectResp> roleMenuTreeSelect(@PathVariable("roleId") Long roleId) {
+        List<SysMenuResp> menus = sysMenuService.selectMenuList(LoginHelper.getUserId());
+        MenuTreeSelectResp selectVo = new MenuTreeSelectResp();
+        selectVo.setCheckedKeys(sysMenuService.selectMenuListByRoleId(roleId));
+        selectVo.setMenus(sysMenuService.buildMenuTreeSelect(menus));
+        return success(selectVo);
+    }
 
 
 

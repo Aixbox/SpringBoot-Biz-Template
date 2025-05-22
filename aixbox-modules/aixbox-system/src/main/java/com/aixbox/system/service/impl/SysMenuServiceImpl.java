@@ -11,6 +11,7 @@ import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
 import com.aixbox.common.security.utils.LoginHelper;
 import com.aixbox.system.domain.entity.SysMenu;
+import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.vo.request.SysMenuListReq;
 import com.aixbox.system.domain.vo.request.SysMenuPageReqVO;
 import com.aixbox.system.domain.vo.request.SysMenuSaveReqVO;
@@ -19,6 +20,7 @@ import com.aixbox.system.domain.vo.response.MetaVO;
 import com.aixbox.system.domain.vo.response.RouterVO;
 import com.aixbox.system.domain.vo.response.SysMenuResp;
 import com.aixbox.system.mapper.SysMenuMapper;
+import com.aixbox.system.mapper.SysRoleMapper;
 import com.aixbox.system.service.SysMenuService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -40,6 +42,7 @@ import java.util.Set;
 public class SysMenuServiceImpl implements SysMenuService {
 
     private final SysMenuMapper sysMenuMapper;
+    private final SysRoleMapper  sysRoleMapper;
 
     /**
      * 新增菜单
@@ -252,6 +255,17 @@ public class SysMenuServiceImpl implements SysMenuService {
             menuTree.put("menuType", menu.getMenuType());
             menuTree.put("icon", menu.getIcon());
         });
+    }
+
+    @Override
+    public List<SysMenuResp> selectMenuList(Long userId) {
+        return selectMenuList(new SysMenuListReq(), userId);
+    }
+
+    @Override
+    public List<Long> selectMenuListByRoleId(Long roleId) {
+        SysRole role = sysRoleMapper.selectById(roleId);
+        return sysMenuMapper.selectMenuListByRoleId(roleId, role.getMenuCheckStrictly());
     }
 
     /**

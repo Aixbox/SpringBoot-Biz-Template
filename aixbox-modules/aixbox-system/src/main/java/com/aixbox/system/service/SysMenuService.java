@@ -96,4 +96,19 @@ public interface SysMenuService {
      */
     List<Tree<Long>> buildMenuTreeSelect(List<SysMenuResp> menus);
 
+    /**
+     * 根据用户查询系统菜单列表
+     *
+     * @param userId 用户ID
+     * @return 菜单列表
+     */
+    List<SysMenuResp> selectMenuList(Long userId);
+
+    /**
+     * 根据角色ID查询菜单树信息
+     *
+     * @param roleId 角色ID
+     * @return 选中菜单列表
+     */
+    List<Long> selectMenuListByRoleId(Long roleId);
 }
