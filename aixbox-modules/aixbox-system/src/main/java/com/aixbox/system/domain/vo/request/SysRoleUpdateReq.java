@@ -11,7 +11,7 @@ import org.wildfly.common.annotation.NotNull;
  */
 @Data
 @AutoMapper(target = SysRole.class)
-public class SysRoleUpdateReqVO {
+public class SysRoleUpdateReq {
 
     /**
     * 角色ID

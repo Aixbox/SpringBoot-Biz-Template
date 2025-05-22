@@ -1,14 +1,13 @@
-package com.aixbox.system.domain.vo.request;
+package com.aixbox.system.domain.bo;
 
 
 import lombok.Data;
 
 /**
- *
+ * 业务对象
  */
 @Data
-public class SysRoleChangeStatusReq {
-
+public class SysRoleBo {
 
     /**
      * 角色ID
@@ -25,8 +24,5 @@ public class SysRoleChangeStatusReq {
      * 角色状态（0正常 1停用）
      */
     private String status;
-
-
-
 
 }

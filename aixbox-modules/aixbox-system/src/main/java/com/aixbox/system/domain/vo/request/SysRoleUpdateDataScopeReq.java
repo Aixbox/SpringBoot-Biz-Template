@@ -7,8 +7,7 @@ import lombok.Data;
  *
  */
 @Data
-public class SysRoleChangeStatusReq {
-
+public class SysRoleUpdateDataScopeReq {
 
     /**
      * 角色ID
@@ -25,8 +24,6 @@ public class SysRoleChangeStatusReq {
      * 角色状态（0正常 1停用）
      */
     private String status;
-
-
 
 
 }

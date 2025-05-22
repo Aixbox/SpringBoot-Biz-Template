@@ -1,13 +1,15 @@
 package com.aixbox.system.service;
 
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.system.domain.bo.SysRoleBo;
 import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.entity.SysUserRole;
 import com.aixbox.system.domain.vo.request.SysRoleChangeStatusReq;
 import com.aixbox.system.domain.vo.request.SysRolePageReqVO;
 import com.aixbox.system.domain.vo.request.SysRoleQueryReq;
 import com.aixbox.system.domain.vo.request.SysRoleSaveReqVO;
-import com.aixbox.system.domain.vo.request.SysRoleUpdateReqVO;
+import com.aixbox.system.domain.vo.request.SysRoleUpdateDataScopeReq;
+import com.aixbox.system.domain.vo.request.SysRoleUpdateReq;
 
 import java.util.List;
 import java.util.Set;
@@ -29,7 +31,7 @@ public interface SysRoleService {
      * @param updateReqVO 修改参数
      * @return 是否成功
      */
-    Boolean updateSysRole(SysRoleUpdateReqVO updateReqVO);
+    Boolean updateSysRole(SysRoleUpdateReq updateReqVO);
 
     /**
      * 删除角色
@@ -112,7 +114,7 @@ public interface SysRoleService {
      *
      * @param role 角色信息
      */
-    void checkRoleAllowed(SysRoleChangeStatusReq role);
+    void checkRoleAllowed(SysRoleBo role);
 
     /**
      * 修改角色状态
@@ -124,4 +126,12 @@ public interface SysRoleService {
     int updateRoleStatus(Long roleId, String status);
 
     long countUserRoleByRoleId(Long roleId);
+
+    /**
+     * 修改数据权限信息
+     *
+     * @param role 角色信息
+     * @return 结果
+     */
+    int authDataScope(SysRoleUpdateDataScopeReq role);
 }

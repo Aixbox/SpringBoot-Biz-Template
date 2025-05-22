@@ -6,13 +6,14 @@ import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageParam;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
+import com.aixbox.system.domain.bo.SysRoleBo;
 import com.aixbox.system.domain.entity.SysRole;
-import com.aixbox.system.domain.entity.SysUser;
 import com.aixbox.system.domain.entity.SysUserRole;
 import com.aixbox.system.domain.vo.request.SysRoleChangeStatusReq;
 import com.aixbox.system.domain.vo.request.SysRolePageReqVO;
 import com.aixbox.system.domain.vo.request.SysRoleSaveReqVO;
-import com.aixbox.system.domain.vo.request.SysRoleUpdateReqVO;
+import com.aixbox.system.domain.vo.request.SysRoleUpdateDataScopeReq;
+import com.aixbox.system.domain.vo.request.SysRoleUpdateReq;
 import com.aixbox.system.domain.vo.request.SysUserQueryReq;
 import com.aixbox.system.domain.vo.response.SysRoleVO;
 import com.aixbox.system.domain.vo.response.SysUserResp;
@@ -22,7 +23,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +40,7 @@ import static com.aixbox.system.constant.ErrorCodeConstants.BULK_AUTH_USER_ERROR
 import static com.aixbox.system.constant.ErrorCodeConstants.BULK_REVOKE_USER_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.CHANGE_STATUS_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.REVOKE_USER_ERROR;
+import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_DATA_SCOPE_ERROR;
 
 /**
  * 角色 Controller
@@ -106,13 +107,22 @@ public class SysRoleController {
     @SaCheckPermission("system:role:edit")
     @PutMapping("/changeStatus")
     public CommonResult<Void> changeStatus(@RequestBody SysRoleChangeStatusReq role) {
-        sysRoleService.checkRoleAllowed(role);
+        sysRoleService.checkRoleAllowed(BeanUtils.toBean(role, SysRoleBo.class));
         sysRoleService.checkRoleDataScope(role.getRoleId());
         return toAjax(sysRoleService.updateRoleStatus(role.getRoleId(), role.getStatus()), CHANGE_STATUS_ERROR);
     }
 
 
-
+    /**
+     * 修改保存数据权限
+     */
+    @SaCheckPermission("system:role:edit")
+    @PutMapping("/dataScope")
+    public CommonResult<Void> dataScope(@RequestBody SysRoleUpdateDataScopeReq role) {
+        sysRoleService.checkRoleAllowed(BeanUtils.toBean(role, SysRoleBo.class));
+        sysRoleService.checkRoleDataScope(role.getRoleId());
+        return toAjax(sysRoleService.authDataScope(role), UPDATE_DATA_SCOPE_ERROR);
+    }
 
 
 
@@ -146,7 +156,7 @@ public class SysRoleController {
      * @return 是否成功
      */
     @PutMapping("/update")
-    public CommonResult<Boolean> edit(@Valid @RequestBody SysRoleUpdateReqVO updateReqVO) {
+    public CommonResult<Boolean> edit(@Valid @RequestBody SysRoleUpdateReq updateReqVO) {
         Boolean result = sysRoleService.updateSysRole(updateReqVO);
         return success(result);
     }
