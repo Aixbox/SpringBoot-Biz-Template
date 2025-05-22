@@ -4,6 +4,7 @@ import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.aixbox.common.core.constant.AdminConstants;
 import com.aixbox.common.core.constant.SystemConstants;
 import com.aixbox.common.core.domain.model.LoginUser;
 import com.aixbox.common.core.exception.ServiceException;
@@ -15,6 +16,7 @@ import com.aixbox.common.core.utils.object.MapstructUtils;
 import com.aixbox.common.security.utils.LoginHelper;
 import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.entity.SysUserRole;
+import com.aixbox.system.domain.vo.request.SysRoleChangeStatusReq;
 import com.aixbox.system.domain.vo.request.SysRolePageReqVO;
 import com.aixbox.system.domain.vo.request.SysRoleQueryReq;
 import com.aixbox.system.domain.vo.request.SysRoleSaveReqVO;
@@ -25,6 +27,7 @@ import com.aixbox.system.service.SysRoleService;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -241,6 +244,67 @@ public class SysRoleServiceImpl implements SysRoleService {
             cleanOnlineUser(ids);
         }
         return rows;
+    }
+
+    /**
+     * 校验角色是否允许操作
+     *
+     * @param role 角色信息
+     */
+    @Override
+    public void checkRoleAllowed(SysRoleChangeStatusReq role) {
+        if (ObjectUtil.isNotNull(role.getRoleId()) && LoginHelper.isSuperAdmin(role.getRoleId())) {
+            throw new ServiceException("不允许操作超级管理员角色");
+        }
+        String[] keys = new String[]{AdminConstants.SUPER_ADMIN_ROLE_KEY};
+        // 新增不允许使用 管理员标识符
+        if (ObjectUtil.isNull(role.getRoleId())
+                && StringUtils.equalsAny(role.getRoleKey(), keys)) {
+            throw new ServiceException("不允许使用系统内置管理员角色标识符!");
+        }
+        // 修改不允许修改 管理员标识符
+        if (ObjectUtil.isNotNull(role.getRoleId())) {
+            SysRole sysRole = sysRoleMapper.selectById(role.getRoleId());
+            // 如果标识符不相等 判断为修改了管理员标识符
+            if (!StringUtils.equals(sysRole.getRoleKey(), role.getRoleKey())) {
+                if (StringUtils.equalsAny(sysRole.getRoleKey(), keys)) {
+                    throw new ServiceException("不允许修改系统内置管理员角色标识符!");
+                } else if (StringUtils.equalsAny(role.getRoleKey(), keys)) {
+                    throw new ServiceException("不允许使用系统内置管理员角色标识符!");
+                }
+            }
+        }
+    }
+
+    /**
+     * 修改角色状态
+     *
+     * @param roleId 角色ID
+     * @param status 角色状态
+     * @return 结果
+     */
+    @Override
+    public int updateRoleStatus(Long roleId, String status) {
+        if (SystemConstants.DISABLE.equals(status) && this.countUserRoleByRoleId(roleId) > 0) {
+            throw new ServiceException("角色已分配，不能禁用!");
+        }
+        return sysRoleMapper.update(null,
+                new LambdaUpdateWrapper<SysRole>()
+                        .set(SysRole::getStatus, status)
+                        .eq(SysRole::getId, roleId));
+    }
+
+
+    /**
+     * 通过角色ID查询角色使用数量
+     *
+     * @param roleId 角色ID
+     * @return 结果
+     */
+    @Override
+    public long countUserRoleByRoleId(Long roleId) {
+        return sysUserRoleMapper.selectCount(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getRoleId,
+                roleId));
     }
 
 

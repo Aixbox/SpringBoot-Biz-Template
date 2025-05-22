@@ -33,5 +33,6 @@ public interface ErrorCodeConstants {
     ErrorCode BULK_REVOKE_USER_ERROR = new ErrorCode(1_002_002_000, "批量取消授权用户失败");
     ErrorCode REVOKE_USER_ERROR = new ErrorCode(1_002_002_001, "取消授权用户失败");
     ErrorCode BULK_AUTH_USER_ERROR = new ErrorCode(1_002_002_002, "批量选择用户授权失败");
+    ErrorCode CHANGE_STATUS_ERROR = new ErrorCode(1_002_002_002, "状态修改失败");
 
 }

@@ -9,6 +9,7 @@ import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.entity.SysUser;
 import com.aixbox.system.domain.entity.SysUserRole;
+import com.aixbox.system.domain.vo.request.SysRoleChangeStatusReq;
 import com.aixbox.system.domain.vo.request.SysRolePageReqVO;
 import com.aixbox.system.domain.vo.request.SysRoleSaveReqVO;
 import com.aixbox.system.domain.vo.request.SysRoleUpdateReqVO;
@@ -37,6 +38,7 @@ import static com.aixbox.common.core.pojo.CommonResult.success;
 import static com.aixbox.common.core.pojo.CommonResult.toAjax;
 import static com.aixbox.system.constant.ErrorCodeConstants.BULK_AUTH_USER_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.BULK_REVOKE_USER_ERROR;
+import static com.aixbox.system.constant.ErrorCodeConstants.CHANGE_STATUS_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.REVOKE_USER_ERROR;
 
 /**
@@ -96,6 +98,17 @@ public class SysRoleController {
     public CommonResult<Void> selectAuthUserAll(Long roleId, Long[] userIds) {
         sysRoleService.checkRoleDataScope(roleId);
         return toAjax(sysRoleService.insertAuthUsers(roleId, userIds), BULK_AUTH_USER_ERROR);
+    }
+
+    /**
+     * 状态修改
+     */
+    @SaCheckPermission("system:role:edit")
+    @PutMapping("/changeStatus")
+    public CommonResult<Void> changeStatus(@RequestBody SysRoleChangeStatusReq role) {
+        sysRoleService.checkRoleAllowed(role);
+        sysRoleService.checkRoleDataScope(role.getRoleId());
+        return toAjax(sysRoleService.updateRoleStatus(role.getRoleId(), role.getStatus()), CHANGE_STATUS_ERROR);
     }
 
 

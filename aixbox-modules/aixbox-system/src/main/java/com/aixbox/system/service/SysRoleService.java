@@ -3,6 +3,7 @@ package com.aixbox.system.service;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.entity.SysUserRole;
+import com.aixbox.system.domain.vo.request.SysRoleChangeStatusReq;
 import com.aixbox.system.domain.vo.request.SysRolePageReqVO;
 import com.aixbox.system.domain.vo.request.SysRoleQueryReq;
 import com.aixbox.system.domain.vo.request.SysRoleSaveReqVO;
@@ -105,4 +106,22 @@ public interface SysRoleService {
      * @return 结果
      */
     int insertAuthUsers(Long roleId, Long[] userIds);
+
+    /**
+     * 校验角色是否允许操作
+     *
+     * @param role 角色信息
+     */
+    void checkRoleAllowed(SysRoleChangeStatusReq role);
+
+    /**
+     * 修改角色状态
+     *
+     * @param roleId 角色ID
+     * @param status 角色状态
+     * @return 结果
+     */
+    int updateRoleStatus(Long roleId, String status);
+
+    long countUserRoleByRoleId(Long roleId);
 }
