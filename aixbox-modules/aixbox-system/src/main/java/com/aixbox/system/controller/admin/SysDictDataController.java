@@ -6,6 +6,7 @@ import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.excel.utils.ExcelUtil;
+import com.aixbox.system.domain.bo.SysDictDataBo;
 import com.aixbox.system.domain.entity.SysDictData;
 import com.aixbox.system.domain.vo.request.dict.SysDictDataPageReq;
 import com.aixbox.system.domain.vo.request.dict.SysDictDataQueryReq;
@@ -30,7 +31,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.aixbox.common.core.pojo.CommonResult.error;
 import static com.aixbox.common.core.pojo.CommonResult.success;
+import static com.aixbox.system.constant.ErrorCodeConstants.DICT_TYPE_EXIST;
+import static org.openxmlformats.schemas.drawingml.x2006.main.STTextTabAlignType.R;
 
 /**
  * 字典数据 Controller
@@ -65,6 +69,10 @@ public class SysDictDataController {
      */
     @PostMapping("/add")
     public CommonResult<Long> add(@Valid @RequestBody SysDictDataSaveReq addReq) {
+        SysDictDataBo dictDataBo = BeanUtils.toBean(addReq, SysDictDataBo.class);
+        if (!sysDictDataService.checkDictDataUnique(dictDataBo)) {
+            return error(DICT_TYPE_EXIST, addReq.getDictValue());
+        }
         Long sysDictDataId = sysDictDataService.addSysDictData(addReq);
         return success(sysDictDataId);
     }

@@ -1,8 +1,10 @@
 package com.aixbox.system.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
+import com.aixbox.common.core.utils.object.ObjectUtils;
 import com.aixbox.common.redis.utils.CacheUtils;
 import com.aixbox.system.constant.CacheNames;
 import com.aixbox.system.domain.bo.SysDictDataBo;
@@ -18,6 +20,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +40,7 @@ public class SysDictDataServiceImpl implements SysDictDataService {
      * @param addReq 新增参数
      * @return 新增数据id
      */
+    @CachePut(cacheNames = CacheNames.SYS_DICT, key = "#addReq.dictType")
     @Override
     public Long addSysDictData(SysDictDataSaveReq addReq) {
         SysDictData sysDictData = BeanUtils.toBean(addReq, SysDictData.class);
@@ -96,6 +100,23 @@ public class SysDictDataServiceImpl implements SysDictDataService {
         LambdaQueryWrapper<SysDictData> lqw = buildQueryWrapper(dictDataBo);
         List<SysDictData> sysDictData = sysDictDataMapper.selectList(lqw);
         return BeanUtils.toBean(sysDictData, SysDictDataResp.class);
+    }
+
+    /**
+     * 校验字典键值是否唯一
+     *
+     * @param dict 字典数据
+     * @return 结果
+     */
+    @Override
+    public boolean checkDictDataUnique(SysDictDataBo dict) {
+        Long dictCode = ObjectUtils.notNull(dict.getId(), -1L);
+        SysDictData entity = sysDictDataMapper.selectOne(new LambdaQueryWrapper<SysDictData>()
+                .eq(SysDictData::getDictType, dict.getDictType()).eq(SysDictData::getDictValue, dict.getDictValue()));
+        if (ObjectUtil.isNotNull(entity) && !dictCode.equals(entity.getId())) {
+            return false;
+        }
+        return true;
     }
 
     private LambdaQueryWrapper<SysDictData> buildQueryWrapper(SysDictDataBo bo) {

@@ -74,4 +74,18 @@ public class ObjectUtils extends ObjectUtil {
         return null;
     }
 
+    /**
+     * 如果值不为空，则返回值，否则返回默认值
+     *
+     * @param obj          对象
+     * @param defaultValue 默认值
+     * @return 对象字段
+     */
+    public static <T> T notNull(T obj, T defaultValue) {
+        if (isNotNull(obj)) {
+            return obj;
+        }
+        return defaultValue;
+    }
+
 }

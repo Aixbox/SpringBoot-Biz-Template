@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class SysDictDataSaveReq {
 
-            /**
+    /**
     * 字典排序
     */
     private Long dictSort;
@@ -37,7 +37,7 @@ public class SysDictDataSaveReq {
     * 是否默认（Y是 N否）
     */
     private String isDefault;
-                                            /**
+    /**
     * 备注
     */
     private String remark;

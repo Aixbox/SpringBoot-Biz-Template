@@ -1,12 +1,14 @@
 package com.aixbox.system.service;
 
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.system.domain.bo.SysDictDataBo;
 import com.aixbox.system.domain.entity.SysDictData;
 import com.aixbox.system.domain.vo.request.dict.SysDictDataPageReq;
 import com.aixbox.system.domain.vo.request.dict.SysDictDataQueryReq;
 import com.aixbox.system.domain.vo.request.dict.SysDictDataSaveReq;
 import com.aixbox.system.domain.vo.request.dict.SysDictDataUpdateReq;
 import com.aixbox.system.domain.vo.response.SysDictDataResp;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -57,4 +59,12 @@ public interface SysDictDataService {
      * @return 字典数据集合信息
      */
     List<SysDictDataResp> selectDictDataList(SysDictDataQueryReq dictData);
+
+    /**
+     * 校验字典键值是否唯一
+     *
+     * @param dict 字典数据
+     * @return 结果
+     */
+    boolean checkDictDataUnique(SysDictDataBo dict);
 }

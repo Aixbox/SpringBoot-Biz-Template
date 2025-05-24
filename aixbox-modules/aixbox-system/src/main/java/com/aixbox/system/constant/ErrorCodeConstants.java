@@ -36,4 +36,7 @@ public interface ErrorCodeConstants {
     ErrorCode CHANGE_STATUS_ERROR = new ErrorCode(1_002_002_003, "状态修改失败");
     ErrorCode UPDATE_DATA_SCOPE_ERROR = new ErrorCode(1_002_002_004, "修改保存数据权限失败");
 
+    // ========== 字典模块 模块 1-002-003-??? ==========
+    ErrorCode DICT_TYPE_EXIST = new ErrorCode(1_002_003_000, "新增字典数据'{}'失败，字典键值已存在");
+
 }

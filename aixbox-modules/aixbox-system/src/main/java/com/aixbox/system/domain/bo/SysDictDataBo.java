@@ -1,6 +1,8 @@
 package com.aixbox.system.domain.bo;
 
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 /**
@@ -9,6 +11,7 @@ import lombok.Data;
 @Data
 public class SysDictDataBo {
 
+    private Long id;
 
     /**
      * 字典排序
@@ -24,6 +27,11 @@ public class SysDictDataBo {
      * 字典类型
      */
     private String dictType;
+
+    /**
+     * 字典键值
+     */
+    private String dictValue;
 
 
 
