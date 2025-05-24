@@ -56,12 +56,6 @@ public class SysDictDataController {
         ExcelUtil.exportExcel(list, "字典数据", SysDictDataResp.class, response);
     }
 
-
-
-
-
-
-
     /**
      * 新增字典数据
      * @param addReq 新增参数
