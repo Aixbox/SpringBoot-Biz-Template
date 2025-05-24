@@ -3,6 +3,8 @@ package com.aixbox.system.service.impl;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
+import com.aixbox.common.redis.utils.CacheUtils;
+import com.aixbox.system.constant.CacheNames;
 import com.aixbox.system.domain.bo.SysDictDataBo;
 import com.aixbox.system.domain.entity.SysDictData;
 import com.aixbox.system.domain.vo.request.dict.SysDictDataPageReq;
@@ -60,7 +62,10 @@ public class SysDictDataServiceImpl implements SysDictDataService {
      */
     @Override
     public Boolean deleteSysDictData(List<Long> ids) {
-        return sysDictDataMapper.deleteByIds(ids) > 0;
+        int i = sysDictDataMapper.deleteByIds(ids);
+        SysDictData data = sysDictDataMapper.selectById(ids.get(0));
+        CacheUtils.evict(CacheNames.SYS_DICT, data.getDictType());
+        return i > 0;
     }
 
     /**
