@@ -3,6 +3,7 @@ package com.aixbox.system.service.impl;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
+import com.aixbox.system.domain.bo.SysDictDataBo;
 import com.aixbox.system.domain.entity.SysDictData;
 import com.aixbox.system.domain.vo.request.dict.SysDictDataPageReq;
 import com.aixbox.system.domain.vo.request.dict.SysDictDataQueryReq;
@@ -15,6 +16,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -78,17 +80,20 @@ public class SysDictDataServiceImpl implements SysDictDataService {
      */
     @Override
     public PageResult<SysDictData> getSysDictDataPage(SysDictDataPageReq pageReq) {
-        return sysDictDataMapper.selectPage(pageReq);
+        SysDictDataBo dictDataBo = BeanUtils.toBean(pageReq, SysDictDataBo.class);
+        LambdaQueryWrapper<SysDictData> lqw = buildQueryWrapper(dictDataBo);
+        return sysDictDataMapper.selectPage(pageReq, lqw);
     }
 
     @Override
     public List<SysDictDataResp> selectDictDataList(SysDictDataQueryReq dictData) {
-        LambdaQueryWrapper<SysDictData> lqw = buildQueryWrapper(dictData);
+        SysDictDataBo dictDataBo = BeanUtils.toBean(dictData, SysDictDataBo.class);
+        LambdaQueryWrapper<SysDictData> lqw = buildQueryWrapper(dictDataBo);
         List<SysDictData> sysDictData = sysDictDataMapper.selectList(lqw);
         return BeanUtils.toBean(sysDictData, SysDictDataResp.class);
     }
 
-    private LambdaQueryWrapper<SysDictData> buildQueryWrapper(SysDictDataQueryReq bo) {
+    private LambdaQueryWrapper<SysDictData> buildQueryWrapper(SysDictDataBo bo) {
         LambdaQueryWrapper<SysDictData> lqw = Wrappers.lambdaQuery();
         lqw.eq(bo.getDictSort() != null, SysDictData::getDictSort, bo.getDictSort());
         lqw.like(StringUtils.isNotBlank(bo.getDictLabel()), SysDictData::getDictLabel, bo.getDictLabel());

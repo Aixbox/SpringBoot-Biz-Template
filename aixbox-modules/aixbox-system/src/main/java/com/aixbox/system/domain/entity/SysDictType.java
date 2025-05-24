@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.time.LocalDateTime;
+
 /**
  * 字典类型对象
  */
@@ -34,6 +36,11 @@ public class SysDictType extends BaseDO {
     * 备注
     */
     private String remark;
+
+    /**
+     * 删除时间
+     */
+    private LocalDateTime deletedTime;
 
 
 }

@@ -13,8 +13,18 @@ import lombok.EqualsAndHashCode;
 public class SysDictDataPageReq extends PageParam {
 
     /**
-     * 关键字
+     * 字典排序
      */
-    private String keyword;
+    private Integer dictSort;
+
+    /**
+     * 字典标签
+     */
+    private String dictLabel;
+
+    /**
+     * 字典类型
+     */
+    private String dictType;
 
 }
