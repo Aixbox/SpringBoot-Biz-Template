@@ -33,8 +33,7 @@ import java.util.List;
 
 import static com.aixbox.common.core.pojo.CommonResult.error;
 import static com.aixbox.common.core.pojo.CommonResult.success;
-import static com.aixbox.system.constant.ErrorCodeConstants.DICT_TYPE_EXIST;
-import static org.openxmlformats.schemas.drawingml.x2006.main.STTextTabAlignType.R;
+import static com.aixbox.system.constant.ErrorCodeConstants.DICT_VALUE_EXIST;
 
 /**
  * 字典数据 Controller
@@ -65,7 +64,7 @@ public class SysDictDataController {
     public CommonResult<Long> add(@Valid @RequestBody SysDictDataSaveReq addReq) {
         SysDictDataBo dictDataBo = BeanUtils.toBean(addReq, SysDictDataBo.class);
         if (!sysDictDataService.checkDictDataUnique(dictDataBo)) {
-            return error(DICT_TYPE_EXIST, addReq.getDictValue());
+            return error(DICT_VALUE_EXIST, addReq.getDictValue());
         }
         Long sysDictDataId = sysDictDataService.addSysDictData(addReq);
         return success(sysDictDataId);
@@ -80,7 +79,7 @@ public class SysDictDataController {
     public CommonResult<Boolean> edit(@Valid @RequestBody SysDictDataUpdateReq updateReq) {
         SysDictDataBo dictDataBo = BeanUtils.toBean(updateReq, SysDictDataBo.class);
         if (!sysDictDataService.checkDictDataUnique(dictDataBo)) {
-            return error(DICT_TYPE_EXIST, updateReq.getDictValue());
+            return error(DICT_VALUE_EXIST, updateReq.getDictValue());
         }
         Boolean result = sysDictDataService.updateSysDictData(updateReq);
         return success(result);

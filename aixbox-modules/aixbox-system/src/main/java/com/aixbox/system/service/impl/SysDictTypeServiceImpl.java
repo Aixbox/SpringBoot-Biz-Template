@@ -2,6 +2,7 @@ package com.aixbox.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.domain.dto.DictDataDTO;
 import com.aixbox.common.core.domain.dto.DictTypeDTO;
 import com.aixbox.common.core.pojo.PageResult;
@@ -13,6 +14,7 @@ import com.aixbox.common.core.utils.object.MapstructUtils;
 import com.aixbox.common.core.utils.spring.SpringUtils;
 import com.aixbox.common.redis.utils.CacheUtils;
 import com.aixbox.system.constant.CacheNames;
+import com.aixbox.system.domain.bo.SysDictTypeBo;
 import com.aixbox.system.domain.entity.SysDictData;
 import com.aixbox.system.domain.entity.SysDictType;
 import com.aixbox.system.domain.vo.request.dict.SysDictTypePageReq;
@@ -27,6 +29,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +54,7 @@ public class SysDictTypeServiceImpl implements SysDictTypeService, DictService {
      * @param addReq 新增参数
      * @return 新增数据id
      */
+    @CachePut(cacheNames = CacheNames.SYS_DICT, key = "#addReq.dictType")
     @Override
     public Long addSysDictType(SysDictTypeSaveReq addReq) {
         SysDictType sysDictType = BeanUtils.toBean(addReq, SysDictType.class);
@@ -170,6 +174,15 @@ public class SysDictTypeServiceImpl implements SysDictTypeService, DictService {
     @Override
     public List<SysDictType> selectDictTypeAll() {
         return sysDictTypeMapper.selectList();
+    }
+
+    @Override
+    public boolean checkDictTypeUnique(SysDictTypeBo dictType) {
+        boolean exist = sysDictTypeMapper.exists(new LambdaQueryWrapper<SysDictType>()
+                .eq(SysDictType::getDictType, dictType.getDictType())
+                .ne(ObjectUtil.isNotNull(dictType.getId()), SysDictType::getId, dictType.getId()));
+        return !exist;
+
     }
 
 

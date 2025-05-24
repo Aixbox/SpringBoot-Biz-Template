@@ -1,6 +1,7 @@
 package com.aixbox.system.service;
 
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.system.domain.bo.SysDictTypeBo;
 import com.aixbox.system.domain.entity.SysDictData;
 import com.aixbox.system.domain.entity.SysDictType;
 import com.aixbox.system.domain.vo.request.dict.SysDictTypePageReq;
@@ -89,4 +90,12 @@ public interface SysDictTypeService {
      * @return 字典类型集合信息
      */
     List<SysDictType> selectDictTypeAll();
+
+    /**
+     * 校验字典类型称是否唯一
+     *
+     * @param sysDictType 字典类型
+     * @return 结果
+     */
+    boolean checkDictTypeUnique(SysDictTypeBo sysDictType);
 }
