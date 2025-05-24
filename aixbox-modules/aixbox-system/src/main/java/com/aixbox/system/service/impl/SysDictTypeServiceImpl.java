@@ -67,10 +67,17 @@ public class SysDictTypeServiceImpl implements SysDictTypeService, DictService {
      * @param updateReq 修改参数
      * @return 是否成功
      */
+    @CachePut(cacheNames = CacheNames.SYS_DICT, key = "#bo.dictType")
     @Override
     public Boolean updateSysDictType(SysDictTypeUpdateReq updateReq) {
         SysDictType sysDictType = MapstructUtils.convert(updateReq, SysDictType.class);
-        return sysDictTypeMapper.updateById(sysDictType) > 0;
+        SysDictType oldDict = sysDictTypeMapper.selectById(updateReq.getId());
+        int i = sysDictTypeMapper.updateById(sysDictType);
+        if (i > 0) {
+            CacheUtils.evict(CacheNames.SYS_DICT, oldDict.getDictType());
+            CacheUtils.evict(CacheNames.SYS_DICT_TYPE, oldDict.getDictType());
+        }
+        return i > 0;
     }
 
     /**

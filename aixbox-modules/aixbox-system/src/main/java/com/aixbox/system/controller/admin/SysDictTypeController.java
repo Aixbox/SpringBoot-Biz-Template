@@ -34,6 +34,7 @@ import java.util.List;
 import static com.aixbox.common.core.pojo.CommonResult.error;
 import static com.aixbox.common.core.pojo.CommonResult.success;
 import static com.aixbox.system.constant.ErrorCodeConstants.DICT_TYPE_EXIST;
+import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_DICT_TYPE_EXIST;
 import static org.openxmlformats.schemas.drawingml.x2006.main.STTextTabAlignType.R;
 
 /**
@@ -116,6 +117,10 @@ public class SysDictTypeController {
      */
     @PutMapping("/update")
     public CommonResult<Boolean> edit(@Valid @RequestBody SysDictTypeUpdateReq updateReq) {
+        SysDictTypeBo sysDictTypeBo = BeanUtils.toBean(updateReq, SysDictTypeBo.class);
+        if (!sysDictTypeService.checkDictTypeUnique(sysDictTypeBo)) {
+            return error(UPDATE_DICT_TYPE_EXIST, updateReq.getDictName());
+        }
         Boolean result = sysDictTypeService.updateSysDictType(updateReq);
         return success(result);
     }

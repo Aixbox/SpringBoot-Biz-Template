@@ -26,7 +26,7 @@ public class SysDictTypeUpdateReq {
     * 字典类型
     */
     private String dictType;
-                                            /**
+    /**
     * 备注
     */
     private String remark;
