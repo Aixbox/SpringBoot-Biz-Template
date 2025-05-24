@@ -53,6 +53,7 @@ public class SysDictDataServiceImpl implements SysDictDataService {
      * @param updateReq 修改参数
      * @return 是否成功
      */
+    @CachePut(cacheNames = CacheNames.SYS_DICT, key = "#updateReq.dictType")
     @Override
     public Boolean updateSysDictData(SysDictDataUpdateReq updateReq) {
         SysDictData sysDictData = MapstructUtils.convert(updateReq, SysDictData.class);

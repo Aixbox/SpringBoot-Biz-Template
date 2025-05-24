@@ -84,6 +84,10 @@ public class SysDictDataController {
      */
     @PutMapping("/update")
     public CommonResult<Boolean> edit(@Valid @RequestBody SysDictDataUpdateReq updateReq) {
+        SysDictDataBo dictDataBo = BeanUtils.toBean(updateReq, SysDictDataBo.class);
+        if (!sysDictDataService.checkDictDataUnique(dictDataBo)) {
+            return error(DICT_TYPE_EXIST, updateReq.getDictValue());
+        }
         Boolean result = sysDictDataService.updateSysDictData(updateReq);
         return success(result);
     }
