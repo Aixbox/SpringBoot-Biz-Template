@@ -67,9 +67,11 @@ public class SysDictDataServiceImpl implements SysDictDataService {
      */
     @Override
     public Boolean deleteSysDictData(List<Long> ids) {
+        for (Long id : ids) {
+            SysDictData data = sysDictDataMapper.selectById(id);
+            CacheUtils.evict(CacheNames.SYS_DICT, data.getDictType());
+        }
         int i = sysDictDataMapper.deleteByIds(ids);
-        SysDictData data = sysDictDataMapper.selectById(ids.get(0));
-        CacheUtils.evict(CacheNames.SYS_DICT, data.getDictType());
         return i > 0;
     }
 

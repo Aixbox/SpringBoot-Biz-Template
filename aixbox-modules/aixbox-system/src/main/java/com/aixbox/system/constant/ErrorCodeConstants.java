@@ -40,6 +40,7 @@ public interface ErrorCodeConstants {
     ErrorCode DICT_VALUE_EXIST = new ErrorCode(1_002_003_000, "新增字典数据'{}'失败，字典键值已存在");
     ErrorCode DICT_TYPE_EXIST = new ErrorCode(1_002_003_001, "新增字典'{}'失败，字典类型已存在");
     ErrorCode UPDATE_DICT_TYPE_EXIST = new ErrorCode(1_002_003_002, "修改字典'{}'失败，字典类型已存在");
+    ErrorCode CANNOT_BE_DELETED = new ErrorCode(1_002_003_003, "{}已分配,不能删除");
 
 
 }

@@ -5,6 +5,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.domain.dto.DictDataDTO;
 import com.aixbox.common.core.domain.dto.DictTypeDTO;
+import com.aixbox.common.core.exception.ServiceException;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.service.DictService;
 import com.aixbox.common.core.utils.StrUtils;
@@ -38,6 +39,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.aixbox.common.core.exception.util.ServiceExceptionUtil.exception;
+import static com.aixbox.system.constant.ErrorCodeConstants.CANNOT_BE_DELETED;
 
 /**
 * 字典类型 Service实现类
@@ -87,6 +91,15 @@ public class SysDictTypeServiceImpl implements SysDictTypeService, DictService {
      */
     @Override
     public Boolean deleteSysDictType(List<Long> ids) {
+        for (Long dictId : ids) {
+            SysDictType dictType = sysDictTypeMapper.selectById(dictId);
+            if (dictDataMapper.exists(new LambdaQueryWrapper<SysDictData>()
+                    .eq(SysDictData::getDictType, dictType.getDictType()))) {
+                throw exception(CANNOT_BE_DELETED, dictType.getDictName());
+            }
+            CacheUtils.evict(CacheNames.SYS_DICT, dictType.getDictType());
+            CacheUtils.evict(CacheNames.SYS_DICT_TYPE, dictType.getDictType());
+        }
         return sysDictTypeMapper.deleteByIds(ids) > 0;
     }
 
