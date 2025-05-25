@@ -93,6 +93,16 @@ public class CommonResult<T> implements Serializable {
         return rows > 0 ? success() : error(errorCode);
     }
 
+    /**
+     * 响应返回结果
+     *
+     * @param result 结果
+     * @return 操作结果
+     */
+    public static CommonResult<Void> toAjax(boolean result, ErrorCode errorCode) {
+        return result ? success() : error(errorCode);
+    }
+
 
 
     public static boolean isSuccess(Integer code) {

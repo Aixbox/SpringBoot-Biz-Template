@@ -45,7 +45,7 @@ public class SysMenuUpdateReqVO {
     /**
     * 是否为外链（0是 1否）
     */
-    private Long isFrame;
+    private String isFrame;
     /**
     * 是否缓存（0缓存 1不缓存）
     */

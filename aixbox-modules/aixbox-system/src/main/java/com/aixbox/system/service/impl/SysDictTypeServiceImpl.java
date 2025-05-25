@@ -71,7 +71,7 @@ public class SysDictTypeServiceImpl implements SysDictTypeService, DictService {
      * @param updateReq 修改参数
      * @return 是否成功
      */
-    @CachePut(cacheNames = CacheNames.SYS_DICT, key = "#bo.dictType")
+    @CachePut(cacheNames = CacheNames.SYS_DICT, key = "#updateReq.dictType")
     @Override
     public Boolean updateSysDictType(SysDictTypeUpdateReq updateReq) {
         SysDictType sysDictType = MapstructUtils.convert(updateReq, SysDictType.class);

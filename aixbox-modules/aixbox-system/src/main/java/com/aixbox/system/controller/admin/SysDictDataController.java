@@ -2,6 +2,7 @@ package com.aixbox.system.controller.admin;
 
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
@@ -14,11 +15,13 @@ import com.aixbox.system.domain.vo.request.dict.SysDictDataSaveReq;
 import com.aixbox.system.domain.vo.request.dict.SysDictDataUpdateReq;
 import com.aixbox.system.domain.vo.response.SysDictDataResp;
 import com.aixbox.system.service.SysDictDataService;
+import com.aixbox.system.service.SysDictTypeService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -44,6 +48,7 @@ import static com.aixbox.system.constant.ErrorCodeConstants.DICT_VALUE_EXIST;
 public class SysDictDataController {
 
     private final SysDictDataService sysDictDataService;
+    private final SysDictTypeService dictTypeService;
 
     /**
      * 导出字典数据列表
@@ -53,6 +58,20 @@ public class SysDictDataController {
     public void export(SysDictDataQueryReq dictData, HttpServletResponse response) {
         List<SysDictDataResp> list = sysDictDataService.selectDictDataList(dictData);
         ExcelUtil.exportExcel(list, "字典数据", SysDictDataResp.class, response);
+    }
+
+    /**
+     * 根据字典类型查询字典数据信息
+     *
+     * @param dictType 字典类型
+     */
+    @GetMapping(value = "/type/{dictType}")
+    public CommonResult<List<SysDictDataResp>> dictType(@PathVariable String dictType) {
+        List<SysDictData> data = dictTypeService.selectDictDataByType(dictType);
+        if (ObjectUtil.isNull(data)) {
+            data = new ArrayList<>();
+        }
+        return success(BeanUtils.toBean(data, SysDictDataResp.class));
     }
 
     /**

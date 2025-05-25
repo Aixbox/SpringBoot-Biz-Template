@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class SysMenuSaveReqVO {
 
-            /**
+    /**
     * 菜单名称
     */
     private String menuName;
@@ -36,7 +36,7 @@ public class SysMenuSaveReqVO {
     /**
     * 是否为外链（0是 1否）
     */
-    private Long isFrame;
+    private String isFrame;
     /**
     * 是否缓存（0缓存 1不缓存）
     */
@@ -61,7 +61,7 @@ public class SysMenuSaveReqVO {
     * 菜单图标
     */
     private String icon;
-                                            /**
+    /**
     * 备注
     */
     private String remark;

@@ -42,5 +42,15 @@ public interface ErrorCodeConstants {
     ErrorCode UPDATE_DICT_TYPE_EXIST = new ErrorCode(1_002_003_002, "修改字典'{}'失败，字典类型已存在");
     ErrorCode CANNOT_BE_DELETED = new ErrorCode(1_002_003_003, "{}已分配,不能删除");
 
+    // ========== 菜单模块 模块 1-002-004-??? ==========
+    ErrorCode MENU_NAME_EXIST = new ErrorCode(1_002_004_000, "新增菜单'{}'失败，菜单名称已存在");
+    ErrorCode ADDRESS_NOT_HTTP = new ErrorCode(1_002_004_001, "新增菜单'{}'失败，地址必须以http(s)://开头");
+    ErrorCode UPDATE_MENU_NAME_EXIST = new ErrorCode(1_002_004_002, "修改菜单'{}'失败，菜单名称已存在");
+    ErrorCode UPDATE_MENU_ADDRESS_NOT_HTTP = new ErrorCode(1_002_004_003, "修改菜单'{}'失败，地址必须以http(s)://开头");
+    ErrorCode UPDATE_MENU_PARENT_ERROR = new ErrorCode(1_002_004_004, "修改菜单'{}'失败，上级菜单不能选择自己");
+    ErrorCode UPDATE_MENU_ERROR = new ErrorCode(1_002_004_005, "修改菜单失败");
+    ErrorCode EXIST_CHILD_MENU = new ErrorCode(1_002_004_006, "存在子菜单,不允许删除");
+    ErrorCode MENU_EXIST_ROLE = new ErrorCode(1_002_004_007, "菜单已分配,不允许删除");
+
 
 }

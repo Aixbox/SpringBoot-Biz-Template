@@ -2,6 +2,7 @@ package com.aixbox.system.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.constant.SystemConstants;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.StrUtils;
@@ -10,8 +11,10 @@ import com.aixbox.common.core.utils.TreeBuildUtils;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
 import com.aixbox.common.security.utils.LoginHelper;
+import com.aixbox.system.domain.bo.SysMenuBo;
 import com.aixbox.system.domain.entity.SysMenu;
 import com.aixbox.system.domain.entity.SysRole;
+import com.aixbox.system.domain.entity.SysRoleMenu;
 import com.aixbox.system.domain.vo.request.menu.SysMenuListReq;
 import com.aixbox.system.domain.vo.request.menu.SysMenuPageReqVO;
 import com.aixbox.system.domain.vo.request.menu.SysMenuSaveReqVO;
@@ -21,7 +24,9 @@ import com.aixbox.system.domain.vo.response.RouterVO;
 import com.aixbox.system.domain.vo.response.SysMenuResp;
 import com.aixbox.system.mapper.SysMenuMapper;
 import com.aixbox.system.mapper.SysRoleMapper;
+import com.aixbox.system.mapper.SysRoleMenuMapper;
 import com.aixbox.system.service.SysMenuService;
+import com.aixbox.system.service.SysRoleMenuService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -43,6 +48,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 
     private final SysMenuMapper sysMenuMapper;
     private final SysRoleMapper  sysRoleMapper;
+    private final SysRoleMenuMapper  sysRoleMenuMapper;
 
     /**
      * 新增菜单
@@ -266,6 +272,43 @@ public class SysMenuServiceImpl implements SysMenuService {
     public List<Long> selectMenuListByRoleId(Long roleId) {
         SysRole role = sysRoleMapper.selectById(roleId);
         return sysMenuMapper.selectMenuListByRoleId(roleId, role.getMenuCheckStrictly());
+    }
+
+    /**
+     * 校验菜单名称是否唯一
+     *
+     * @param menuBo 菜单信息
+     * @return 结果
+     */
+    @Override
+    public boolean checkMenuNameUnique(SysMenuBo menuBo) {
+        boolean exist = sysMenuMapper.exists(new LambdaQueryWrapper<SysMenu>()
+                .eq(SysMenu::getMenuName, menuBo.getMenuName())
+                .eq(SysMenu::getParentId, menuBo.getParentId())
+                .ne(ObjectUtil.isNotNull(menuBo.getId()), SysMenu::getId, menuBo.getId()));
+        return !exist;
+    }
+
+    /**
+     * 是否存在菜单子节点
+     *
+     * @param id 菜单ID
+     * @return 结果
+     */
+    @Override
+    public boolean hasChildByMenuId(Long id) {
+        return sysMenuMapper.exists(new LambdaQueryWrapper<SysMenu>().eq(SysMenu::getParentId, id));
+    }
+
+    /**
+     * 查询菜单使用数量
+     *
+     * @param id 菜单ID
+     * @return 结果
+     */
+    @Override
+    public boolean checkMenuExistRole(Long id) {
+        return sysRoleMenuMapper.exists(new LambdaQueryWrapper<SysRoleMenu>().eq(SysRoleMenu::getMenuId, id));
     }
 
     /**

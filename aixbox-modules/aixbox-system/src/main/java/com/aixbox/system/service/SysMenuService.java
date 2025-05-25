@@ -2,6 +2,7 @@ package com.aixbox.system.service;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.system.domain.bo.SysMenuBo;
 import com.aixbox.system.domain.entity.SysMenu;
 import com.aixbox.system.domain.vo.request.menu.SysMenuListReq;
 import com.aixbox.system.domain.vo.request.menu.SysMenuPageReqVO;
@@ -9,6 +10,7 @@ import com.aixbox.system.domain.vo.request.menu.SysMenuSaveReqVO;
 import com.aixbox.system.domain.vo.request.menu.SysMenuUpdateReqVO;
 import com.aixbox.system.domain.vo.response.RouterVO;
 import com.aixbox.system.domain.vo.response.SysMenuResp;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;
 import java.util.Set;
@@ -111,4 +113,28 @@ public interface SysMenuService {
      * @return 选中菜单列表
      */
     List<Long> selectMenuListByRoleId(Long roleId);
+
+    /**
+     * 校验菜单名称是否唯一
+     *
+     * @param menuBo 菜单信息
+     * @return 结果
+     */
+    boolean checkMenuNameUnique(SysMenuBo menuBo);
+
+    /**
+     * 是否存在菜单子节点
+     *
+     * @param id 菜单ID
+     * @return 结果 true 存在 false 不存在
+     */
+    boolean hasChildByMenuId(Long id);
+
+    /**
+     * 查询菜单是否存在角色
+     *
+     * @param id 菜单ID
+     * @return 结果 true 存在 false 不存在
+     */
+    boolean checkMenuExistRole(Long id);
 }
