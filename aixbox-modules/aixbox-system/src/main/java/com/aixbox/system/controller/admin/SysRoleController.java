@@ -34,13 +34,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
 
+import static com.aixbox.common.core.pojo.CommonResult.error;
 import static com.aixbox.common.core.pojo.CommonResult.success;
 import static com.aixbox.common.core.pojo.CommonResult.toAjax;
 import static com.aixbox.system.constant.ErrorCodeConstants.BULK_AUTH_USER_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.BULK_REVOKE_USER_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.CHANGE_STATUS_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.REVOKE_USER_ERROR;
+import static com.aixbox.system.constant.ErrorCodeConstants.ROLE_KEY_EXIST;
+import static com.aixbox.system.constant.ErrorCodeConstants.ROLE_NAME_EXIST;
 import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_DATA_SCOPE_ERROR;
+import static net.sf.jsqlparser.util.validation.metadata.NamedObject.role;
 
 /**
  * 角色 Controller
@@ -146,6 +150,13 @@ public class SysRoleController {
      */
     @PostMapping("/add")
     public CommonResult<Long> add(@Valid @RequestBody SysRoleSaveReqVO addReqVO) {
+        SysRoleBo sysRolebo = BeanUtils.toBean(addReqVO, SysRoleBo.class);
+        sysRoleService.checkRoleAllowed(sysRolebo);
+        if (!sysRoleService.checkRoleNameUnique(sysRolebo)) {
+            return error(ROLE_NAME_EXIST, addReqVO.getRoleName());
+        } else if (!sysRoleService.checkRoleKeyUnique(sysRolebo)) {
+            return error(ROLE_KEY_EXIST, addReqVO.getRoleName());
+        }
         Long sysRoleId = sysRoleService.addSysRole(addReqVO);
         return success(sysRoleId);
     }

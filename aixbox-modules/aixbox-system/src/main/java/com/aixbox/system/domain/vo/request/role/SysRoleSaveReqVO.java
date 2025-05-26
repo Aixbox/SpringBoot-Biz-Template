@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class SysRoleSaveReqVO {
 
-            /**
+    /**
     * 角色名称
     */
     private String roleName;
@@ -37,7 +37,7 @@ public class SysRoleSaveReqVO {
     * 角色状态（0正常 1停用）
     */
     private String status;
-                                            /**
+    /**
     * 备注
     */
     private String remark;

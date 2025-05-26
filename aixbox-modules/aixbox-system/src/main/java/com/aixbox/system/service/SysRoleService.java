@@ -133,4 +133,20 @@ public interface SysRoleService {
      * @return 结果
      */
     int authDataScope(SysRoleUpdateDataScopeReq role);
+
+    /**
+     * 校验角色名称是否唯一
+     *
+     * @param sysRolebo 角色信息
+     * @return 结果
+     */
+    boolean checkRoleNameUnique(SysRoleBo sysRolebo);
+
+    /**
+     * 校验角色权限是否唯一
+     *
+     * @param sysRolebo 角色信息
+     * @return 结果
+     */
+    boolean checkRoleKeyUnique(SysRoleBo sysRolebo);
 }

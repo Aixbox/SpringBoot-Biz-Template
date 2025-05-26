@@ -329,6 +329,34 @@ public class SysRoleServiceImpl implements SysRoleService {
         return 1;
     }
 
+    /**
+     * 校验角色名称是否唯一
+     *
+     * @param sysRolebo 角色信息
+     * @return 结果
+     */
+    @Override
+    public boolean checkRoleNameUnique(SysRoleBo sysRolebo) {
+        boolean exist = sysRoleMapper.exists(new LambdaQueryWrapper<SysRole>()
+                .eq(SysRole::getRoleName, sysRolebo.getRoleName())
+                .ne(ObjectUtil.isNotNull(sysRolebo.getRoleId()), SysRole::getId, sysRolebo.getRoleId()));
+        return !exist;
+    }
+
+    /**
+     * 校验角色权限是否唯一
+     *
+     * @param sysRolebo 角色信息
+     * @return 结果
+     */
+    @Override
+    public boolean checkRoleKeyUnique(SysRoleBo sysRolebo) {
+        boolean exist = sysRoleMapper.exists(new LambdaQueryWrapper<SysRole>()
+                .eq(SysRole::getRoleKey, sysRolebo.getRoleKey())
+                .ne(ObjectUtil.isNotNull(sysRolebo.getRoleId()), SysRole::getId, sysRolebo.getRoleId()));
+        return !exist;
+    }
+
 
     private Wrapper<SysRole> buildQueryWrapper(SysRoleQueryReq bo) {
         Map<String, Object> params = bo.getParams();
