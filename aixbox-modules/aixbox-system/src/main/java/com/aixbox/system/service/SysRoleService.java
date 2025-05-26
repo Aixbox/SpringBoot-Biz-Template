@@ -149,4 +149,6 @@ public interface SysRoleService {
      * @return 结果
      */
     boolean checkRoleKeyUnique(SysRoleBo sysRolebo);
+
+    void cleanOnlineUserByRole(Long roleId);
 }

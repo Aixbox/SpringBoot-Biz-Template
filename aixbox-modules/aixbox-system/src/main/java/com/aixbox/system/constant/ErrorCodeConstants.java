@@ -38,7 +38,10 @@ public interface ErrorCodeConstants {
     ErrorCode CHANGE_STATUS_ERROR = new ErrorCode(1_002_002_003, "状态修改失败");
     ErrorCode UPDATE_DATA_SCOPE_ERROR = new ErrorCode(1_002_002_004, "修改保存数据权限失败");
     ErrorCode ROLE_NAME_EXIST = new ErrorCode(1_002_002_005, "新增角色'{}'失败，角色名称已存在");
-    ErrorCode ROLE_KEY_EXIST = new ErrorCode(1_002_002_006, "新增角色'{}'失败，角色权限已存在");
+    ErrorCode UPDATE_ROLE_NAME_EXIST = new ErrorCode(1_002_002_006, "新增角色'{}'失败，角色名称已存在");
+    ErrorCode ROLE_KEY_EXIST = new ErrorCode(1_002_002_007, "新增角色'{}'失败，角色权限已存在");
+    ErrorCode UPDATE_ROLE_KEY_EXIST = new ErrorCode(1_002_002_008, "新增角色'{}'失败，角色权限已存在");
+    ErrorCode UPDATE_ROLE_ERROR = new ErrorCode(1_002_002_009, "修改角色'{}'失败，请联系管理员");
 
     // ========== 字典模块 模块 1-002-003-??? ==========
     ErrorCode DICT_VALUE_EXIST = new ErrorCode(1_002_003_000, "新增字典数据'{}'失败，字典键值已存在");

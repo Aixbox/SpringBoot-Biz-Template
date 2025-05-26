@@ -17,7 +17,7 @@ public class SysRoleUpdateReq {
     * 角色ID
     */
     @NotNull
-    private Long id;
+    private Long roleId;
     /**
     * 角色名称
     */

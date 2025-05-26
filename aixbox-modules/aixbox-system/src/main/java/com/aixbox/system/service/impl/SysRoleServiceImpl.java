@@ -357,6 +357,37 @@ public class SysRoleServiceImpl implements SysRoleService {
         return !exist;
     }
 
+    @Override
+    public void cleanOnlineUserByRole(Long roleId) {
+        // 如果角色未绑定用户 直接返回
+        Long num = sysUserRoleMapper.selectCount(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getRoleId, roleId));
+        if (num == 0) {
+            return;
+        }
+        List<String> keys = StpUtil.searchTokenValue("", 0, -1, false);
+        if (CollUtil.isEmpty(keys)) {
+            return;
+        }
+        // 角色关联的在线用户量过大会导致redis阻塞卡顿 谨慎操作
+        keys.parallelStream().forEach(key -> {
+            String token = StringUtils.substringAfterLast(key, ":");
+            // 如果已经过期则跳过
+            if (StpUtil.stpLogic.getTokenActiveTimeoutByToken(token) < -1) {
+                return;
+            }
+            LoginUser loginUser = LoginHelper.getLoginUser(token);
+            if (ObjectUtil.isNull(loginUser) || CollUtil.isEmpty(loginUser.getRoles())) {
+                return;
+            }
+            if (loginUser.getRoles().stream().anyMatch(r -> r.getId().equals(roleId))) {
+                try {
+                    StpUtil.logoutByTokenValue(token);
+                } catch (NotLoginException ignored) {
+                }
+            }
+        });
+    }
+
 
     private Wrapper<SysRole> buildQueryWrapper(SysRoleQueryReq bo) {
         Map<String, Object> params = bo.getParams();

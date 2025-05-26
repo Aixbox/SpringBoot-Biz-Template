@@ -44,6 +44,9 @@ import static com.aixbox.system.constant.ErrorCodeConstants.REVOKE_USER_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.ROLE_KEY_EXIST;
 import static com.aixbox.system.constant.ErrorCodeConstants.ROLE_NAME_EXIST;
 import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_DATA_SCOPE_ERROR;
+import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_ROLE_ERROR;
+import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_ROLE_KEY_EXIST;
+import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_ROLE_NAME_EXIST;
 import static net.sf.jsqlparser.util.validation.metadata.NamedObject.role;
 
 /**
@@ -148,6 +151,7 @@ public class SysRoleController {
      * @param addReqVO 新增参数
      * @return 新增数据id
      */
+    @SaCheckPermission("system:role:add")
     @PostMapping("/add")
     public CommonResult<Long> add(@Valid @RequestBody SysRoleSaveReqVO addReqVO) {
         SysRoleBo sysRolebo = BeanUtils.toBean(addReqVO, SysRoleBo.class);
@@ -168,8 +172,19 @@ public class SysRoleController {
      */
     @PutMapping("/update")
     public CommonResult<Boolean> edit(@Valid @RequestBody SysRoleUpdateReq updateReqVO) {
-        Boolean result = sysRoleService.updateSysRole(updateReqVO);
-        return success(result);
+        SysRoleBo roleBo = BeanUtils.toBean(updateReqVO, SysRoleBo.class);
+        sysRoleService.checkRoleAllowed(roleBo);
+        sysRoleService.checkRoleDataScope(roleBo.getRoleId());
+        if (!sysRoleService.checkRoleNameUnique(roleBo)) {
+            return error(UPDATE_ROLE_NAME_EXIST, updateReqVO.getRoleName());
+        } else if (!sysRoleService.checkRoleKeyUnique(roleBo)) {
+            return error(UPDATE_ROLE_KEY_EXIST, updateReqVO.getRoleName());
+        }
+        if (sysRoleService.updateSysRole(updateReqVO)) {
+            sysRoleService.cleanOnlineUserByRole(updateReqVO.getRoleId());
+            return success();
+        }
+        return error(UPDATE_ROLE_ERROR, updateReqVO.getRoleName());
     }
 
     /**
