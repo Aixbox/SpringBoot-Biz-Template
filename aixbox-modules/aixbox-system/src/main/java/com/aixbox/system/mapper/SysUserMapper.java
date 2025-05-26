@@ -53,6 +53,20 @@ public interface SysUserMapper extends BaseMapperX<SysUser> {
     })
     Page<SysUser> selectAllocatedList(@Param("page") Page<SysUser> page,
                                       @Param(Constants.WRAPPER) Wrapper<SysUser> queryWrapper);
+
+
+    /**
+     * 分页查询用户列表，并进行数据权限控制
+     *
+     * @param page         分页参数
+     * @param queryWrapper 查询条件
+     * @return 分页的用户信息
+     */
+    @DataPermission({
+            @DataColumn(key = "deptName", value = "u.dept_id"),
+            @DataColumn(key = "userName", value = "u.user_id")
+    })
+    PageResult<SysUser> selectPageUserList(@Param("page") Page<SysUser> page, @Param(Constants.WRAPPER) Wrapper<SysUser> queryWrapper);
 }
 
 

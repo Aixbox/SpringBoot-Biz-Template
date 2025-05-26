@@ -1,12 +1,16 @@
 package com.aixbox.system.service.impl;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.constant.SystemConstants;
 import com.aixbox.common.core.pojo.PageParam;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.StrUtils;
+import com.aixbox.common.core.utils.StreamUtils;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
+import com.aixbox.system.domain.bo.SysUserBo;
+import com.aixbox.system.domain.entity.SysDept;
 import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.entity.SysUser;
 import com.aixbox.system.domain.vo.request.user.SysUserPageReqVO;
@@ -15,9 +19,11 @@ import com.aixbox.system.domain.vo.request.user.SysUserSaveReqVO;
 import com.aixbox.system.domain.vo.request.user.SysUserUpdateReqVO;
 import com.aixbox.system.domain.vo.response.SysRoleVO;
 import com.aixbox.system.domain.vo.response.SysUserResp;
+import com.aixbox.system.mapper.SysDeptMapper;
 import com.aixbox.system.mapper.SysRoleMapper;
 import com.aixbox.system.mapper.SysUserMapper;
 import com.aixbox.system.service.SysUserService;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -25,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
 * 用户 Service实现类
@@ -35,6 +42,7 @@ public class SysUserServiceImpl implements SysUserService {
 
     private final SysUserMapper sysUserMapper;
     private final SysRoleMapper sysRoleMapper;
+    private final SysDeptMapper deptMapper;
 
     /**
      * 新增用户
@@ -86,8 +94,32 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     public PageResult<SysUser> getSysUserPage(SysUserPageReqVO pageReqVO) {
-        return sysUserMapper.selectPage(pageReqVO);
+        SysUserBo sysUser = BeanUtils.toBean(pageReqVO, SysUserBo.class);
+        return sysUserMapper.selectPageUserList(new Page<>(pageReqVO.getPageNo(), pageReqVO.getPageSize()), this.buildQueryWrapper(sysUser));
     }
+
+    private Wrapper<SysUser> buildQueryWrapper(SysUserBo user) {
+        QueryWrapper<SysUser> wrapper = Wrappers.query();
+        wrapper.eq("u.del_flag", SystemConstants.NORMAL)
+               .eq(ObjectUtil.isNotNull(user.getId()), "u.id", user.getId())
+               .in(StrUtils.isNotBlank(user.getUserIds()), "u.id", StrUtils.splitTo(user.getUserIds(), Convert::toLong))
+               .like(StrUtils.isNotBlank(user.getUserName()), "u.user_name", user.getUserName())
+               .eq(StrUtils.isNotBlank(user.getStatus()), "u.status", user.getStatus())
+               .like(StrUtils.isNotBlank(user.getPhonenumber()), "u.phonenumber", user.getPhonenumber())
+               .and(ObjectUtil.isNotNull(user.getDeptId()), w -> {
+                   List<SysDept> deptList = deptMapper.selectListByParentId(user.getDeptId());
+                   List<Long> ids = StreamUtils.toList(deptList, SysDept::getId);
+                   ids.add(user.getDeptId());
+                   w.in("u.dept_id", ids);
+               }).orderByAsc("u.id");
+        if (StrUtils.isNotBlank(user.getExcludeUserIds())) {
+            wrapper.notIn("u.id", StrUtils.splitTo(user.getExcludeUserIds(), Convert::toLong));
+        }
+        return wrapper;
+    }
+
+
+
 
     /**
      * 注册用户信息

@@ -2,6 +2,7 @@ package com.aixbox.system.service.impl;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.constant.AdminConstants;
@@ -16,6 +17,7 @@ import com.aixbox.common.core.utils.object.MapstructUtils;
 import com.aixbox.common.security.utils.LoginHelper;
 import com.aixbox.system.domain.bo.SysRoleBo;
 import com.aixbox.system.domain.entity.SysRole;
+import com.aixbox.system.domain.entity.SysRoleMenu;
 import com.aixbox.system.domain.entity.SysUserRole;
 import com.aixbox.system.domain.vo.request.role.SysRolePageReqVO;
 import com.aixbox.system.domain.vo.request.role.SysRoleQueryReq;
@@ -23,6 +25,7 @@ import com.aixbox.system.domain.vo.request.role.SysRoleSaveReqVO;
 import com.aixbox.system.domain.vo.request.role.SysRoleUpdateDataScopeReq;
 import com.aixbox.system.domain.vo.request.role.SysRoleUpdateReq;
 import com.aixbox.system.mapper.SysRoleMapper;
+import com.aixbox.system.mapper.SysRoleMenuMapper;
 import com.aixbox.system.mapper.SysUserRoleMapper;
 import com.aixbox.system.service.SysRoleService;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
@@ -34,6 +37,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +52,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 
     private final SysRoleMapper sysRoleMapper;
     private final SysUserRoleMapper sysUserRoleMapper;
+    private final SysRoleMenuMapper roleMenuMapper;
 
     /**
      * 新增角色
@@ -79,7 +84,19 @@ public class SysRoleServiceImpl implements SysRoleService {
      */
     @Override
     public Boolean deleteSysRole(List<Long> ids) {
-        return sysRoleMapper.deleteByIds(ids) > 0;
+        for (Long roleId : ids) {
+            SysRole role = sysRoleMapper.selectById(roleId);
+            checkRoleAllowed(BeanUtil.toBean(role, SysRoleBo.class));
+            checkRoleDataScope(roleId);
+            if (countUserRoleByRoleId(roleId) > 0) {
+                throw new ServiceException(String.format("%1$s已分配，不能删除!", role.getRoleName()));
+            }
+        }
+        // 删除角色与菜单关联
+        roleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>().in(SysRoleMenu::getRoleId, ids));
+        // todo 删除角色与部门关联
+        //roleDeptMapper.delete(new LambdaQueryWrapper<SysRoleDept>().in(SysRoleDept::getRoleId,ids));
+        return sysRoleMapper.deleteByIds(ids) >  0;
     }
 
     /**

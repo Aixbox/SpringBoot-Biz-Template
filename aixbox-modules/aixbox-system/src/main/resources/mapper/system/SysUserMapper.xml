@@ -21,4 +21,18 @@
     </select>
 
 
+    <select id="selectPageUserList" resultMap="SysUserResult">
+        select
+        <if test="ew.getSqlSelect != null">
+            ${ew.getSqlSelect}
+        </if>
+        <if test="ew.getSqlSelect == null">
+            u.id u.dept_id, u.nick_name, u.user_name, u.email, u.avatar, u.phonenumber, u.sex,
+            u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark
+        </if>
+        from sys_user u
+        ${ew.getCustomSqlSegment}
+    </select>
+
+
 </mapper>
