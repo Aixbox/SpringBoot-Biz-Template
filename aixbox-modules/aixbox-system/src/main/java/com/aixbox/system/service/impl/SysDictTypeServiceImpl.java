@@ -30,6 +30,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -58,7 +59,7 @@ public class SysDictTypeServiceImpl implements SysDictTypeService, DictService {
      * @param addReq 新增参数
      * @return 新增数据id
      */
-    @CachePut(cacheNames = CacheNames.SYS_DICT, key = "#addReq.dictType")
+    @CacheEvict(cacheNames = CacheNames.SYS_DICT, key = "#addReq.dictType")
     @Override
     public Long addSysDictType(SysDictTypeSaveReq addReq) {
         SysDictType sysDictType = BeanUtils.toBean(addReq, SysDictType.class);
@@ -71,7 +72,7 @@ public class SysDictTypeServiceImpl implements SysDictTypeService, DictService {
      * @param updateReq 修改参数
      * @return 是否成功
      */
-    @CachePut(cacheNames = CacheNames.SYS_DICT, key = "#updateReq.dictType")
+    @CacheEvict(cacheNames = CacheNames.SYS_DICT, key = "#updateReq.dictType")
     @Override
     public Boolean updateSysDictType(SysDictTypeUpdateReq updateReq) {
         SysDictType sysDictType = MapstructUtils.convert(updateReq, SysDictType.class);

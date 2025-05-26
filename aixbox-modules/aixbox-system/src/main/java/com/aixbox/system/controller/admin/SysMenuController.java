@@ -178,8 +178,7 @@ public class SysMenuController {
      * @return 是否成功
      */
     @DeleteMapping("/{id}")
-    public CommonResult<Boolean> remove(@NotEmpty(message = "主键不能为空")
-                                     @PathVariable Long id) {
+    public CommonResult<Boolean> remove(@PathVariable Long id) {
         if (sysMenuService.hasChildByMenuId(id)) {
             return error(EXIST_CHILD_MENU);
         }
@@ -188,18 +187,6 @@ public class SysMenuController {
         }
         Boolean result = sysMenuService.deleteSysMenu(Arrays.asList(id));
         return success(result);
-    }
-
-    /**
-     * 获取菜单详细信息
-     * @param id 数据id
-     * @return demo对象
-     */
-    @GetMapping("/{id}")
-    public CommonResult<SysMenuResp> getSysMenu(@NotNull(message = "主键不能为空")
-                                                    @PathVariable("id") Long id) {
-        SysMenu sysMenu = sysMenuService.getSysMenu(id);
-        return success(BeanUtils.toBean(sysMenu, SysMenuResp.class));
     }
 
     /**
