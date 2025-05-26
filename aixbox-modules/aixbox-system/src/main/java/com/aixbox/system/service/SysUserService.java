@@ -2,6 +2,7 @@ package com.aixbox.system.service;
 
 import com.aixbox.common.core.pojo.PageParam;
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.system.domain.bo.SysUserBo;
 import com.aixbox.system.domain.entity.SysUser;
 import com.aixbox.system.domain.vo.request.user.SysUserPageReqVO;
 import com.aixbox.system.domain.vo.request.user.SysUserQueryReq;
@@ -76,4 +77,53 @@ public interface SysUserService {
      * @return 用户信息集合信息
      */
     PageResult<SysUserResp> selectAllocatedList(SysUserQueryReq user, PageParam pageQuery);
+
+    /**
+     * 导出用户列表
+     *
+     * @param user 用户信息
+     * @return 用户信息集合信息
+     */
+    List<SysUserResp> selectUserExportList(SysUserBo user);
+
+
+    /**
+     * 通过手机号查询用户
+     *
+     * @param phonenumber 手机号
+     * @return 用户对象信息
+     */
+    SysUserResp selectUserByUserName(String phonenumber);
+
+    /**
+     * 新增用户信息
+     *
+     * @param user 用户信息
+     * @return 结果
+     */
+    int insertUser(SysUserBo user);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

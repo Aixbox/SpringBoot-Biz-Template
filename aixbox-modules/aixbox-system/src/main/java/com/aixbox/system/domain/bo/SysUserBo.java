@@ -3,6 +3,8 @@ package com.aixbox.system.domain.bo;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
  *
  */
@@ -48,5 +50,26 @@ public class SysUserBo {
      * 排除不查询的用户(工作流用)
      */
     private String excludeUserIds;
+
+    /**
+     * 创建时间
+     */
+    private LocalDateTime createTime;
+
+    /**
+     * 创建时间
+     */
+    private Long createBy;
+
+    /**
+     * 密码
+     */
+    private String password;
+
+    /**
+     * 岗位组
+     */
+    private Long[] postIds;
+
 
 }

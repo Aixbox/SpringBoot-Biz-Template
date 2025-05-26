@@ -1,6 +1,7 @@
 package com.aixbox.system.service.impl;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.constant.SystemConstants;
 import com.aixbox.common.core.pojo.PageParam;
@@ -24,6 +25,7 @@ import com.aixbox.system.mapper.SysRoleMapper;
 import com.aixbox.system.mapper.SysUserMapper;
 import com.aixbox.system.service.SysUserService;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -173,7 +175,67 @@ public class SysUserServiceImpl implements SysUserService {
                 pageQuery.getPageSize()), wrapper);
         return new PageResult<>(BeanUtils.toBean(page.getRecords(), SysUserResp.class), page.getTotal());
     }
+
+    /**
+     * 根据条件分页查询用户列表
+     *
+     * @param user 用户信息
+     * @return 用户信息集合信息
+     */
+    @Override
+    public List<SysUserResp> selectUserExportList(SysUserBo user) {
+        return sysUserMapper.selectUserExportList(this.buildQueryWrapper(user));
+    }
+
+    /**
+     * 通过手机号查询用户
+     *
+     * @param phonenumber 手机号
+     * @return 用户对象信息
+     */
+    @Override
+    public SysUserResp selectUserByUserName(String phonenumber) {
+        SysUser sysUser = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getPhonenumber, phonenumber));
+        return BeanUtils.toBean(sysUser, SysUserResp.class);
+    }
+
+    @Override
+    public int insertUser(SysUserBo user) {
+        SysUser sysUser = BeanUtils.toBean(user, SysUser.class);
+        // 新增用户信息
+        int rows = sysUserMapper.insert(sysUser);
+        user.setId(sysUser.getId());
+        //todo
+        // 新增用户岗位关联
+        //insertUserPost(user, false);
+        // 新增用户与角色管理
+        //insertUserRole(user, false);
+        return rows;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

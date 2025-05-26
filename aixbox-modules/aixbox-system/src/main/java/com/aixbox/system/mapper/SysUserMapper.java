@@ -8,11 +8,14 @@ import com.aixbox.common.mybatis.core.mapper.BaseMapperX;
 import com.aixbox.common.mybatis.core.query.LambdaQueryWrapperX;
 import com.aixbox.system.domain.entity.SysUser;
 import com.aixbox.system.domain.vo.request.user.SysUserPageReqVO;
+import com.aixbox.system.domain.vo.response.SysUserResp;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * 用户 Mapper接口
@@ -67,6 +70,18 @@ public interface SysUserMapper extends BaseMapperX<SysUser> {
             @DataColumn(key = "userName", value = "u.user_id")
     })
     PageResult<SysUser> selectPageUserList(@Param("page") Page<SysUser> page, @Param(Constants.WRAPPER) Wrapper<SysUser> queryWrapper);
+
+    /**
+     * 根据条件分页查询用户列表
+     *
+     * @param queryWrapper 查询条件
+     * @return 用户信息集合信息
+     */
+    @DataPermission({
+            @DataColumn(key = "deptName", value = "d.dept_id"),
+            @DataColumn(key = "userName", value = "u.user_id")
+    })
+    List<SysUserResp> selectUserExportList(@Param(Constants.WRAPPER) Wrapper<SysUser> queryWrapper);
 }
 
 
