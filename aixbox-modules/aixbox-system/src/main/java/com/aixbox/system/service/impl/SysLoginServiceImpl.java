@@ -16,12 +16,11 @@ import com.aixbox.common.core.utils.spring.SpringUtils;
 import com.aixbox.common.redis.utils.RedisUtils;
 import com.aixbox.common.security.utils.LoginHelper;
 import com.aixbox.system.constant.CacheConstants;
-import com.aixbox.system.domain.entity.SysDept;
 import com.aixbox.system.domain.entity.SysPost;
 import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.entity.SysSocial;
 import com.aixbox.system.domain.entity.SysUser;
-import com.aixbox.system.domain.vo.response.SysDeptRespVO;
+import com.aixbox.system.domain.vo.response.SysDeptResp;
 import com.aixbox.system.enums.LoginType;
 import com.aixbox.system.event.LogininforEvent;
 import com.aixbox.system.service.SysDeptService;
@@ -30,7 +29,6 @@ import com.aixbox.system.service.SysPermissionService;
 import com.aixbox.system.service.SysPostService;
 import com.aixbox.system.service.SysRoleService;
 import com.aixbox.system.service.SysSocialService;
-import com.baomidou.lock.annotation.Lock4j;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.zhyd.oauth.model.AuthUser;
@@ -119,9 +117,9 @@ public class SysLoginServiceImpl implements SysLoginService {
         loginUser.setMenuPermission(permissionService.getMenuPermission(userId));
         loginUser.setRolePermission(permissionService.getRolePermission(userId));
         if (ObjectUtil.isNotNull(user.getDeptId())) {
-            Opt<SysDeptRespVO> deptOpt = Opt.of(user.getDeptId()).map(deptService::selectDeptById);
-            loginUser.setDeptName(deptOpt.map(SysDeptRespVO::getDeptName).orElse(StringUtils.EMPTY));
-            loginUser.setDeptCategory(deptOpt.map(SysDeptRespVO::getDeptCategory).orElse(StringUtils.EMPTY));
+            Opt<SysDeptResp> deptOpt = Opt.of(user.getDeptId()).map(deptService::selectDeptById);
+            loginUser.setDeptName(deptOpt.map(SysDeptResp::getDeptName).orElse(StringUtils.EMPTY));
+            loginUser.setDeptCategory(deptOpt.map(SysDeptResp::getDeptCategory).orElse(StringUtils.EMPTY));
         }
         List<SysRole> roles = roleService.selectRolesByUserId(userId);
         List<SysPost> posts = postService.selectPostsByUserId(userId);

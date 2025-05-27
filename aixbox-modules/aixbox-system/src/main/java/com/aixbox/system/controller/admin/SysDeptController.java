@@ -1,6 +1,7 @@
 package com.aixbox.system.controller.admin;
 
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
@@ -8,7 +9,7 @@ import com.aixbox.system.domain.entity.SysDept;
 import com.aixbox.system.domain.vo.request.dept.SysDeptPageReqVO;
 import com.aixbox.system.domain.vo.request.dept.SysDeptSaveReqVO;
 import com.aixbox.system.domain.vo.request.dept.SysDeptUpdateReqVO;
-import com.aixbox.system.domain.vo.response.SysDeptRespVO;
+import com.aixbox.system.domain.vo.response.SysDeptResp;
 import com.aixbox.system.service.SysDeptService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -77,21 +78,22 @@ public class SysDeptController {
      * @return demo对象
      */
     @GetMapping("/{id}")
-    public CommonResult<SysDeptRespVO> getSysDept(@NotNull(message = "主键不能为空")
+    public CommonResult<SysDeptResp> getSysDept(@NotNull(message = "主键不能为空")
                                                     @PathVariable("id") Long id) {
         SysDept sysDept = sysDeptService.getSysDept(id);
-        return success(BeanUtils.toBean(sysDept, SysDeptRespVO.class));
+        return success(BeanUtils.toBean(sysDept, SysDeptResp.class));
     }
 
     /**
-     * 分页查询demo
+     * 分页查询部门
      * @param pageReqVO 分页参数
      * @return demo分页对象
      */
+    @SaCheckPermission("system:dept:list")
     @GetMapping("/page")
-    public CommonResult<PageResult<SysDeptRespVO>> getSysDeptPage(@Valid SysDeptPageReqVO pageReqVO) {
+    public CommonResult<PageResult<SysDeptResp>> getSysDeptPage(@Valid SysDeptPageReqVO pageReqVO) {
         PageResult<SysDept> pageResult = sysDeptService.getSysDeptPage(pageReqVO);
-        return success(BeanUtils.toBean(pageResult, SysDeptRespVO.class));
+        return success(BeanUtils.toBean(pageResult, SysDeptResp.class));
     }
 
 

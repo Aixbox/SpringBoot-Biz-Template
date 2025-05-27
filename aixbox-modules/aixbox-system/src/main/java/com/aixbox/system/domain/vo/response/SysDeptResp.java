@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
  * 部门 返回参数
  */
 @Data
-public class SysDeptRespVO {
+public class SysDeptResp {
 
     /**
     * 部门id

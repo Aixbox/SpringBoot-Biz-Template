@@ -2,14 +2,12 @@ package com.aixbox.system.service;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.aixbox.common.core.pojo.PageResult;
-import com.aixbox.system.constant.CacheNames;
 import com.aixbox.system.domain.bo.SysDeptBo;
 import com.aixbox.system.domain.entity.SysDept;
 import com.aixbox.system.domain.vo.request.dept.SysDeptPageReqVO;
 import com.aixbox.system.domain.vo.request.dept.SysDeptSaveReqVO;
 import com.aixbox.system.domain.vo.request.dept.SysDeptUpdateReqVO;
-import com.aixbox.system.domain.vo.response.SysDeptRespVO;
-import org.springframework.cache.annotation.Cacheable;
+import com.aixbox.system.domain.vo.response.SysDeptResp;
 
 import java.util.List;
 
@@ -53,7 +51,7 @@ public interface SysDeptService {
      */
     PageResult<SysDept> getSysDeptPage(SysDeptPageReqVO pageReqVO);
 
-    SysDeptRespVO selectDeptById(Long deptId);
+    SysDeptResp selectDeptById(Long deptId);
 
     /**
      * 根据角色ID查询部门树信息

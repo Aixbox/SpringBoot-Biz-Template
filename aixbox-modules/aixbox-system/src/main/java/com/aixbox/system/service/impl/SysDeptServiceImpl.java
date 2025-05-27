@@ -4,7 +4,6 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.constant.SystemConstants;
-import com.aixbox.common.core.exception.ServiceException;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.StrUtils;
 import com.aixbox.common.core.utils.StreamUtils;
@@ -20,7 +19,7 @@ import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.vo.request.dept.SysDeptPageReqVO;
 import com.aixbox.system.domain.vo.request.dept.SysDeptSaveReqVO;
 import com.aixbox.system.domain.vo.request.dept.SysDeptUpdateReqVO;
-import com.aixbox.system.domain.vo.response.SysDeptRespVO;
+import com.aixbox.system.domain.vo.response.SysDeptResp;
 import com.aixbox.system.mapper.SysDeptMapper;
 import com.aixbox.system.mapper.SysRoleMapper;
 import com.aixbox.system.service.SysDeptService;
@@ -95,7 +94,9 @@ public class SysDeptServiceImpl implements SysDeptService {
      */
     @Override
     public PageResult<SysDept> getSysDeptPage(SysDeptPageReqVO pageReqVO) {
-        return sysDeptMapper.selectPage(pageReqVO);
+        SysDeptBo sysDeptBo = BeanUtils.toBean(pageReqVO, SysDeptBo.class);
+        LambdaQueryWrapper<SysDept> lqw = buildQueryWrapper(sysDeptBo);
+        return sysDeptMapper.selectPage(pageReqVO, lqw);
     }
 
     /**
@@ -106,7 +107,7 @@ public class SysDeptServiceImpl implements SysDeptService {
      */
     @Cacheable(cacheNames = CacheNames.SYS_DEPT, key = "#deptId")
     @Override
-    public SysDeptRespVO selectDeptById(Long deptId) {
+    public SysDeptResp selectDeptById(Long deptId) {
         SysDept dept = sysDeptMapper.selectById(deptId);
         if (ObjectUtil.isNull(dept)) {
             return null;
@@ -114,7 +115,7 @@ public class SysDeptServiceImpl implements SysDeptService {
         SysDept parentDept = sysDeptMapper.selectOne(new LambdaQueryWrapper<SysDept>()
                 .select(SysDept::getDeptName).eq(SysDept::getId, dept.getParentId()));
 
-        SysDeptRespVO respVO = BeanUtils.toBean(dept, SysDeptRespVO.class);
+        SysDeptResp respVO = BeanUtils.toBean(dept, SysDeptResp.class);
         respVO.setParentName(ObjectUtils.notNullGetter(parentDept, SysDept::getDeptName));
         return respVO;
     }
