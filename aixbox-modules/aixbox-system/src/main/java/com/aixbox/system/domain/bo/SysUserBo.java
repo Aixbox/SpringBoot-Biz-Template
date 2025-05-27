@@ -75,6 +75,11 @@ public class SysUserBo {
     private Long[] postIds;
 
     /**
+     * 用户邮箱
+     */
+    private String email;
+
+    /**
      * 数据权限 当前角色ID
      */
     private Long roleId;

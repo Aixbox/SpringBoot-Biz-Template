@@ -70,4 +70,11 @@ public interface SysDeptService {
      * @return 部门树信息集合
      */
     List<Tree<Long>> selectDeptTreeList(SysDeptBo sysDeptBo);
+
+    /**
+     * 校验部门是否有数据权限
+     *
+     * @param deptId 部门id
+     */
+    void checkDeptDataScope(Long deptId);
 }

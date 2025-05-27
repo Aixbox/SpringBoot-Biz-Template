@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Data
 public class SysUserSaveReqVO {
 
-            /**
+    /**
     * 部门ID
     */
     private Long deptId;
@@ -63,7 +63,7 @@ public class SysUserSaveReqVO {
     * 最后登录时间
     */
     private LocalDateTime loginDate;
-                                            /**
+    /**
     * 备注
     */
     private String remark;

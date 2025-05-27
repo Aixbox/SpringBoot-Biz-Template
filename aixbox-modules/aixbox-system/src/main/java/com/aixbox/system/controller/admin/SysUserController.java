@@ -2,11 +2,13 @@ package com.aixbox.system.controller.admin;
 
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.secure.BCrypt;
 import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.constant.SystemConstants;
 import com.aixbox.common.core.domain.model.LoginUser;
 import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.common.core.utils.StrUtils;
 import com.aixbox.common.core.utils.StreamUtils;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.excel.core.ExcelResult;
@@ -29,6 +31,7 @@ import com.aixbox.system.domain.vo.response.SysUserInfoResp;
 import com.aixbox.system.domain.vo.response.SysUserResp;
 import com.aixbox.system.domain.vo.response.UserInfoResp;
 import com.aixbox.system.listener.SysUserImportListener;
+import com.aixbox.system.service.SysDeptService;
 import com.aixbox.system.service.SysPostService;
 import com.aixbox.system.service.SysRoleService;
 import com.aixbox.system.service.SysUserService;
@@ -56,7 +59,17 @@ import java.util.List;
 
 import static com.aixbox.common.core.pojo.CommonResult.error;
 import static com.aixbox.common.core.pojo.CommonResult.success;
+import static com.aixbox.common.core.pojo.CommonResult.toAjax;
+import static com.aixbox.system.constant.ErrorCodeConstants.ADD_USER_ERROR;
+import static com.aixbox.system.constant.ErrorCodeConstants.EMAIL_EXIST;
+import static com.aixbox.system.constant.ErrorCodeConstants.PHONE_EXIST;
+import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_EMAIL_EXIST;
+import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_ERROR;
+import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_PHONE_EXIST;
+import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_USERNAME_EXIST;
+import static com.aixbox.system.constant.ErrorCodeConstants.USERNAME_NOT_EXIST_OR_NOT_ENABLE;
 import static com.aixbox.system.constant.ErrorCodeConstants.USERNAME_NO_PERMISSION;
+import static net.sf.jsqlparser.util.validation.metadata.NamedObject.user;
 
 /**
  * 用户 Controller
@@ -69,7 +82,7 @@ public class SysUserController {
     private final SysUserService sysUserService;
     private final SysRoleService sysRoleService;
     private final SysPostService sysPostService;
-
+    private final SysDeptService sysDeptService;
 
 
 
@@ -139,9 +152,19 @@ public class SysUserController {
      * @return 新增数据id
      */
     @PostMapping("/add")
-    public CommonResult<Long> add(@Valid @RequestBody SysUserSaveReqVO addReqVO) {
-        Long sysUserId = sysUserService.addSysUser(addReqVO);
-        return success(sysUserId);
+    public CommonResult<Void> add(@Valid @RequestBody SysUserSaveReqVO addReqVO) {
+        SysUserBo user = BeanUtils.toBean(addReqVO, SysUserBo.class);
+        sysDeptService.checkDeptDataScope(addReqVO.getDeptId());
+        if (!sysUserService.checkUserNameUnique(user)) {
+            return error(USERNAME_NOT_EXIST_OR_NOT_ENABLE, user.getUserName());
+        } else if (StrUtils.isNotEmpty(user.getPhonenumber()) && !sysUserService.checkPhoneUnique(user)) {
+            return error(PHONE_EXIST, user.getUserName());
+        } else if (StrUtils.isNotEmpty(user.getEmail()) && !sysUserService.checkEmailUnique(user)) {
+            return error(EMAIL_EXIST);
+        }
+        user.setPassword(BCrypt.hashpw(user.getPassword()));
+
+        return toAjax(sysUserService.insertUser(user), ADD_USER_ERROR);
     }
 
     /**
@@ -149,10 +172,21 @@ public class SysUserController {
      * @param updateReqVO 修改参数
      * @return 是否成功
      */
+    @SaCheckPermission("system:user:edit")
     @PutMapping("/update")
-    public CommonResult<Boolean> edit(@Valid @RequestBody SysUserUpdateReqVO updateReqVO) {
-        Boolean result = sysUserService.updateSysUser(updateReqVO);
-        return success(result);
+    public CommonResult<Void> edit(@Valid @RequestBody SysUserUpdateReqVO updateReqVO) {
+        SysUserBo user = BeanUtils.toBean(updateReqVO, SysUserBo.class);
+        sysUserService.checkUserAllowed(user.getId());
+        sysUserService.checkUserDataScope(user.getId());
+        sysDeptService.checkDeptDataScope(user.getDeptId());
+        if (!sysUserService.checkUserNameUnique(user)) {
+            return error(UPDATE_USERNAME_EXIST, user.getUserName());
+        } else if (StrUtils.isNotEmpty(user.getPhonenumber()) && !sysUserService.checkPhoneUnique(user)) {
+            return error(UPDATE_PHONE_EXIST, user.getUserName());
+        } else if (StrUtils.isNotEmpty(user.getEmail()) && !sysUserService.checkEmailUnique(user)) {
+            return error(UPDATE_EMAIL_EXIST, user.getUserName());
+        }
+        return toAjax(sysUserService.updateUser(user), UPDATE_ERROR);
     }
 
     /**

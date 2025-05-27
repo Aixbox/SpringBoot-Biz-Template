@@ -67,6 +67,17 @@ public interface SysDeptMapper extends BaseMapperX<SysDept> {
             @DataColumn(key = "deptName", value = "dept_id")
     })
     List<SysDept> selectDeptList(LambdaQueryWrapper<SysDept> queryWrapper);
+
+    /**
+     * 统计指定部门ID的部门数量
+     *
+     * @param deptId 部门ID
+     * @return 该部门ID的部门数量
+     */
+    @DataPermission({
+            @DataColumn(key = "deptName", value = "dept_id")
+    })
+    long countDeptById(Long deptId);
 }
 
 

@@ -305,6 +305,46 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     /**
+     * 校验用户名称是否唯一
+     *
+     * @param user 用户信息
+     * @return 结果
+     */
+    @Override
+    public boolean checkUserNameUnique(SysUserBo user) {
+        boolean exist = sysUserMapper.exists(new LambdaQueryWrapper<SysUser>()
+                .eq(SysUser::getUserName, user.getUserName())
+                .ne(ObjectUtil.isNotNull(user.getId()), SysUser::getId, user.getId()));
+        return !exist;
+    }
+
+    /**
+     * 校验手机号码是否唯一
+     *
+     * @param user 用户信息
+     */
+    @Override
+    public boolean checkPhoneUnique(SysUserBo user) {
+        boolean exist = sysUserMapper.exists(new LambdaQueryWrapper<SysUser>()
+                .eq(SysUser::getPhonenumber, user.getPhonenumber())
+                .ne(ObjectUtil.isNotNull(user.getId()), SysUser::getId, user.getId()));
+        return !exist;
+    }
+
+    /**
+     * 校验email是否唯一
+     *
+     * @param user 用户信息
+     */
+    @Override
+    public boolean checkEmailUnique(SysUserBo user) {
+        boolean exist = sysUserMapper.exists(new LambdaQueryWrapper<SysUser>()
+                .eq(SysUser::getEmail, user.getEmail())
+                .ne(ObjectUtil.isNotNull(user.getId()), SysUser::getId, user.getId()));
+        return !exist;
+    }
+
+    /**
      * 新增用户岗位信息
      *
      * @param user  用户对象

@@ -31,6 +31,14 @@ public interface ErrorCodeConstants {
     ErrorCode USERNAME_EXIST = new ErrorCode(1_002_001_002, "保存用户 {} 失败，注册账号已存在");
     ErrorCode USERNAME_NO_PERMISSION = new ErrorCode(1_002_001_003, "没有权限访问用户数据!");
     ErrorCode USERNAME_SUPER_ADMIN = new ErrorCode(1_002_001_004, "不允许操作超级管理员用户");
+    ErrorCode USERNAME_NOT_EXIST_OR_NOT_ENABLE = new ErrorCode(1_002_001_005, "新增用户'{}'失败，登录账号已存在");
+    ErrorCode PHONE_EXIST = new ErrorCode(1_002_001_006, "新增用户'{}'失败，手机号码已存在");
+    ErrorCode EMAIL_EXIST = new ErrorCode(1_002_001_007, "新增用户'{}'失败，邮箱账号已存在");
+    ErrorCode ADD_USER_ERROR = new ErrorCode(1_002_001_008, "新增用户失败");
+    ErrorCode UPDATE_EMAIL_EXIST = new ErrorCode(1_002_001_009, "修改用户'{}'失败，邮箱账号已存在");
+    ErrorCode UPDATE_USERNAME_EXIST = new ErrorCode(1_002_001_010, "修改用户'{}'失败，登录账号已存在");
+    ErrorCode UPDATE_PHONE_EXIST = new ErrorCode(1_002_001_011, "修改用户'{}'失败，手机号码已存在");
+    ErrorCode UPDATE_ERROR = new ErrorCode(1_002_001_012, "修改用户失败");
 
     // ========== 角色模块 模块 1-002-002-??? ==========
     ErrorCode BULK_REVOKE_USER_ERROR = new ErrorCode(1_002_002_000, "批量取消授权用户失败");
@@ -59,6 +67,9 @@ public interface ErrorCodeConstants {
     ErrorCode UPDATE_MENU_ERROR = new ErrorCode(1_002_004_005, "修改菜单失败");
     ErrorCode EXIST_CHILD_MENU = new ErrorCode(1_002_004_006, "存在子菜单,不允许删除");
     ErrorCode MENU_EXIST_ROLE = new ErrorCode(1_002_004_007, "菜单已分配,不允许删除");
+
+    // ========== 部门模块 模块 1-002-005-??? ==========
+    ErrorCode NO_DEPT_PERMISSION = new ErrorCode(1_002_005_000, "没有权限访问部门数据！");
 
 
 }

@@ -93,6 +93,8 @@ public class CommonResult<T> implements Serializable {
         return rows > 0 ? success() : error(errorCode);
     }
 
+
+
     /**
      * 响应返回结果
      *

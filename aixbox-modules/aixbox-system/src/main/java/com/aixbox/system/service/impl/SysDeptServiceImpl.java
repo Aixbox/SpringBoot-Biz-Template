@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.constant.SystemConstants;
+import com.aixbox.common.core.exception.ServiceException;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.StrUtils;
 import com.aixbox.common.core.utils.StreamUtils;
@@ -11,6 +12,7 @@ import com.aixbox.common.core.utils.TreeBuildUtils;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
 import com.aixbox.common.core.utils.object.ObjectUtils;
+import com.aixbox.common.security.utils.LoginHelper;
 import com.aixbox.system.constant.CacheNames;
 import com.aixbox.system.domain.bo.SysDeptBo;
 import com.aixbox.system.domain.entity.SysDept;
@@ -29,6 +31,9 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.aixbox.common.core.exception.util.ServiceExceptionUtil.exception;
+import static com.aixbox.system.constant.ErrorCodeConstants.NO_DEPT_PERMISSION;
 
 /**
 * 部门 Service实现类
@@ -131,6 +136,24 @@ public class SysDeptServiceImpl implements SysDeptService {
         LambdaQueryWrapper<SysDept> lqw = buildQueryWrapper(sysDeptBo);
         List<SysDept> depts = sysDeptMapper.selectDeptList(lqw);
         return buildDeptTreeSelect(depts);
+    }
+
+    /**
+     * 校验部门是否有数据权限
+     *
+     * @param deptId 部门id
+     */
+    @Override
+    public void checkDeptDataScope(Long deptId) {
+        if (ObjectUtil.isNull(deptId)) {
+            return;
+        }
+        if (LoginHelper.isSuperAdmin()) {
+            return;
+        }
+        if (sysDeptMapper.countDeptById(deptId) == 0) {
+            throw exception(NO_DEPT_PERMISSION);
+        }
     }
 
     /**
