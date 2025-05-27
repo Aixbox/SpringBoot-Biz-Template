@@ -42,7 +42,7 @@ public interface SysDeptService {
      * @param id 数据id
      * @return 部门对象
      */
-    SysDept getSysDept(Long id);
+    SysDeptResp getSysDept(Long id);
 
     /**
      * 分页查询部门
@@ -75,4 +75,12 @@ public interface SysDeptService {
      * @param deptId 部门id
      */
     void checkDeptDataScope(Long deptId);
+
+    /**
+     * 查询部门管理数据
+     *
+     * @param sysDeptBo 部门信息
+     * @return 部门信息集合
+     */
+    List<SysDeptResp> selectDeptList(SysDeptBo sysDeptBo);
 }

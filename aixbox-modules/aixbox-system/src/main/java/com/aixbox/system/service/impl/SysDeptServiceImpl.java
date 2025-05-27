@@ -83,8 +83,16 @@ public class SysDeptServiceImpl implements SysDeptService {
      * @return 部门对象
      */
     @Override
-    public SysDept getSysDept(Long id) {
-        return sysDeptMapper.selectById(id);
+    public SysDeptResp getSysDept(Long id) {
+        SysDept dept = sysDeptMapper.selectById(id);
+        if (ObjectUtil.isNull(dept)) {
+            return null;
+        }
+        SysDeptResp deptResp = BeanUtils.toBean(dept, SysDeptResp.class);
+        SysDept parentDept = sysDeptMapper.selectOne(new LambdaQueryWrapper<SysDept>()
+                .select(SysDept::getDeptName).eq(SysDept::getId, deptResp.getParentId()));
+        deptResp.setParentName(ObjectUtils.notNullGetter(parentDept, SysDept::getDeptName));
+        return deptResp;
     }
 
     /**
@@ -155,6 +163,19 @@ public class SysDeptServiceImpl implements SysDeptService {
         if (sysDeptMapper.countDeptById(deptId) == 0) {
             throw exception(NO_DEPT_PERMISSION);
         }
+    }
+
+    /**
+     * 查询部门管理数据
+     *
+     * @param sysDeptBo 部门信息
+     * @return 部门信息集合
+     */
+    @Override
+    public List<SysDeptResp> selectDeptList(SysDeptBo sysDeptBo) {
+        LambdaQueryWrapper<SysDept> lqw = buildQueryWrapper(sysDeptBo);
+        List<SysDept> sysDepts = sysDeptMapper.selectDeptList(lqw);
+        return BeanUtils.toBean(sysDepts, SysDeptResp.class);
     }
 
     /**
