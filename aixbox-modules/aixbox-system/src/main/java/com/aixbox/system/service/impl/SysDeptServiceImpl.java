@@ -277,6 +277,27 @@ public class SysDeptServiceImpl implements SysDeptService {
         return result;
     }
 
+    @Override
+    public boolean hasChildByDeptId(Long deptId) {
+        return sysDeptMapper.exists(new LambdaQueryWrapper<SysDept>()
+                .eq(SysDept::getParentId, deptId));
+    }
+
+    /**
+     * 删除部门管理信息
+     *
+     * @param deptId 部门ID
+     * @return 结果
+     */
+    @Caching(evict = {
+            @CacheEvict(cacheNames = CacheNames.SYS_DEPT, key = "#deptId"),
+            @CacheEvict(cacheNames = CacheNames.SYS_DEPT_AND_CHILD, key = "#deptId")
+    })
+    @Override
+    public int deleteDeptById(Long deptId) {
+        return sysDeptMapper.deleteById(deptId);
+    }
+
     /**
      * 修改该部门的父级部门状态
      *

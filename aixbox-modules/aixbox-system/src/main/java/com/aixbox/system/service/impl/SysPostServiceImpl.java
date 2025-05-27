@@ -121,6 +121,17 @@ public class SysPostServiceImpl implements SysPostService {
     }
 
     /**
+     * 通过部门ID查询岗位使用数量
+     *
+     * @param deptId 部门id
+     * @return 结果
+     */
+    @Override
+    public long countPostByDeptId(Long deptId) {
+        return sysPostMapper.selectCount(new LambdaQueryWrapper<SysPost>().eq(SysPost::getDeptId, deptId));
+    }
+
+    /**
      * 根据查询条件构建查询包装器
      *
      * @param bo 查询条件对象

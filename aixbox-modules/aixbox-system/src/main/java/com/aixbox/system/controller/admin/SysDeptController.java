@@ -15,6 +15,7 @@ import com.aixbox.system.domain.vo.request.dept.SysDeptSaveReqVO;
 import com.aixbox.system.domain.vo.request.dept.SysDeptUpdateReqVO;
 import com.aixbox.system.domain.vo.response.SysDeptResp;
 import com.aixbox.system.service.SysDeptService;
+import com.aixbox.system.service.SysPostService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -35,9 +36,13 @@ import static com.aixbox.common.core.pojo.CommonResult.error;
 import static com.aixbox.common.core.pojo.CommonResult.success;
 import static com.aixbox.common.core.pojo.CommonResult.toAjax;
 import static com.aixbox.system.constant.ErrorCodeConstants.ADD_DEPT_ERROR;
+import static com.aixbox.system.constant.ErrorCodeConstants.DELETE_DEPT_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.DEPT_EXIST_CHILD;
 import static com.aixbox.system.constant.ErrorCodeConstants.DEPT_EXIST_USER;
 import static com.aixbox.system.constant.ErrorCodeConstants.DEPT_NAME_EXIST;
+import static com.aixbox.system.constant.ErrorCodeConstants.EXIST_CHILD_DEPT;
+import static com.aixbox.system.constant.ErrorCodeConstants.EXIST_POST;
+import static com.aixbox.system.constant.ErrorCodeConstants.EXIST_USER;
 import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_DEPT_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_DEPT_NAME_EXIST;
 import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_DEPT_PARENT_ERROR;
@@ -51,6 +56,7 @@ import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_DEPT_PARENT_E
 public class SysDeptController {
 
     private final SysDeptService sysDeptService;
+    private final SysPostService sysPostService;
 
     /**
      * 新增部门
@@ -94,14 +100,23 @@ public class SysDeptController {
 
     /**
      * 删除部门
-     * @param ids 删除id数组
+     * @param id 删除id
      * @return 是否成功
      */
-    @DeleteMapping("/{ids}")
-    public CommonResult<Boolean> remove(@NotEmpty(message = "主键不能为空")
-                                     @PathVariable Long[] ids) {
-        Boolean result = sysDeptService.deleteSysDept(Arrays.asList(ids));
-        return success(result);
+    @SaCheckPermission("system:dept:remove")
+    @DeleteMapping("/{id}")
+    public CommonResult<Void> remove(@PathVariable Long id) {
+        if (sysDeptService.hasChildByDeptId(id)) {
+            return error(EXIST_CHILD_DEPT);
+        }
+        if (sysDeptService.checkDeptExistUser(id)) {
+            return error(EXIST_USER);
+        }
+        if (sysPostService.countPostByDeptId(id) > 0) {
+            return error(EXIST_POST);
+        }
+        sysDeptService.checkDeptDataScope(id);
+        return toAjax(sysDeptService.deleteDeptById(id), DELETE_DEPT_ERROR);
     }
 
     /**

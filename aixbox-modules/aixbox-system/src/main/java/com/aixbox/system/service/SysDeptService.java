@@ -123,4 +123,20 @@ public interface SysDeptService {
      * @return 结果
      */
     int updateDept(SysDeptBo dept);
+
+    /**
+     * 是否存在部门子节点
+     *
+     * @param deptId 部门ID
+     * @return 结果
+     */
+    boolean hasChildByDeptId(Long deptId);
+
+    /**
+     * 删除部门管理信息
+     *
+     * @param deptId 部门ID
+     * @return 结果
+     */
+    int deleteDeptById(Long deptId);
 }

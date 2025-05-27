@@ -74,4 +74,12 @@ public interface SysPostService {
      * @return 选中岗位ID列表
      */
     List<Long> selectPostListByUserId(Long userId);
+
+    /**
+     * 通过部门ID查询岗位使用数量
+     *
+     * @param deptId 部门id
+     * @return 结果
+     */
+    long countPostByDeptId(Long deptId);
 }

@@ -81,6 +81,10 @@ public interface ErrorCodeConstants {
     ErrorCode DEPT_EXIST_CHILD = new ErrorCode(1_002_005_004, "该部门包含未停用的子部门!");
     ErrorCode DEPT_EXIST_USER = new ErrorCode(1_002_005_005, "该部门下存在已分配用户，不能禁用!");
     ErrorCode UPDATE_DEPT_ERROR = new ErrorCode(1_002_005_006, "修改部门失败");
+    ErrorCode EXIST_CHILD_DEPT = new ErrorCode(1_002_005_006, "存在下级部门,不允许删除");
+    ErrorCode EXIST_USER = new ErrorCode(1_002_005_006, "部门存在用户,不允许删除");
+    ErrorCode EXIST_POST = new ErrorCode(1_002_005_006, "部门存在岗位,不允许删除");
+    ErrorCode DELETE_DEPT_ERROR = new ErrorCode(1_002_005_006, "删除部门失败");
 
 
 }
