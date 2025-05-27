@@ -8,7 +8,7 @@ import com.aixbox.system.domain.entity.SysPost;
 import com.aixbox.system.domain.vo.request.post.SysPostPageReqVO;
 import com.aixbox.system.domain.vo.request.post.SysPostSaveReqVO;
 import com.aixbox.system.domain.vo.request.post.SysPostUpdateReqVO;
-import com.aixbox.system.domain.vo.response.SysPostRespVO;
+import com.aixbox.system.domain.vo.response.SysPostResp;
 import com.aixbox.system.service.SysPostService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -77,10 +77,10 @@ public class SysPostController {
      * @return demo对象
      */
     @GetMapping("/{id}")
-    public CommonResult<SysPostRespVO> getSysPost(@NotNull(message = "主键不能为空")
+    public CommonResult<SysPostResp> getSysPost(@NotNull(message = "主键不能为空")
                                                     @PathVariable("id") Long id) {
         SysPost sysPost = sysPostService.getSysPost(id);
-        return success(BeanUtils.toBean(sysPost, SysPostRespVO.class));
+        return success(BeanUtils.toBean(sysPost, SysPostResp.class));
     }
 
     /**
@@ -89,9 +89,9 @@ public class SysPostController {
      * @return demo分页对象
      */
     @GetMapping("/page")
-    public CommonResult<PageResult<SysPostRespVO>> getSysPostPage(@Valid SysPostPageReqVO pageReqVO) {
+    public CommonResult<PageResult<SysPostResp>> getSysPostPage(@Valid SysPostPageReqVO pageReqVO) {
         PageResult<SysPost> pageResult = sysPostService.getSysPostPage(pageReqVO);
-        return success(BeanUtils.toBean(pageResult, SysPostRespVO.class));
+        return success(BeanUtils.toBean(pageResult, SysPostResp.class));
     }
 
 

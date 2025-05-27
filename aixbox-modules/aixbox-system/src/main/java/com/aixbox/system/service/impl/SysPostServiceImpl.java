@@ -1,14 +1,22 @@
 package com.aixbox.system.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.common.core.utils.StrUtils;
+import com.aixbox.common.core.utils.StreamUtils;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
+import com.aixbox.system.domain.bo.SysPostBo;
+import com.aixbox.system.domain.entity.SysDept;
 import com.aixbox.system.domain.entity.SysPost;
 import com.aixbox.system.domain.vo.request.post.SysPostPageReqVO;
 import com.aixbox.system.domain.vo.request.post.SysPostSaveReqVO;
 import com.aixbox.system.domain.vo.request.post.SysPostUpdateReqVO;
+import com.aixbox.system.domain.vo.response.SysPostResp;
+import com.aixbox.system.mapper.SysDeptMapper;
 import com.aixbox.system.mapper.SysPostMapper;
 import com.aixbox.system.service.SysPostService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +30,7 @@ import java.util.List;
 public class SysPostServiceImpl implements SysPostService {
 
     private final SysPostMapper sysPostMapper;
+    private final SysDeptMapper sysDeptMapper;
 
     /**
      * 新增岗位
@@ -86,6 +95,59 @@ public class SysPostServiceImpl implements SysPostService {
     public List<SysPost> selectPostsByUserId(Long userId) {
         return sysPostMapper.selectPostsByUserId(userId);
     }
+
+    /**
+     * 查询岗位信息集合
+     *
+     * @param postBo 岗位信息
+     * @return 岗位信息集合
+     */
+    @Override
+    public List<SysPostResp> selectPostList(SysPostBo postBo) {
+        List<SysPost> sysPosts = sysPostMapper.selectList(buildQueryWrapper(postBo));
+        return BeanUtils.toBean(sysPosts, SysPostResp.class);
+    }
+
+    /**
+     * 根据用户ID获取岗位选择框列表
+     *
+     * @param userId 用户ID
+     * @return 选中岗位ID列表
+     */
+    @Override
+    public List<Long> selectPostListByUserId(Long userId) {
+        List<SysPost> list = sysPostMapper.selectPostsByUserId(userId);
+        return StreamUtils.toList(list, SysPost::getId);
+    }
+
+    /**
+     * 根据查询条件构建查询包装器
+     *
+     * @param bo 查询条件对象
+     * @return 构建好的查询包装器
+     */
+    private LambdaQueryWrapper<SysPost> buildQueryWrapper(SysPostBo bo) {
+        LambdaQueryWrapper<SysPost> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(StrUtils.isNotBlank(bo.getPostCode()), SysPost::getPostCode, bo.getPostCode())
+               .like(StrUtils.isNotBlank(bo.getPostCategory()), SysPost::getPostCategory, bo.getPostCategory())
+               .like(StrUtils.isNotBlank(bo.getPostName()), SysPost::getPostName, bo.getPostName())
+               .eq(StrUtils.isNotBlank(bo.getStatus()), SysPost::getStatus, bo.getStatus())
+               .orderByAsc(SysPost::getPostSort);
+        if (ObjectUtil.isNotNull(bo.getDeptId())) {
+            //优先单部门搜索
+            wrapper.eq(SysPost::getDeptId, bo.getDeptId());
+        } else if (ObjectUtil.isNotNull(bo.getBelongDeptId())) {
+            //部门树搜索
+            wrapper.and(x -> {
+                List<SysDept> deptList = sysDeptMapper.selectListByParentId(bo.getBelongDeptId());
+                List<Long> deptIds = StreamUtils.toList(deptList, SysDept::getId);
+                deptIds.add(bo.getBelongDeptId());
+                x.in(SysPost::getDeptId, deptIds);
+            });
+        }
+        return wrapper;
+    }
+
 }
 
 

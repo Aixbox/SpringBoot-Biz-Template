@@ -112,6 +112,28 @@ public interface SysUserService {
      * @return 用户信息集合信息
      */
     PageResult<SysUserResp> selectUnallocatedList(SysUserBo user, @Valid PageParam pageQuery);
+
+    /**
+     * 校验用户是否允许操作
+     *
+     * @param userId 用户ID
+     */
+    void checkUserAllowed(Long userId);
+
+    /**
+     * 校验用户是否有数据权限
+     *
+     * @param userId 用户id
+     */
+    void checkUserDataScope(Long userId);
+
+    /**
+     * 修改用户信息
+     *
+     * @param user 用户信息
+     * @return 结果
+     */
+    int updateUser(SysUserBo user);
 }
 
 

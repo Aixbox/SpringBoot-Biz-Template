@@ -13,6 +13,7 @@ import com.aixbox.common.excel.core.ExcelListener;
 import com.aixbox.common.excel.core.ExcelResult;
 import com.aixbox.common.security.utils.LoginHelper;
 import com.aixbox.system.domain.bo.SysUserBo;
+import com.aixbox.system.domain.bo.SysUserImportBo;
 import com.aixbox.system.domain.vo.response.SysUserResp;
 import com.aixbox.system.service.SysUserService;
 import com.alibaba.excel.context.AnalysisContext;
@@ -27,7 +28,7 @@ import java.util.List;
  * 系统用户自定义导入
  */
 @Slf4j
-public class SysUserImportListener extends AnalysisEventListener<SysUserResp> implements ExcelListener<SysUserResp> {
+public class SysUserImportListener extends AnalysisEventListener<SysUserImportBo> implements ExcelListener<SysUserImportBo> {
 
 
     private final SysUserService userService;
@@ -54,44 +55,43 @@ public class SysUserImportListener extends AnalysisEventListener<SysUserResp> im
     }
 
     @Override
-    public void invoke(SysUserResp userVo, AnalysisContext context) {
+    public void invoke(SysUserImportBo userVo, AnalysisContext context) {
         SysUserResp sysUser = this.userService.selectUserByUserName(userVo.getUserName());
-        // todo
-        //try {
-        //    // 验证是否存在这个用户
-        //    if (ObjectUtil.isNull(sysUser)) {
-        //        SysUserBo user = BeanUtil.toBean(userVo, SysUserBo.class);
-        //        ValidatorUtils.validate(user);
-        //        user.setPassword(password);
-        //        user.setCreateBy(operUserId);
-        //        userService.insertUser(user);
-        //        successNum++;
-        //        successMsg.append("<br/>").append(successNum).append("、账号 ").append(user.getUserName()).append(" 导入成功");
-        //    } else if (isUpdateSupport) {
-        //        Long userId = sysUser.getId();
-        //        SysUserBo user = BeanUtil.toBean(userVo, SysUserBo.class);
-        //        user.setId(userId);
-        //        ValidatorUtils.validate(user);
-        //        userService.checkUserAllowed(user.getId());
-        //        userService.checkUserDataScope(user.getId());
-        //        user.setUpdater(operUserId);
-        //        userService.updateUser(user);
-        //        successNum++;
-        //        successMsg.append("<br/>").append(successNum).append("、账号 ").append(user.getUserName()).append(" 更新成功");
-        //    } else {
-        //        failureNum++;
-        //        failureMsg.append("<br/>").append(failureNum).append("、账号 ").append(sysUser.getUserName()).append(" 已存在");
-        //    }
-        //} catch (Exception e) {
-        //    failureNum++;
-        //    String msg = "<br/>" + failureNum + "、账号 " + HtmlUtil.cleanHtmlTag(userVo.getUserName()) + " 导入失败：";
-        //    String message = e.getMessage();
-        //    if (e instanceof ConstraintViolationException cvException) {
-        //        message = StreamUtils.join(cvException.getConstraintViolations(), ConstraintViolation::getMessage, ", ");
-        //    }
-        //    failureMsg.append(msg).append(message);
-        //    log.error(msg, e);
-        //}
+        try {
+            // 验证是否存在这个用户
+            if (ObjectUtil.isNull(sysUser)) {
+                SysUserBo user = BeanUtil.toBean(userVo, SysUserBo.class);
+                ValidatorUtils.validate(user);
+                user.setPassword(password);
+                user.setCreateBy(operUserId);
+                userService.insertUser(user);
+                successNum++;
+                successMsg.append("<br/>").append(successNum).append("、账号 ").append(user.getUserName()).append(" 导入成功");
+            } else if (isUpdateSupport) {
+                Long userId = sysUser.getId();
+                SysUserBo user = BeanUtil.toBean(userVo, SysUserBo.class);
+                user.setId(userId);
+                ValidatorUtils.validate(user);
+                userService.checkUserAllowed(user.getId());
+                userService.checkUserDataScope(user.getId());
+                user.setUpdater(operUserId);
+                userService.updateUser(user);
+                successNum++;
+                successMsg.append("<br/>").append(successNum).append("、账号 ").append(user.getUserName()).append(" 更新成功");
+            } else {
+                failureNum++;
+                failureMsg.append("<br/>").append(failureNum).append("、账号 ").append(sysUser.getUserName()).append(" 已存在");
+            }
+        } catch (Exception e) {
+            failureNum++;
+            String msg = "<br/>" + failureNum + "、账号 " + HtmlUtil.cleanHtmlTag(userVo.getUserName()) + " 导入失败：";
+            String message = e.getMessage();
+            if (e instanceof ConstraintViolationException cvException) {
+                message = StreamUtils.join(cvException.getConstraintViolations(), ConstraintViolation::getMessage, ", ");
+            }
+            failureMsg.append(msg).append(message);
+            log.error(msg, e);
+        }
     }
 
     @Override
@@ -100,7 +100,7 @@ public class SysUserImportListener extends AnalysisEventListener<SysUserResp> im
     }
 
     @Override
-    public ExcelResult<SysUserResp> getExcelResult() {
+    public ExcelResult<SysUserImportBo> getExcelResult() {
         return new ExcelResult<>() {
 
             @Override
@@ -115,7 +115,7 @@ public class SysUserImportListener extends AnalysisEventListener<SysUserResp> im
             }
 
             @Override
-            public List<SysUserResp> getList() {
+            public List<SysUserImportBo> getList() {
                 return null;
             }
 

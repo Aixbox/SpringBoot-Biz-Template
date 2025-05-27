@@ -3,21 +3,34 @@ package com.aixbox.system.controller.admin;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.util.ObjectUtil;
+import com.aixbox.common.core.constant.SystemConstants;
 import com.aixbox.common.core.domain.model.LoginUser;
 import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.common.core.utils.StreamUtils;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.excel.core.ExcelResult;
 import com.aixbox.common.excel.utils.ExcelUtil;
 import com.aixbox.common.security.utils.LoginHelper;
+import com.aixbox.system.domain.bo.SysPostBo;
+import com.aixbox.system.domain.bo.SysRoleBo;
 import com.aixbox.system.domain.bo.SysUserBo;
+import com.aixbox.system.domain.bo.SysUserImportBo;
+import com.aixbox.system.domain.entity.SysPost;
+import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.entity.SysUser;
+import com.aixbox.system.domain.vo.request.role.SysRoleQueryReq;
 import com.aixbox.system.domain.vo.request.user.SysUserPageReqVO;
 import com.aixbox.system.domain.vo.request.user.SysUserSaveReqVO;
 import com.aixbox.system.domain.vo.request.user.SysUserUpdateReqVO;
+import com.aixbox.system.domain.vo.response.SysPostResp;
+import com.aixbox.system.domain.vo.response.SysRoleResp;
+import com.aixbox.system.domain.vo.response.SysUserInfoResp;
 import com.aixbox.system.domain.vo.response.SysUserResp;
 import com.aixbox.system.domain.vo.response.UserInfoResp;
 import com.aixbox.system.listener.SysUserImportListener;
+import com.aixbox.system.service.SysPostService;
+import com.aixbox.system.service.SysRoleService;
 import com.aixbox.system.service.SysUserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -37,6 +50,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,8 +67,8 @@ import static com.aixbox.system.constant.ErrorCodeConstants.USERNAME_NO_PERMISSI
 public class SysUserController {
 
     private final SysUserService sysUserService;
-
-
+    private final SysRoleService sysRoleService;
+    private final SysPostService sysPostService;
 
 
 
@@ -91,8 +105,27 @@ public class SysUserController {
 
 
 
+    /**
+     * 导入数据
+     *
+     * @param file          导入文件
+     * @param updateSupport 是否更新已存在数据
+     */
+    @SaCheckPermission("system:user:import")
+    @PostMapping(value = "/importData", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public CommonResult<Void> importData(@RequestPart("file") MultipartFile file, boolean updateSupport) throws Exception {
+        ExcelResult<SysUserImportBo> result = ExcelUtil.importExcel(file.getInputStream(),
+                SysUserImportBo.class, new SysUserImportListener(updateSupport));
+        return success();
+    }
 
-
+    /**
+     * 获取导入模板
+     */
+    @PostMapping("/importTemplate")
+    public void importTemplate(HttpServletResponse response) {
+        ExcelUtil.exportExcel(new ArrayList<>(), "用户数据", SysUserImportBo.class, response);
+    }
 
 
 
@@ -135,15 +168,33 @@ public class SysUserController {
     }
 
     /**
-     * 获取用户详细信息
-     * @param id 数据id
-     * @return demo对象
+     * 根据用户编号获取详细信息
+     *
+     * @param userId 用户ID
      */
-    @GetMapping("/{id}")
-    public CommonResult<SysUserResp> getSysUser(@NotNull(message = "主键不能为空")
-                                                    @PathVariable("id") Long id) {
-        SysUser sysUser = sysUserService.getSysUser(id);
-        return success(BeanUtils.toBean(sysUser, SysUserResp.class));
+    @SaCheckPermission("system:user:query")
+    @GetMapping(value = {"/", "/{userId}"})
+    public CommonResult<SysUserInfoResp> getInfo(@PathVariable(value = "userId", required = false) Long userId) {
+        SysUserInfoResp userInfoVo = new SysUserInfoResp();
+        if (ObjectUtil.isNotNull(userId)) {
+            sysUserService.checkUserDataScope(userId);
+            SysUserResp sysUser = sysUserService.selectUserById(userId);
+            userInfoVo.setUser(sysUser);
+            userInfoVo.setRoleIds(sysRoleService.selectRoleListByUserId(userId));
+            Long deptId = sysUser.getDeptId();
+            if (ObjectUtil.isNotNull(deptId)) {
+                SysPostBo postBo = new SysPostBo();
+                postBo.setDeptId(deptId);
+                userInfoVo.setPosts(sysPostService.selectPostList(postBo));
+                userInfoVo.setPostIds(sysPostService.selectPostListByUserId(userId));
+            }
+        }
+        SysRoleQueryReq roleBo = new SysRoleQueryReq();
+        roleBo.setStatus(SystemConstants.NORMAL);
+        List<SysRole> roles = sysRoleService.selectRoleList(roleBo);
+        List<SysRoleResp> list = BeanUtils.toBean(roles, SysRoleResp.class);
+        userInfoVo.setRoles(LoginHelper.isSuperAdmin(userId) ? list : StreamUtils.filter(list, r -> !r.isSuperAdmin()));
+        return success(userInfoVo);
     }
 
     /**

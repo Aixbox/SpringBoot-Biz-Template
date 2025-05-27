@@ -3,6 +3,7 @@ package com.aixbox.system.domain.vo.request.role;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.util.Map;
  *
  */
 @Data
+@NoArgsConstructor
 public class SysRoleQueryReq {
 
 

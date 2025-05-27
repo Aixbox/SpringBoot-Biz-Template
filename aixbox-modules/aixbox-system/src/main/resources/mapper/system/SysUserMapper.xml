@@ -59,5 +59,9 @@
             ${ew.getCustomSqlSegment}
     </select>
 
+    <select id="countUserById" resultType="Long">
+        select count(*) from sys_user where deleted = '0' and id = #{userId}
+    </select>
+
 
 </mapper>

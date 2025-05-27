@@ -38,4 +38,9 @@ public interface CacheNames {
      */
     String SYS_DICT_TYPE = "sys_dict_type";
 
+    /**
+     * 用户名称
+     */
+    String SYS_NICKNAME = "sys_nickname#30d";
+
 }

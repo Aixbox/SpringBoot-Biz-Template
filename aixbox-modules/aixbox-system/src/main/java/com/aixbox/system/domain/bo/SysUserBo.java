@@ -1,6 +1,9 @@
 package com.aixbox.system.domain.bo;
 
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -75,5 +78,15 @@ public class SysUserBo {
      * 数据权限 当前角色ID
      */
     private Long roleId;
+
+    /**
+     * 角色组
+     */
+    private Long[] roleIds;
+
+    /**
+     * 更新者
+     */
+    private Long updater;
 
 }

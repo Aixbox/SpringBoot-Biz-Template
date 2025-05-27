@@ -1,5 +1,6 @@
 package com.aixbox.system.domain.vo.response;
 
+import com.aixbox.common.core.constant.SystemConstants;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -50,6 +51,10 @@ public class SysRoleResp {
     * 备注
     */
     private String remark;
+
+    public boolean isSuperAdmin() {
+        return SystemConstants.SUPER_ADMIN_ID.equals(this.id);
+    }
 
 
 }

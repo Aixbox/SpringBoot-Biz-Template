@@ -95,6 +95,18 @@ public interface SysUserMapper extends BaseMapperX<SysUser> {
             @DataColumn(key = "userName", value = "u.user_id")
     })
     Page<SysUser> selectUnallocatedList(@Param("page") Page<SysUser> page, @Param(Constants.WRAPPER) Wrapper<SysUser> queryWrapper);
+
+    /**
+     * 根据用户ID统计用户数量
+     *
+     * @param userId 用户ID
+     * @return 用户数量
+     */
+    @DataPermission({
+            @DataColumn(key = "deptName", value = "dept_id"),
+            @DataColumn(key = "userName", value = "user_id")
+    })
+    long countUserById(Long userId);
 }
 
 

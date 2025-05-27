@@ -1,10 +1,12 @@
 package com.aixbox.system.service;
 
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.system.domain.bo.SysPostBo;
 import com.aixbox.system.domain.entity.SysPost;
 import com.aixbox.system.domain.vo.request.post.SysPostPageReqVO;
 import com.aixbox.system.domain.vo.request.post.SysPostSaveReqVO;
 import com.aixbox.system.domain.vo.request.post.SysPostUpdateReqVO;
+import com.aixbox.system.domain.vo.response.SysPostResp;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -56,4 +58,20 @@ public interface SysPostService {
      * @return 岗位ID
      */
     List<SysPost> selectPostsByUserId(@Param("userId") Long userId);
+
+    /**
+     * 查询岗位信息集合
+     *
+     * @param postBo 岗位信息
+     * @return 岗位列表
+     */
+    List<SysPostResp> selectPostList(SysPostBo postBo);
+
+    /**
+     * 根据用户ID获取岗位选择框列表
+     *
+     * @param userId 用户ID
+     * @return 选中岗位ID列表
+     */
+    List<Long> selectPostListByUserId(Long userId);
 }
