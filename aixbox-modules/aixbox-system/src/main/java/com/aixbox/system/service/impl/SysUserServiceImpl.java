@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.aixbox.common.core.exception.util.ServiceExceptionUtil.exception;
+import static com.aixbox.system.constant.ErrorCodeConstants.DELETE_USER_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.USERNAME_NO_PERMISSION;
 import static com.aixbox.system.constant.ErrorCodeConstants.USERNAME_SUPER_ADMIN;
 
@@ -358,6 +359,57 @@ public class SysUserServiceImpl implements SysUserService {
                 new LambdaUpdateWrapper<SysUser>()
                         .set(SysUser::getStatus, status)
                         .eq(SysUser::getId, userId));
+    }
+
+    /**
+     * 批量删除用户信息
+     *
+     * @param userIds 需要删除的用户ID
+     * @return 结果
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int deleteUserByIds(List<Long> userIds) {
+        for (Long userId : userIds) {
+            checkUserAllowed(userId);
+            checkUserDataScope(userId);
+        }
+        // 删除用户与角色关联
+        sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().in(SysUserRole::getUserId,
+                userIds));
+        // 删除用户与岗位表
+        sysUserPostMapper.delete(new LambdaQueryWrapper<SysUserPost>().in(SysUserPost::getUserId,
+                userIds));
+        // 防止更新失败导致的数据删除
+        int flag = sysUserMapper.deleteByIds(userIds);
+        if (flag < 1) {
+            throw exception(DELETE_USER_ERROR);
+        }
+        return flag;
+    }
+
+    /**
+     * 重置用户密码
+     *
+     * @param userId   用户ID
+     * @param password 密码
+     * @return 结果
+     */
+    @Override
+    public int resetUserPwd(Long userId, String password) {
+        return sysUserMapper.update(null,
+                new LambdaUpdateWrapper<SysUser>()
+                        .set(SysUser::getPassword, password)
+                        .eq(SysUser::getId, userId));
+    }
+
+    @Override
+    public List<SysUserResp> selectUserListByDept(Long deptId) {
+        LambdaQueryWrapper<SysUser> lqw = Wrappers.lambdaQuery();
+        lqw.eq(SysUser::getDeptId, deptId);
+        lqw.orderByAsc(SysUser::getId);
+        List<SysUser> sysUsers = sysUserMapper.selectList(lqw);
+        return BeanUtils.toBean(sysUsers, SysUserResp.class);
     }
 
     /**

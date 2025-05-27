@@ -10,6 +10,7 @@ import com.aixbox.system.domain.vo.request.user.SysUserSaveReqVO;
 import com.aixbox.system.domain.vo.request.user.SysUserUpdateReqVO;
 import com.aixbox.system.domain.vo.response.SysUserResp;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -167,6 +168,31 @@ public interface SysUserService {
      * @return 结果
      */
     int updateUserStatus(Long userId, String status);
+
+    /**
+     * 批量删除用户信息
+     *
+     * @param userIds 需要删除的用户ID
+     * @return 结果
+     */
+    int deleteUserByIds(List<Long> userIds);
+
+    /**
+     * 重置用户密码
+     *
+     * @param userId   用户ID
+     * @param password 密码
+     * @return 结果
+     */
+    int resetUserPwd(Long userId, String password);
+
+    /**
+     * 通过部门id查询当前部门所有用户
+     *
+     * @param deptId 部门id
+     * @return 结果
+     */
+    List<SysUserResp> selectUserListByDept(Long deptId);
 }
 
 

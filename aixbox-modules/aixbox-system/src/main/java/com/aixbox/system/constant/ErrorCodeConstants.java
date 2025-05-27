@@ -40,6 +40,9 @@ public interface ErrorCodeConstants {
     ErrorCode UPDATE_PHONE_EXIST = new ErrorCode(1_002_001_011, "修改用户'{}'失败，手机号码已存在");
     ErrorCode UPDATE_ERROR = new ErrorCode(1_002_001_012, "修改用户失败");
     ErrorCode UPDATE_STATUS_ERROR = new ErrorCode(1_002_001_013, "用户状态修改失败");
+    ErrorCode DELETE_CURRENT_USER_ERROR = new ErrorCode(1_002_001_014, "当前用户不能删除");
+    ErrorCode DELETE_USER_ERROR = new ErrorCode(1_002_001_015, "删除用户失败!");
+    ErrorCode RESET_PASSWORD_ERROR = new ErrorCode(1_002_001_016, "重置密码失败!");
 
     // ========== 角色模块 模块 1-002-002-??? ==========
     ErrorCode BULK_REVOKE_USER_ERROR = new ErrorCode(1_002_002_000, "批量取消授权用户失败");

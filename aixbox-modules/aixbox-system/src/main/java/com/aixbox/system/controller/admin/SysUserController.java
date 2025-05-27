@@ -3,6 +3,8 @@ package com.aixbox.system.controller.admin;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.secure.BCrypt;
+import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.constant.SystemConstants;
 import com.aixbox.common.core.domain.model.LoginUser;
@@ -14,6 +16,7 @@ import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.excel.core.ExcelResult;
 import com.aixbox.common.excel.utils.ExcelUtil;
 import com.aixbox.common.security.utils.LoginHelper;
+import com.aixbox.system.domain.bo.SysDeptBo;
 import com.aixbox.system.domain.bo.SysPostBo;
 import com.aixbox.system.domain.bo.SysRoleBo;
 import com.aixbox.system.domain.bo.SysUserBo;
@@ -61,8 +64,11 @@ import static com.aixbox.common.core.pojo.CommonResult.error;
 import static com.aixbox.common.core.pojo.CommonResult.success;
 import static com.aixbox.common.core.pojo.CommonResult.toAjax;
 import static com.aixbox.system.constant.ErrorCodeConstants.ADD_USER_ERROR;
+import static com.aixbox.system.constant.ErrorCodeConstants.DELETE_CURRENT_USER_ERROR;
+import static com.aixbox.system.constant.ErrorCodeConstants.DELETE_USER_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.EMAIL_EXIST;
 import static com.aixbox.system.constant.ErrorCodeConstants.PHONE_EXIST;
+import static com.aixbox.system.constant.ErrorCodeConstants.RESET_PASSWORD_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_EMAIL_EXIST;
 import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_PHONE_EXIST;
@@ -207,11 +213,43 @@ public class SysUserController {
      * @param ids 删除id数组
      * @return 是否成功
      */
+    @SaCheckPermission("system:user:remove")
     @DeleteMapping("/{ids}")
-    public CommonResult<Boolean> remove(@NotEmpty(message = "主键不能为空")
-                                     @PathVariable Long[] ids) {
-        Boolean result = sysUserService.deleteSysUser(Arrays.asList(ids));
-        return success(result);
+    public CommonResult<Void> remove(@PathVariable Long[] ids) {
+        if (ArrayUtil.contains(ids, LoginHelper.getUserId())) {
+            return error(DELETE_CURRENT_USER_ERROR);
+        }
+        return toAjax(sysUserService.deleteUserByIds(Arrays.asList(ids)), DELETE_USER_ERROR);
+    }
+
+    /**
+     * 重置密码
+     */
+    @SaCheckPermission("system:user:resetPwd")
+    @PutMapping("/resetPwd")
+    public CommonResult<Void> resetPwd(@RequestBody SysUserBo user) {
+        sysUserService.checkUserAllowed(user.getId());
+        sysUserService.checkUserDataScope(user.getId());
+        user.setPassword(BCrypt.hashpw(user.getPassword()));
+        return toAjax(sysUserService.resetUserPwd(user.getId(), user.getPassword()), RESET_PASSWORD_ERROR);
+    }
+
+    /**
+     * 获取部门树列表
+     */
+    @SaCheckPermission("system:user:list")
+    @GetMapping("/deptTree")
+    public CommonResult<List<Tree<Long>>> deptTree(SysDeptBo dept) {
+        return success(sysDeptService.selectDeptTreeList(dept));
+    }
+
+    /**
+     * 获取部门下的所有用户信息
+     */
+    @SaCheckPermission("system:user:list")
+    @GetMapping("/list/dept/{deptId}")
+    public CommonResult<List<SysUserResp>> listByDept(@PathVariable @NotNull Long deptId) {
+        return success(sysUserService.selectUserListByDept(deptId));
     }
 
     /**
