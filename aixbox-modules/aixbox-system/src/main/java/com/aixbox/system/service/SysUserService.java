@@ -158,6 +158,15 @@ public interface SysUserService {
      * @return 结果
      */
     boolean checkEmailUnique(SysUserBo user);
+
+    /**
+     * 修改用户状态
+     *
+     * @param userId 用户ID
+     * @param status 帐号状态
+     * @return 结果
+     */
+    int updateUserStatus(Long userId, String status);
 }
 
 

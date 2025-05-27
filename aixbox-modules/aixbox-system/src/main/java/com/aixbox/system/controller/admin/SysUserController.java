@@ -66,6 +66,7 @@ import static com.aixbox.system.constant.ErrorCodeConstants.PHONE_EXIST;
 import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_EMAIL_EXIST;
 import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_PHONE_EXIST;
+import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_STATUS_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_USERNAME_EXIST;
 import static com.aixbox.system.constant.ErrorCodeConstants.USERNAME_NOT_EXIST_OR_NOT_ENABLE;
 import static com.aixbox.system.constant.ErrorCodeConstants.USERNAME_NO_PERMISSION;
@@ -188,6 +189,18 @@ public class SysUserController {
         }
         return toAjax(sysUserService.updateUser(user), UPDATE_ERROR);
     }
+
+    /**
+     * 状态修改
+     */
+    @SaCheckPermission("system:user:edit")
+    @PutMapping("/changeStatus")
+    public CommonResult<Void> changeStatus(@RequestBody SysUserBo user) {
+        sysUserService.checkUserAllowed(user.getId());
+        sysUserService.checkUserDataScope(user.getId());
+        return toAjax(sysUserService.updateUserStatus(user.getId(), user.getStatus()), UPDATE_STATUS_ERROR);
+    }
+
 
     /**
      * 删除用户

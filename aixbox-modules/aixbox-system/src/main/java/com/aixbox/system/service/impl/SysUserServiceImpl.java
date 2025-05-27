@@ -35,6 +35,7 @@ import com.aixbox.system.service.SysUserService;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -342,6 +343,21 @@ public class SysUserServiceImpl implements SysUserService {
                 .eq(SysUser::getEmail, user.getEmail())
                 .ne(ObjectUtil.isNotNull(user.getId()), SysUser::getId, user.getId()));
         return !exist;
+    }
+
+    /**
+     * 修改用户状态
+     *
+     * @param userId 用户ID
+     * @param status 帐号状态
+     * @return 结果
+     */
+    @Override
+    public int updateUserStatus(Long userId, String status) {
+        return sysUserMapper.update(null,
+                new LambdaUpdateWrapper<SysUser>()
+                        .set(SysUser::getStatus, status)
+                        .eq(SysUser::getId, userId));
     }
 
     /**
