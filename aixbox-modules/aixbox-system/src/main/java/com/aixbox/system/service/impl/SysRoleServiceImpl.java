@@ -33,6 +33,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -116,7 +117,9 @@ public class SysRoleServiceImpl implements SysRoleService {
      */
     @Override
     public PageResult<SysRole> getSysRolePage(SysRolePageReqVO pageReqVO) {
-        return sysRoleMapper.selectPage(pageReqVO);
+        SysRoleBo roleBo = BeanUtils.toBean(pageReqVO, SysRoleBo.class);
+        return sysRoleMapper.selectPage(pageReqVO, this.buildQueryWrapper(roleBo));
+
     }
 
     /**
@@ -234,7 +237,8 @@ public class SysRoleServiceImpl implements SysRoleService {
      */
     @Override
     public List<SysRole> selectRoleList(SysRoleQueryReq role) {
-        return sysRoleMapper.selectRoleList(this.buildQueryWrapper(role));
+        SysRoleBo roleBo = BeanUtils.toBean(role, SysRoleBo.class);
+        return sysRoleMapper.selectRoleList(this.buildQueryWrapper(roleBo));
     }
 
     /**
@@ -406,16 +410,13 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
 
-    private Wrapper<SysRole> buildQueryWrapper(SysRoleQueryReq bo) {
-        Map<String, Object> params = bo.getParams();
+    private Wrapper<SysRole> buildQueryWrapper(SysRoleBo bo) {
         QueryWrapper<SysRole> wrapper = Wrappers.query();
         wrapper.eq("r.deleted", SystemConstants.NORMAL)
                .eq(ObjectUtil.isNotNull(bo.getRoleId()), "r.id", bo.getRoleId())
                .like(StringUtils.isNotBlank(bo.getRoleName()), "r.role_name", bo.getRoleName())
                .eq(StringUtils.isNotBlank(bo.getStatus()), "r.status", bo.getStatus())
                .like(StringUtils.isNotBlank(bo.getRoleKey()), "r.role_key", bo.getRoleKey())
-               .between(params.get("beginTime") != null && params.get("endTime") != null,
-                       "r.create_time", params.get("beginTime"), params.get("endTime"))
                .orderByAsc("r.role_sort").orderByAsc("r.create_time");
         return wrapper;
     }

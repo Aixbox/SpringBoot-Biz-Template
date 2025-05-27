@@ -8,6 +8,8 @@ import com.aixbox.system.domain.entity.SysUserRole;
 import com.aixbox.system.domain.vo.request.user.SysUserRolePageReqVO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
 * 用户和角色关联 Mapper接口
 */
@@ -24,6 +26,13 @@ public interface SysUserRoleMapper extends BaseMapperX<SysUserRole> {
                 .orderByDesc(BaseDO::getCreateTime));
     }
 
+    /**
+     * 根据角色ID查询关联的用户ID列表
+     *
+     * @param roleId 角色ID
+     * @return 关联到指定角色的用户ID列表
+     */
+    List<Long> selectUserIdsByRoleId(Long roleId);
 }
 
 

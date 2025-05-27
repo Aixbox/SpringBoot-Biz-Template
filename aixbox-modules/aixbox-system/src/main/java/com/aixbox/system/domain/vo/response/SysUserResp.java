@@ -80,7 +80,7 @@ public class SysUserResp {
     /**
      * 角色对象
      */
-    private List<SysRoleVO> roles;
+    private List<SysRoleResp> roles;
 
 
 }

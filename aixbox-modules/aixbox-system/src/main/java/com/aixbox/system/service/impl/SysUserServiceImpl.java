@@ -1,7 +1,7 @@
 package com.aixbox.system.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.constant.SystemConstants;
 import com.aixbox.common.core.pojo.PageParam;
@@ -18,11 +18,12 @@ import com.aixbox.system.domain.vo.request.user.SysUserPageReqVO;
 import com.aixbox.system.domain.vo.request.user.SysUserQueryReq;
 import com.aixbox.system.domain.vo.request.user.SysUserSaveReqVO;
 import com.aixbox.system.domain.vo.request.user.SysUserUpdateReqVO;
-import com.aixbox.system.domain.vo.response.SysRoleVO;
+import com.aixbox.system.domain.vo.response.SysRoleResp;
 import com.aixbox.system.domain.vo.response.SysUserResp;
 import com.aixbox.system.mapper.SysDeptMapper;
 import com.aixbox.system.mapper.SysRoleMapper;
 import com.aixbox.system.mapper.SysUserMapper;
+import com.aixbox.system.mapper.SysUserRoleMapper;
 import com.aixbox.system.service.SysUserService;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -33,7 +34,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 /**
 * 用户 Service实现类
@@ -45,6 +45,7 @@ public class SysUserServiceImpl implements SysUserService {
     private final SysUserMapper sysUserMapper;
     private final SysRoleMapper sysRoleMapper;
     private final SysDeptMapper deptMapper;
+    private final SysUserRoleMapper sysUserRoleMapper;
 
     /**
      * 新增用户
@@ -151,8 +152,8 @@ public class SysUserServiceImpl implements SysUserService {
         }
         SysUserResp userResp = BeanUtils.toBean(user, SysUserResp.class);
         List<SysRole> sysRoles = sysRoleMapper.selectRolesByUserId(user.getId());
-        List<SysRoleVO> sysRoleVO = MapstructUtils.convert(sysRoles, SysRoleVO.class);
-        userResp.setRoles(sysRoleVO);
+        List<SysRoleResp> sysRoleResp = MapstructUtils.convert(sysRoles, SysRoleResp.class);
+        userResp.setRoles(sysRoleResp);
         return userResp;
     }
 
@@ -211,6 +212,28 @@ public class SysUserServiceImpl implements SysUserService {
         // 新增用户与角色管理
         //insertUserRole(user, false);
         return rows;
+    }
+
+    /**
+     * 根据条件分页查询未分配用户角色列表
+     *
+     * @param user 用户信息
+     * @return 用户信息集合信息
+     */
+    @Override
+    public PageResult<SysUserResp> selectUnallocatedList(SysUserBo user, PageParam pageQuery) {
+        List<Long> userIds = sysUserRoleMapper.selectUserIdsByRoleId(user.getRoleId());
+        QueryWrapper<SysUser> wrapper = Wrappers.query();
+        wrapper.eq("u.deleted", SystemConstants.NORMAL)
+               .and(w -> w.ne("r.id", user.getRoleId()).or().isNull("r.id"))
+               .notIn(CollUtil.isNotEmpty(userIds), "u.id", userIds)
+               .like(StrUtils.isNotBlank(user.getUserName()), "u.user_name", user.getUserName())
+               .like(StrUtils.isNotBlank(user.getPhonenumber()), "u.phonenumber", user.getPhonenumber())
+               .orderByAsc("u.id");
+        Page<SysUser> page = sysUserMapper.selectUnallocatedList(new Page<>(pageQuery.getPageNo()
+                        , pageQuery.getPageSize()), wrapper);
+        List<SysUserResp> userResps = BeanUtils.toBean(page.getRecords(), SysUserResp.class);
+        return new PageResult<>(userResps, page.getTotal());
     }
 }
 

@@ -9,6 +9,7 @@ import com.aixbox.system.domain.vo.request.user.SysUserQueryReq;
 import com.aixbox.system.domain.vo.request.user.SysUserSaveReqVO;
 import com.aixbox.system.domain.vo.request.user.SysUserUpdateReqVO;
 import com.aixbox.system.domain.vo.response.SysUserResp;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -102,6 +103,15 @@ public interface SysUserService {
      * @return 结果
      */
     int insertUser(SysUserBo user);
+
+    /**
+     * 根据条件分页查询未分配用户角色列表
+     *
+     * @param user      用户信息
+     * @param pageQuery 分页
+     * @return 用户信息集合信息
+     */
+    PageResult<SysUserResp> selectUnallocatedList(SysUserBo user, @Valid PageParam pageQuery);
 }
 
 

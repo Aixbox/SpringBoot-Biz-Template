@@ -6,19 +6,23 @@ import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageParam;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
+import com.aixbox.common.excel.utils.ExcelUtil;
 import com.aixbox.system.domain.bo.SysRoleBo;
+import com.aixbox.system.domain.bo.SysUserBo;
 import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.entity.SysUserRole;
 import com.aixbox.system.domain.vo.request.role.SysRoleChangeStatusReq;
 import com.aixbox.system.domain.vo.request.role.SysRolePageReqVO;
+import com.aixbox.system.domain.vo.request.role.SysRoleQueryReq;
 import com.aixbox.system.domain.vo.request.role.SysRoleSaveReqVO;
 import com.aixbox.system.domain.vo.request.role.SysRoleUpdateDataScopeReq;
 import com.aixbox.system.domain.vo.request.role.SysRoleUpdateReq;
 import com.aixbox.system.domain.vo.request.user.SysUserQueryReq;
-import com.aixbox.system.domain.vo.response.SysRoleVO;
+import com.aixbox.system.domain.vo.response.SysRoleResp;
 import com.aixbox.system.domain.vo.response.SysUserResp;
 import com.aixbox.system.service.SysRoleService;
 import com.aixbox.system.service.SysUserService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -33,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static com.aixbox.common.core.pojo.CommonResult.error;
 import static com.aixbox.common.core.pojo.CommonResult.success;
@@ -47,7 +52,6 @@ import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_DATA_SCOPE_ER
 import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_ROLE_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_ROLE_KEY_EXIST;
 import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_ROLE_NAME_EXIST;
-import static net.sf.jsqlparser.util.validation.metadata.NamedObject.role;
 
 /**
  * 角色 Controller
@@ -70,6 +74,15 @@ public class SysRoleController {
                                                                @Valid PageParam pageQuery) {
         PageResult<SysUserResp> pageResult = sysUserService.selectAllocatedList(user, pageQuery);
         return success(pageResult);
+    }
+
+    /**
+     * 查询未分配用户角色列表
+     */
+    @SaCheckPermission("system:role:list")
+    @GetMapping("/authUser/unallocatedList")
+    public CommonResult<PageResult<SysUserResp>> unallocatedList(SysUserBo user, @Valid  PageParam pageQuery) {
+        return success(sysUserService.selectUnallocatedList(user, pageQuery));
     }
 
     /**
@@ -131,7 +144,16 @@ public class SysRoleController {
         return toAjax(sysRoleService.authDataScope(role), UPDATE_DATA_SCOPE_ERROR);
     }
 
-
+    /**
+     * 导出角色信息列表
+     */
+    @SaCheckPermission("system:role:export")
+    @PostMapping("/export")
+    public void export(SysRoleQueryReq role, HttpServletResponse response) {
+        List<SysRole> sysRoles = sysRoleService.selectRoleList(role);
+        List<SysRoleResp> list = BeanUtils.toBean(sysRoles, SysRoleResp.class);
+        ExcelUtil.exportExcel(list, "角色数据", SysRoleResp.class, response);
+    }
 
 
 
@@ -193,8 +215,7 @@ public class SysRoleController {
      * @return 是否成功
      */
     @DeleteMapping("/{ids}")
-    public CommonResult<Boolean> remove(@NotEmpty(message = "主键不能为空")
-                                     @PathVariable Long[] ids) {
+    public CommonResult<Boolean> remove(@PathVariable Long[] ids) {
         Boolean result = sysRoleService.deleteSysRole(Arrays.asList(ids));
         return success(result);
     }
@@ -205,10 +226,9 @@ public class SysRoleController {
      * @return demo对象
      */
     @GetMapping("/{id}")
-    public CommonResult<SysRoleVO> getSysRole(@NotNull(message = "主键不能为空")
-                                                    @PathVariable("id") Long id) {
+    public CommonResult<SysRoleResp> getSysRole(@PathVariable("id") Long id) {
         SysRole sysRole = sysRoleService.getSysRole(id);
-        return success(BeanUtils.toBean(sysRole, SysRoleVO.class));
+        return success(BeanUtils.toBean(sysRole, SysRoleResp.class));
     }
 
     /**
@@ -217,9 +237,9 @@ public class SysRoleController {
      * @return demo分页对象
      */
     @GetMapping("/page")
-    public CommonResult<PageResult<SysRoleVO>> getSysRolePage(@Valid SysRolePageReqVO pageReqVO) {
+    public CommonResult<PageResult<SysRoleResp>> getSysRolePage(@Valid SysRolePageReqVO pageReqVO) {
         PageResult<SysRole> pageResult = sysRoleService.getSysRolePage(pageReqVO);
-        return success();
+        return success(BeanUtils.toBean(pageResult, SysRoleResp.class));
     }
 
 

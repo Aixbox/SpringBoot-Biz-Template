@@ -71,5 +71,9 @@ public class SysUserBo {
      */
     private Long[] postIds;
 
+    /**
+     * 数据权限 当前角色ID
+     */
+    private Long roleId;
 
 }

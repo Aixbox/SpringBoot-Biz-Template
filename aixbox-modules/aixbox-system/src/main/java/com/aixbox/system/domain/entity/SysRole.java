@@ -1,7 +1,7 @@
 package com.aixbox.system.domain.entity;
 
 import com.aixbox.common.mybatis.core.dataobject.BaseDO;
-import com.aixbox.system.domain.vo.response.SysRoleVO;
+import com.aixbox.system.domain.vo.response.SysRoleResp;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.linpeilie.annotations.AutoMapper;
@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 @TableName(value ="sys_role")
 @Data
 @EqualsAndHashCode(callSuper = true)
-@AutoMapper(target = SysRoleVO.class)
+@AutoMapper(target = SysRoleResp.class)
 public class SysRole extends BaseDO {
 
     /**
