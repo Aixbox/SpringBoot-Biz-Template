@@ -1,19 +1,29 @@
 package com.aixbox.system.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
+import com.aixbox.common.core.constant.SystemConstants;
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.common.core.utils.StrUtils;
+import com.aixbox.common.core.utils.StreamUtils;
+import com.aixbox.common.core.utils.TreeBuildUtils;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
 import com.aixbox.common.core.utils.object.ObjectUtils;
 import com.aixbox.system.constant.CacheNames;
+import com.aixbox.system.domain.bo.SysDeptBo;
 import com.aixbox.system.domain.entity.SysDept;
+import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.vo.request.dept.SysDeptPageReqVO;
 import com.aixbox.system.domain.vo.request.dept.SysDeptSaveReqVO;
 import com.aixbox.system.domain.vo.request.dept.SysDeptUpdateReqVO;
 import com.aixbox.system.domain.vo.response.SysDeptRespVO;
 import com.aixbox.system.mapper.SysDeptMapper;
+import com.aixbox.system.mapper.SysRoleMapper;
 import com.aixbox.system.service.SysDeptService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -28,6 +38,7 @@ import java.util.List;
 public class SysDeptServiceImpl implements SysDeptService {
 
     private final SysDeptMapper sysDeptMapper;
+    private final SysRoleMapper sysRoleMapper;
 
     /**
      * 新增部门
@@ -101,6 +112,81 @@ public class SysDeptServiceImpl implements SysDeptService {
         SysDeptRespVO respVO = BeanUtils.toBean(dept, SysDeptRespVO.class);
         respVO.setParentName(ObjectUtils.notNullGetter(parentDept, SysDept::getDeptName));
         return respVO;
+    }
+
+    @Override
+    public List<Long> selectDeptListByRoleId(Long roleId) {
+        SysRole role = sysRoleMapper.selectById(roleId);
+        return sysDeptMapper.selectDeptListByRoleId(roleId, role.getDeptCheckStrictly());
+    }
+
+    /**
+     * 查询部门树结构信息
+     *
+     * @param sysDeptBo 部门信息
+     * @return 部门树信息集合
+     */
+    @Override
+    public List<Tree<Long>> selectDeptTreeList(SysDeptBo sysDeptBo) {
+        LambdaQueryWrapper<SysDept> lqw = buildQueryWrapper(sysDeptBo);
+        List<SysDept> depts = sysDeptMapper.selectDeptList(lqw);
+        return buildDeptTreeSelect(depts);
+    }
+
+    /**
+     * 构建前端所需要下拉树结构
+     *
+     * @param depts 部门列表
+     * @return 下拉树结构列表
+     */
+    private List<Tree<Long>> buildDeptTreeSelect(List<SysDept> depts) {
+        if (CollUtil.isEmpty(depts)) {
+            return CollUtil.newArrayList();
+        }
+        // 获取当前列表中每一个节点的parentId，然后在列表中查找是否有id与其parentId对应，若无对应，则表明此时节点列表中，该节点在当前列表中属于顶级节点
+        List<Tree<Long>> treeList = CollUtil.newArrayList();
+        for (SysDept d : depts) {
+            Long parentId = d.getParentId();
+            SysDept sysDeptVo = StreamUtils.findFirst(depts,
+                    it -> it.getId().longValue() == parentId);
+            if (ObjectUtil.isNull(sysDeptVo)) {
+                List<Tree<Long>> trees = TreeBuildUtils.build(depts, parentId, (dept, tree) ->
+                        tree.setId(dept.getId())
+                            .setParentId(dept.getParentId())
+                            .setName(dept.getDeptName())
+                            .setWeight(dept.getOrderNum())
+                            .putExtra("disabled", SystemConstants.DISABLE.equals(dept.getStatus())));
+                Tree<Long> tree = StreamUtils.findFirst(trees,
+                        it -> it.getId().longValue() == d.getId());
+                treeList.add(tree);
+            }
+        }
+        return treeList;
+    }
+
+    private LambdaQueryWrapper<SysDept> buildQueryWrapper(SysDeptBo bo) {
+        LambdaQueryWrapper<SysDept> lqw = Wrappers.lambdaQuery();
+        lqw.eq(SysDept::getDeleted, SystemConstants.NORMAL);
+        lqw.eq(ObjectUtil.isNotNull(bo.getId()), SysDept::getId, bo.getId());
+        lqw.eq(ObjectUtil.isNotNull(bo.getParentId()), SysDept::getParentId, bo.getParentId());
+        lqw.like(StrUtils.isNotBlank(bo.getDeptName()), SysDept::getDeptName, bo.getDeptName());
+        lqw.like(StrUtils.isNotBlank(bo.getDeptCategory()), SysDept::getDeptCategory, bo.getDeptCategory());
+        lqw.eq(StrUtils.isNotBlank(bo.getStatus()), SysDept::getStatus, bo.getStatus());
+        lqw.orderByAsc(SysDept::getAncestors);
+        lqw.orderByAsc(SysDept::getParentId);
+        lqw.orderByAsc(SysDept::getOrderNum);
+        lqw.orderByAsc(SysDept::getId);
+        if (ObjectUtil.isNotNull(bo.getBelongDeptId())) {
+            //部门树搜索
+            lqw.and(x -> {
+                Long parentId = bo.getBelongDeptId();
+                List<SysDept> deptList = sysDeptMapper.selectListByParentId(parentId);
+                List<Long> deptIds = StreamUtils.toList(deptList, SysDept::getId);
+                deptIds.add(parentId);
+                x.in(SysDept::getId, deptIds);
+            });
+        }
+        return lqw;
     }
 }
 

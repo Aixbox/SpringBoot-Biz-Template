@@ -1,6 +1,8 @@
 package com.aixbox.system.mapper;
 
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.common.datePermission.annotation.DataColumn;
+import com.aixbox.common.datePermission.annotation.DataPermission;
 import com.aixbox.common.mybatis.core.dataobject.BaseDO;
 import com.aixbox.common.mybatis.core.mapper.BaseMapperX;
 import com.aixbox.common.mybatis.core.query.LambdaQueryWrapperX;
@@ -45,6 +47,26 @@ public interface SysDeptMapper extends BaseMapperX<SysDept> {
                 .select(SysDept::getId)
                 .apply(MyBatisUtils.findInSet("ancestors", deptId)));
     }
+
+    /**
+     * 根据角色ID查询部门树信息
+     *
+     * @param roleId            角色ID
+     * @param deptCheckStrictly 部门树选择项是否关联显示
+     * @return 选中部门列表
+     */
+    List<Long> selectDeptListByRoleId(Long roleId, Long deptCheckStrictly);
+
+    /**
+     * 查询部门管理数据
+     *
+     * @param queryWrapper 查询条件
+     * @return 部门信息集合
+     */
+    @DataPermission({
+            @DataColumn(key = "deptName", value = "dept_id")
+    })
+    List<SysDept> selectDeptList(LambdaQueryWrapper<SysDept> queryWrapper);
 }
 
 

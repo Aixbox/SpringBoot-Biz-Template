@@ -7,6 +7,7 @@ import com.aixbox.common.core.pojo.PageParam;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.excel.utils.ExcelUtil;
+import com.aixbox.system.domain.bo.SysDeptBo;
 import com.aixbox.system.domain.bo.SysRoleBo;
 import com.aixbox.system.domain.bo.SysUserBo;
 import com.aixbox.system.domain.entity.SysRole;
@@ -18,8 +19,10 @@ import com.aixbox.system.domain.vo.request.role.SysRoleSaveReqVO;
 import com.aixbox.system.domain.vo.request.role.SysRoleUpdateDataScopeReq;
 import com.aixbox.system.domain.vo.request.role.SysRoleUpdateReq;
 import com.aixbox.system.domain.vo.request.user.SysUserQueryReq;
+import com.aixbox.system.domain.vo.response.DeptTreeSelectResp;
 import com.aixbox.system.domain.vo.response.SysRoleResp;
 import com.aixbox.system.domain.vo.response.SysUserResp;
+import com.aixbox.system.service.SysDeptService;
 import com.aixbox.system.service.SysRoleService;
 import com.aixbox.system.service.SysUserService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -63,6 +66,7 @@ public class SysRoleController {
 
     private final SysRoleService sysRoleService;
     private final SysUserService sysUserService;
+    private final SysDeptService sysDeptService;
 
 
     /**
@@ -157,7 +161,19 @@ public class SysRoleController {
 
 
 
-
+    /**
+     * 获取对应角色部门树列表
+     *
+     * @param roleId 角色ID
+     */
+    @SaCheckPermission("system:role:list")
+    @GetMapping(value = "/deptTree/{roleId}")
+    public CommonResult<DeptTreeSelectResp> roleDeptTreeselect(@PathVariable("roleId") Long roleId) {
+        DeptTreeSelectResp selectVo = new DeptTreeSelectResp();
+        selectVo.setCheckedKeys(sysDeptService.selectDeptListByRoleId(roleId));
+        selectVo.setDepts(sysDeptService.selectDeptTreeList(new SysDeptBo()));
+        return success(selectVo);
+    }
 
 
 

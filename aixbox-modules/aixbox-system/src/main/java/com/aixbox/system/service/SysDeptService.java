@@ -1,7 +1,9 @@
 package com.aixbox.system.service;
 
+import cn.hutool.core.lang.tree.Tree;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.system.constant.CacheNames;
+import com.aixbox.system.domain.bo.SysDeptBo;
 import com.aixbox.system.domain.entity.SysDept;
 import com.aixbox.system.domain.vo.request.dept.SysDeptPageReqVO;
 import com.aixbox.system.domain.vo.request.dept.SysDeptSaveReqVO;
@@ -51,6 +53,21 @@ public interface SysDeptService {
      */
     PageResult<SysDept> getSysDeptPage(SysDeptPageReqVO pageReqVO);
 
-    @Cacheable(cacheNames = CacheNames.SYS_DEPT, key = "#deptId")
     SysDeptRespVO selectDeptById(Long deptId);
+
+    /**
+     * 根据角色ID查询部门树信息
+     *
+     * @param roleId 角色ID
+     * @return 选中部门列表
+     */
+    List<Long> selectDeptListByRoleId(Long roleId);
+
+    /**
+     * 查询部门树结构信息
+     *
+     * @param sysDeptBo 部门信息
+     * @return 部门树信息集合
+     */
+    List<Tree<Long>> selectDeptTreeList(SysDeptBo sysDeptBo);
 }
