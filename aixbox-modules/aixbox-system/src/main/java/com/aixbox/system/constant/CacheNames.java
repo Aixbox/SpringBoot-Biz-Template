@@ -43,4 +43,9 @@ public interface CacheNames {
      */
     String SYS_NICKNAME = "sys_nickname#30d";
 
+    /**
+     * 部门及以下权限
+     */
+    String SYS_DEPT_AND_CHILD = "sys_dept_and_child#30d";
+
 }

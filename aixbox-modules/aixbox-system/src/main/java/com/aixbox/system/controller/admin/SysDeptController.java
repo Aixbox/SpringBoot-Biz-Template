@@ -3,6 +3,7 @@ package com.aixbox.system.controller.admin;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.convert.Convert;
+import com.aixbox.common.core.constant.SystemConstants;
 import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.StrUtils;
@@ -30,7 +31,16 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.aixbox.common.core.pojo.CommonResult.error;
 import static com.aixbox.common.core.pojo.CommonResult.success;
+import static com.aixbox.common.core.pojo.CommonResult.toAjax;
+import static com.aixbox.system.constant.ErrorCodeConstants.ADD_DEPT_ERROR;
+import static com.aixbox.system.constant.ErrorCodeConstants.DEPT_EXIST_CHILD;
+import static com.aixbox.system.constant.ErrorCodeConstants.DEPT_EXIST_USER;
+import static com.aixbox.system.constant.ErrorCodeConstants.DEPT_NAME_EXIST;
+import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_DEPT_ERROR;
+import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_DEPT_NAME_EXIST;
+import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_DEPT_PARENT_ERROR;
 
 /**
  * 部门 Controller
@@ -47,10 +57,15 @@ public class SysDeptController {
      * @param addReqVO 新增参数
      * @return 新增数据id
      */
+    @SaCheckPermission("system:dept:add")
     @PostMapping("/add")
-    public CommonResult<Long> add(@Valid @RequestBody SysDeptSaveReqVO addReqVO) {
-        Long sysDeptId = sysDeptService.addSysDept(addReqVO);
-        return success(sysDeptId);
+    public CommonResult<Void> add(@Valid @RequestBody SysDeptSaveReqVO addReqVO) {
+        SysDeptBo sysDept = BeanUtils.toBean(addReqVO, SysDeptBo.class);
+        SysDept dept = BeanUtils.toBean(addReqVO, SysDept.class);
+        if (!sysDeptService.checkDeptNameUnique(sysDept)) {
+            return error(DEPT_NAME_EXIST, sysDept.getDeptName());
+        }
+        return toAjax(sysDeptService.insertDept(dept), ADD_DEPT_ERROR);
     }
 
     /**
@@ -59,9 +74,22 @@ public class SysDeptController {
      * @return 是否成功
      */
     @PutMapping("/update")
-    public CommonResult<Boolean> edit(@Valid @RequestBody SysDeptUpdateReqVO updateReqVO) {
-        Boolean result = sysDeptService.updateSysDept(updateReqVO);
-        return success(result);
+    public CommonResult<Void> edit(@Valid @RequestBody SysDeptUpdateReqVO updateReqVO) {
+        Long deptId = updateReqVO.getId();
+        SysDeptBo dept = BeanUtils.toBean(updateReqVO, SysDeptBo.class);
+        sysDeptService.checkDeptDataScope(deptId);
+        if (!sysDeptService.checkDeptNameUnique(dept)) {
+            return error(UPDATE_DEPT_NAME_EXIST, dept.getDeptName());
+        } else if (dept.getParentId().equals(deptId)) {
+            return error(UPDATE_DEPT_PARENT_ERROR, dept.getDeptName());
+        } else if (StrUtils.equals(SystemConstants.DISABLE, dept.getStatus())) {
+            if (sysDeptService.selectNormalChildrenDeptById(deptId) > 0) {
+                return error(DEPT_EXIST_CHILD);
+            } else if (sysDeptService.checkDeptExistUser(deptId)) {
+                return error(DEPT_EXIST_USER);
+            }
+        }
+        return toAjax(sysDeptService.updateDept(dept), UPDATE_DEPT_ERROR);
     }
 
     /**

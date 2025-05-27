@@ -83,4 +83,44 @@ public interface SysDeptService {
      * @return 部门信息集合
      */
     List<SysDeptResp> selectDeptList(SysDeptBo sysDeptBo);
+
+    /**
+     * 校验部门名称是否唯一
+     *
+     * @param sysDept 部门信息
+     * @return 结果
+     */
+    boolean checkDeptNameUnique(SysDeptBo sysDept);
+
+    /**
+     * 新增保存部门信息
+     *
+     * @param sysDept 部门信息
+     * @return 结果
+     */
+    int insertDept(SysDept sysDept);
+
+    /**
+     * 根据ID查询所有子部门数（正常状态）
+     *
+     * @param deptId 部门ID
+     * @return 子部门数
+     */
+    long selectNormalChildrenDeptById(Long deptId);
+
+    /**
+     * 查询部门是否存在用户
+     *
+     * @param deptId 部门ID
+     * @return 结果 true 存在 false 不存在
+     */
+    boolean checkDeptExistUser(Long deptId);
+
+    /**
+     * 修改保存部门信息
+     *
+     * @param dept 部门信息
+     * @return 结果
+     */
+    int updateDept(SysDeptBo dept);
 }

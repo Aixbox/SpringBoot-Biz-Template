@@ -10,8 +10,11 @@ import com.aixbox.common.mybatis.core.util.MyBatisUtils;
 import com.aixbox.system.domain.entity.SysDept;
 import com.aixbox.system.domain.vo.request.dept.SysDeptPageReqVO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.toolkit.Db;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.poi.ss.formula.functions.T;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -78,6 +81,8 @@ public interface SysDeptMapper extends BaseMapperX<SysDept> {
             @DataColumn(key = "deptName", value = "dept_id")
     })
     long countDeptById(Long deptId);
+
+
 }
 
 

@@ -74,6 +74,13 @@ public interface ErrorCodeConstants {
 
     // ========== 部门模块 模块 1-002-005-??? ==========
     ErrorCode NO_DEPT_PERMISSION = new ErrorCode(1_002_005_000, "没有权限访问部门数据！");
+    ErrorCode DEPT_NAME_EXIST = new ErrorCode(1_002_005_001, "新增部门'{}'失败，部门名称已存在");
+    ErrorCode ADD_DEPT_ERROR = new ErrorCode(1_002_005_002, "新增部门失败");
+    ErrorCode UPDATE_DEPT_NAME_EXIST = new ErrorCode(1_002_005_003, "修改部门'{}'失败，部门名称已存在");
+    ErrorCode UPDATE_DEPT_PARENT_ERROR = new ErrorCode(1_002_005_004, "修改部门'{}'失败，上级部门不能是自己");
+    ErrorCode DEPT_EXIST_CHILD = new ErrorCode(1_002_005_004, "该部门包含未停用的子部门!");
+    ErrorCode DEPT_EXIST_USER = new ErrorCode(1_002_005_005, "该部门下存在已分配用户，不能禁用!");
+    ErrorCode UPDATE_DEPT_ERROR = new ErrorCode(1_002_005_006, "修改部门失败");
 
 
 }
