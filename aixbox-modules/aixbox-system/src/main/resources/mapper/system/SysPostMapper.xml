@@ -15,4 +15,16 @@
         where u.id = #{userId}
     </select>
 
+
+    <select id="selectPagePostList" resultMap="SysPostResult">
+        select
+        <if test="ew.getSqlSelect != null">
+            ${ew.getSqlSelect}
+        </if>
+        <if test="ew.getSqlSelect == null">
+            *
+        </if>
+        from sys_post ${ew.getCustomSqlSegment}
+    </select>
+
 </mapper>

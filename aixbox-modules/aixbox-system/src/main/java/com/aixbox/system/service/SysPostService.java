@@ -82,4 +82,36 @@ public interface SysPostService {
      * @return 结果
      */
     long countPostByDeptId(Long deptId);
+
+    /**
+     * 校验岗位名称
+     *
+     * @param postBo 岗位信息
+     * @return 结果
+     */
+    boolean checkPostNameUnique(SysPostBo postBo);
+
+    /**
+     * 校验岗位编码
+     *
+     * @param postBo 岗位信息
+     * @return 结果
+     */
+    boolean checkPostCodeUnique(SysPostBo postBo);
+
+    /**
+     * 通过岗位ID查询岗位使用数量
+     *
+     * @param postId 岗位ID
+     * @return 结果
+     */
+    long countUserPostById(Long postId);
+
+    /**
+     * 通过岗位ID串查询岗位
+     *
+     * @param postIds 岗位id串
+     * @return 岗位列表信息
+     */
+    List<SysPostResp> selectPostByIds(List<Long> postIds);
 }

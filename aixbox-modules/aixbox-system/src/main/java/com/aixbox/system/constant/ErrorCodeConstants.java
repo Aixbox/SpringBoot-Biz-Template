@@ -86,5 +86,12 @@ public interface ErrorCodeConstants {
     ErrorCode EXIST_POST = new ErrorCode(1_002_005_006, "部门存在岗位,不允许删除");
     ErrorCode DELETE_DEPT_ERROR = new ErrorCode(1_002_005_006, "删除部门失败");
 
+    // ========== 岗位模块 模块 1-002-006-??? ==========
+    ErrorCode POST_NAME_EXIST = new ErrorCode(1_002_006_000, "新增岗位'{}'失败，岗位名称已存在");
+    ErrorCode POST_CODE_EXIST = new ErrorCode(1_002_006_000, "新增岗位'{}'失败，岗位编码已存在");
+    ErrorCode UPDATE_POST_NAME_EXIST = new ErrorCode(1_002_006_000, "修改岗位'{}'失败，岗位名称已存在");
+    ErrorCode UPDATE_POST_CODE_EXIST = new ErrorCode(1_002_006_000, "修改岗位'{}'失败，岗位编码已存在");
+    ErrorCode UPDATE_POST_ERROR = new ErrorCode(1_002_006_000, "该岗位下存在已分配用户，不能禁用!");
+
 
 }

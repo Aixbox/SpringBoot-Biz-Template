@@ -1,6 +1,9 @@
 package com.aixbox.system.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.aixbox.common.core.constant.SystemConstants;
+import com.aixbox.common.core.exception.ServiceException;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.StrUtils;
 import com.aixbox.common.core.utils.StreamUtils;
@@ -9,14 +12,17 @@ import com.aixbox.common.core.utils.object.MapstructUtils;
 import com.aixbox.system.domain.bo.SysPostBo;
 import com.aixbox.system.domain.entity.SysDept;
 import com.aixbox.system.domain.entity.SysPost;
+import com.aixbox.system.domain.entity.SysUserPost;
 import com.aixbox.system.domain.vo.request.post.SysPostPageReqVO;
 import com.aixbox.system.domain.vo.request.post.SysPostSaveReqVO;
 import com.aixbox.system.domain.vo.request.post.SysPostUpdateReqVO;
 import com.aixbox.system.domain.vo.response.SysPostResp;
 import com.aixbox.system.mapper.SysDeptMapper;
 import com.aixbox.system.mapper.SysPostMapper;
+import com.aixbox.system.mapper.SysUserPostMapper;
 import com.aixbox.system.service.SysPostService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +37,7 @@ public class SysPostServiceImpl implements SysPostService {
 
     private final SysPostMapper sysPostMapper;
     private final SysDeptMapper sysDeptMapper;
+    private final SysUserPostMapper userPostMapper;
 
     /**
      * 新增岗位
@@ -62,6 +69,12 @@ public class SysPostServiceImpl implements SysPostService {
      */
     @Override
     public Boolean deleteSysPost(List<Long> ids) {
+        for (Long postId : ids) {
+            SysPost post = sysPostMapper.selectById(postId);
+            if (countUserPostById(postId) > 0) {
+                throw new ServiceException(String.format("%1$s已分配，不能删除!", post.getPostName()));
+            }
+        }
         return sysPostMapper.deleteByIds(ids) > 0;
     }
 
@@ -82,6 +95,9 @@ public class SysPostServiceImpl implements SysPostService {
      */
     @Override
     public PageResult<SysPost> getSysPostPage(SysPostPageReqVO pageReqVO) {
+        SysPostBo postBo = BeanUtils.toBean(pageReqVO, SysPostBo.class);
+        Page<SysPost> page = sysPostMapper.selectPagePostList(new Page<>(pageReqVO.getPageNo(), pageReqVO.getPageSize()),
+                buildQueryWrapper(postBo));
         return sysPostMapper.selectPage(pageReqVO);
     }
 
@@ -129,6 +145,61 @@ public class SysPostServiceImpl implements SysPostService {
     @Override
     public long countPostByDeptId(Long deptId) {
         return sysPostMapper.selectCount(new LambdaQueryWrapper<SysPost>().eq(SysPost::getDeptId, deptId));
+    }
+
+    /**
+     * 校验岗位名称是否唯一
+     *
+     * @param post 岗位信息
+     * @return 结果
+     */
+    @Override
+    public boolean checkPostNameUnique(SysPostBo post) {
+        boolean exist = sysPostMapper.exists(new LambdaQueryWrapper<SysPost>()
+                .eq(SysPost::getPostName, post.getPostName())
+                .eq(SysPost::getDeptId, post.getDeptId())
+                .ne(ObjectUtil.isNotNull(post.getId()), SysPost::getId, post.getId()));
+        return !exist;
+    }
+
+    /**
+     * 校验岗位编码是否唯一
+     *
+     * @param post 岗位信息
+     * @return 结果
+     */
+    @Override
+    public boolean checkPostCodeUnique(SysPostBo post) {
+        boolean exist = sysPostMapper.exists(new LambdaQueryWrapper<SysPost>()
+                .eq(SysPost::getPostCode, post.getPostCode())
+                .ne(ObjectUtil.isNotNull(post.getId()), SysPost::getId, post.getId()));
+        return !exist;
+    }
+
+    /**
+     * 通过岗位ID查询岗位使用数量
+     *
+     * @param postId 岗位ID
+     * @return 结果
+     */
+    @Override
+    public long countUserPostById(Long postId) {
+        return userPostMapper.selectCount(new LambdaQueryWrapper<SysUserPost>().eq(SysUserPost::getPostId, postId));
+    }
+
+    /**
+     * 通过岗位ID串查询岗位
+     *
+     * @param postIds 岗位id串
+     * @return 岗位列表信息
+     */
+    @Override
+    public List<SysPostResp> selectPostByIds(List<Long> postIds) {
+        List<SysPost> sysPosts = sysPostMapper.selectList(new LambdaQueryWrapper<SysPost>()
+                .select(SysPost::getId, SysPost::getPostName, SysPost::getPostCode)
+                .eq(SysPost::getStatus, SystemConstants.NORMAL)
+                .in(CollUtil.isNotEmpty(postIds), SysPost::getId, postIds));
+        return BeanUtils.toBean(sysPosts, SysPostResp.class);
     }
 
     /**

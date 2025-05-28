@@ -9,6 +9,8 @@ import lombok.Data;
 @Data
 public class SysPostBo {
 
+    private Long id;
+
     /**
      * 部门id
      */
