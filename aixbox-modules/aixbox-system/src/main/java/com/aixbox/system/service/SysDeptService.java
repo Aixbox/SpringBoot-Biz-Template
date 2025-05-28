@@ -139,4 +139,12 @@ public interface SysDeptService {
      * @return 结果
      */
     int deleteDeptById(Long deptId);
+
+    /**
+     * 通过部门ID串查询部门
+     *
+     * @param deptIds 部门id串
+     * @return 部门列表信息
+     */
+    List<SysDeptResp> selectDeptByIds(List<Long> deptIds);
 }

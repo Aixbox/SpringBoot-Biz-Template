@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
@@ -157,6 +158,18 @@ public class SysDeptController {
                 || StrUtils.splitList(d.getAncestors()).contains(Convert.toStr(deptId)));
         return success(depts);
     }
+
+    /**
+     * 获取部门选择框列表
+     *
+     * @param deptIds 部门ID串
+     */
+    @SaCheckPermission("system:dept:query")
+    @GetMapping("/optionselect")
+    public CommonResult<List<SysDeptResp>> optionselect(@RequestParam(required = false) Long[] deptIds) {
+        return success(sysDeptService.selectDeptByIds(deptIds == null ? null : List.of(deptIds)));
+    }
+
 
 
 

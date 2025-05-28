@@ -298,6 +298,15 @@ public class SysDeptServiceImpl implements SysDeptService {
         return sysDeptMapper.deleteById(deptId);
     }
 
+    @Override
+    public List<SysDeptResp> selectDeptByIds(List<Long> deptIds) {
+        List<SysDept> sysDepts = sysDeptMapper.selectDeptList(new LambdaQueryWrapper<SysDept>()
+                .select(SysDept::getId, SysDept::getDeptName, SysDept::getLeader)
+                .eq(SysDept::getStatus, SystemConstants.NORMAL)
+                .in(CollUtil.isNotEmpty(deptIds), SysDept::getId, deptIds));
+        return BeanUtils.toBean(sysDepts, SysDeptResp.class);
+    }
+
     /**
      * 修改该部门的父级部门状态
      *
