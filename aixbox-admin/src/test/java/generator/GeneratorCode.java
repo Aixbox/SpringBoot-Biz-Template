@@ -30,13 +30,13 @@ public class GeneratorCode {
         //数据源
         String dataName = "master";
         //表名
-        String[] tableNames = {"sys_role_dept"};
+        String[] tableNames = {"sys_config"};
         //包路径
         String packageName = "com.aixbox.system";
         //模块名
         String moduleName = "system";
         //功能名
-        String functionName = "角色和部门关联";
+        String functionName = "参数配置";
 
 
         //查询数据库是否存在表
