@@ -118,7 +118,9 @@ public class SysRoleServiceImpl implements SysRoleService {
     @Override
     public PageResult<SysRole> getSysRolePage(SysRolePageReqVO pageReqVO) {
         SysRoleBo roleBo = BeanUtils.toBean(pageReqVO, SysRoleBo.class);
-        return sysRoleMapper.selectPage(pageReqVO, this.buildQueryWrapper(roleBo));
+        Page<SysRole> page = sysRoleMapper.selectPageRoleList(new Page<>(pageReqVO.getPageNo(),
+                        pageReqVO.getPageSize()), this.buildQueryWrapper(roleBo));
+        return new PageResult<>(page.getRecords(), page.getTotal());
 
     }
 

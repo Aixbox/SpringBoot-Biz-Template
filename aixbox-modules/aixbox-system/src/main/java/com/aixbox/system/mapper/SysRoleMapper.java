@@ -10,6 +10,7 @@ import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.vo.request.role.SysRolePageReqVO;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -56,6 +57,19 @@ public interface SysRoleMapper extends BaseMapperX<SysRole> {
             @DataColumn(key = "userName", value = "r.create_by")
     })
     List<SysRole> selectRoleList(@Param(Constants.WRAPPER) Wrapper<SysRole> queryWrapper);
+
+    /**
+     * 分页查询角色列表
+     *
+     * @param page         分页对象
+     * @param queryWrapper 查询条件
+     * @return 包含角色信息的分页结果
+     */
+    @DataPermission({
+            @DataColumn(key = "deptName", value = "d.dept_id"),
+            @DataColumn(key = "userName", value = "r.create_by")
+    })
+    Page<SysRole> selectPageRoleList(@Param("page") Page<SysRole> page, @Param(Constants.WRAPPER) Wrapper<SysRole> queryWrapper);
 }
 
 

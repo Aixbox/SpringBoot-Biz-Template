@@ -27,7 +27,7 @@
                         r.menu_check_strictly,
                         r.dept_check_strictly,
                         r.status,
-                        r.del_flag,
+                        r.deleted,
                         r.create_time,
                         r.remark
         from sys_role r
@@ -38,6 +38,12 @@
 
 
     <select id="selectRoleList" resultMap="SysRoleResult">
+        <include refid="selectRoleVo"/>
+        ${ew.getCustomSqlSegment}
+    </select>
+
+
+    <select id="selectPageRoleList" resultType="com.aixbox.system.domain.entity.SysRole">
         <include refid="selectRoleVo"/>
         ${ew.getCustomSqlSegment}
     </select>
