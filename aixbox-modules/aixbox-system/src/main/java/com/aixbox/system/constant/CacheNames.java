@@ -48,4 +48,9 @@ public interface CacheNames {
      */
     String SYS_DEPT_AND_CHILD = "sys_dept_and_child#30d";
 
+    /**
+     * 系统配置
+     */
+    String SYS_CONFIG = "sys_config";
+
 }

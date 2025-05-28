@@ -1,10 +1,12 @@
 package com.aixbox.system.service;
 
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.system.domain.bo.SysConfigBo;
 import com.aixbox.system.domain.entity.SysConfig;
 import com.aixbox.system.domain.vo.request.SysConfigPageReq;
 import com.aixbox.system.domain.vo.request.SysConfigSaveReq;
 import com.aixbox.system.domain.vo.request.SysConfigUpdateReq;
+import com.aixbox.system.domain.vo.response.SysConfigResp;
 
 import java.util.List;
 
@@ -25,7 +27,7 @@ public interface SysConfigService {
      * @param updateReq 修改参数
      * @return 是否成功
      */
-    Boolean updateSysConfig(SysConfigUpdateReq updateReq);
+    Boolean updateSysConfig(SysConfigBo updateReq);
 
     /**
      * 删除参数配置
@@ -47,4 +49,34 @@ public interface SysConfigService {
      * @return 参数配置分页对象
      */
     PageResult<SysConfig> getSysConfigPage(SysConfigPageReq pageReq);
+
+    /**
+     * 查询参数配置列表
+     *
+     * @param config 参数配置信息
+     * @return 参数配置集合
+     */
+    List<SysConfigResp> selectConfigList(SysConfigBo config);
+
+    /**
+     * 根据键名查询参数配置信息
+     *
+     * @param configKey 参数键名
+     * @return 参数键值
+     */
+    String selectConfigByKey(String configKey);
+
+    /**
+     * 校验参数键名是否唯一
+     *
+     * @param config 参数信息
+     * @return 结果
+     */
+    boolean checkConfigKeyUnique(SysConfigBo config);
+
+    /**
+     * 重置参数缓存数据
+     */
+    void resetConfigCache();
+
 }

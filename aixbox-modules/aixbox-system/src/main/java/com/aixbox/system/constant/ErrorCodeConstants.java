@@ -93,5 +93,9 @@ public interface ErrorCodeConstants {
     ErrorCode UPDATE_POST_CODE_EXIST = new ErrorCode(1_002_006_000, "修改岗位'{}'失败，岗位编码已存在");
     ErrorCode UPDATE_POST_ERROR = new ErrorCode(1_002_006_000, "该岗位下存在已分配用户，不能禁用!");
 
+    //  ========== 系统配置模块 模块 1-002-007-??? ==========
+    ErrorCode CONFIG_KEY_EXIST = new ErrorCode(1_002_007_000, "新增参数'{}'失败，参数键名已存在");
+    ErrorCode UPDATE_CONFIG_KEY_EXIST = new ErrorCode(1_002_007_000, "修改参数''失败，参数键名已存在");
+
 
 }
