@@ -115,7 +115,9 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public PageResult<SysUser> getSysUserPage(SysUserPageReqVO pageReqVO) {
         SysUserBo sysUser = BeanUtils.toBean(pageReqVO, SysUserBo.class);
-        return sysUserMapper.selectPageUserList(new Page<>(pageReqVO.getPageNo(), pageReqVO.getPageSize()), this.buildQueryWrapper(sysUser));
+        Page<SysUser> sysUserPage = sysUserMapper.selectPageUserList(new Page<>(pageReqVO.getPageNo(),
+                pageReqVO.getPageSize()), this.buildQueryWrapper(sysUser));
+        return new PageResult<>(sysUserPage.getRecords(), sysUserPage.getTotal());
     }
 
     private Wrapper<SysUser> buildQueryWrapper(SysUserBo user) {

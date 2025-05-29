@@ -9,9 +9,12 @@ import com.aixbox.common.mybatis.core.query.LambdaQueryWrapperX;
 import com.aixbox.common.mybatis.core.util.MyBatisUtils;
 import com.aixbox.system.domain.entity.SysDept;
 import com.aixbox.system.domain.vo.request.dept.SysDeptPageReqVO;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.poi.ss.formula.functions.T;
 
 import java.util.Collection;
@@ -69,7 +72,7 @@ public interface SysDeptMapper extends BaseMapperX<SysDept> {
     @DataPermission({
             @DataColumn(key = "deptName", value = "dept_id")
     })
-    List<SysDept> selectDeptList(LambdaQueryWrapper<SysDept> queryWrapper);
+    List<SysDept> selectDeptList(@Param(Constants.WRAPPER) Wrapper<SysDept> queryWrapper);
 
     /**
      * 统计指定部门ID的部门数量

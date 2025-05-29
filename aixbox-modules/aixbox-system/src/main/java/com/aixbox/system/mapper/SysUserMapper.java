@@ -70,7 +70,8 @@ public interface SysUserMapper extends BaseMapperX<SysUser> {
             @DataColumn(key = "deptName", value = "u.dept_id"),
             @DataColumn(key = "userName", value = "u.user_id")
     })
-    PageResult<SysUser> selectPageUserList(@Param("page") Page<SysUser> page, @Param(Constants.WRAPPER) Wrapper<SysUser> queryWrapper);
+    Page<SysUser> selectPageUserList(@Param("page") Page<SysUser> page,
+                                  @Param(Constants.WRAPPER) Wrapper<SysUser> queryWrapper);
 
     /**
      * 根据条件分页查询用户列表

@@ -30,8 +30,8 @@
             ${ew.getSqlSelect}
         </if>
         <if test="ew.getSqlSelect == null">
-            u.id u.dept_id, u.nick_name, u.user_name, u.email, u.avatar, u.phonenumber, u.sex,
-            u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark
+            u.id, u.dept_id, u.nick_name, u.user_name, u.email, u.avatar, u.phonenumber, u.sex,
+            u.status, u.deleted, u.login_ip, u.login_date, u.creator, u.create_time, u.remark
         </if>
         from sys_user u
         ${ew.getCustomSqlSegment}
@@ -40,7 +40,7 @@
 
     <select id="selectUserExportList" resultMap="SysUserExportResult">
         select u.id, u.dept_id, u.nick_name, u.user_name, u.email, u.avatar, u.phonenumber, u.sex,
-               u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark,
+               u.status, u.deleted, u.login_ip, u.login_date, u.creator, u.create_time, u.remark,
                d.dept_name, d.leader, u1.user_name as leaderName
         from sys_user u
                  left join sys_dept d on u.dept_id = d.id
