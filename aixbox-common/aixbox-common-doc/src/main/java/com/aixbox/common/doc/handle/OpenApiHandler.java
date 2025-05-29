@@ -1,6 +1,5 @@
 package com.aixbox.common.doc.handle;
 
-
 import cn.hutool.core.io.IoUtil;
 import com.aixbox.common.core.utils.StreamUtils;
 import io.swagger.v3.core.jackson.TypeNameResolver;
@@ -27,15 +26,7 @@ import org.springframework.web.method.HandlerMethod;
 
 import java.io.StringReader;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

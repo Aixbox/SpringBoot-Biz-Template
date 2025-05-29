@@ -4,8 +4,6 @@ spring:
   profiles:
     active: local
   mvc:
-    # 设置静态资源路径 防止所有请求都去查静态资源
-    static-path-pattern: /static/**
     format:
       date-time: yyyy-MM-dd HH:mm:ss
   jackson:
@@ -50,10 +48,20 @@ security:
   # 排除路径
   excludes:
     - /*.html
+    - /**/*.html
+    - /**/*.css
+    - /**/*.js
+    - /favicon.ico
+    - /error
+    - /*/api-docs
+    - /*/api-docs/**
     - /admin-api/system/auth/register
     - /admin-api/system/auth/login
-    - /v3/api-docs
     - /swagger-ui.html
+    - /doc.html
+
+knife4j:
+  enable: false
 
 
 springdoc:
@@ -85,10 +93,4 @@ springdoc:
   group-configs:
     - group: 用户端接口文档
       packages-to-scan: com.aixbox.system
-      paths-to-match:
-        - /app-api/**
-        - /admin-api/**
-    - group: 管理端接口文档
-      packages-to-scan: net.xdclass
-      paths-to-match: /admin/**
 

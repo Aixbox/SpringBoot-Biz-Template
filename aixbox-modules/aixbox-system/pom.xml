@@ -15,6 +15,11 @@
 
         <dependency>
             <groupId>com.aixbox</groupId>
+            <artifactId>aixbox-common-doc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aixbox</groupId>
             <artifactId>aixbox-common-web</artifactId>
         </dependency>
 

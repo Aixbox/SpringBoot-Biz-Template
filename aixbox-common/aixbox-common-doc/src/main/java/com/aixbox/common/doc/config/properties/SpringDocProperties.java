@@ -1,6 +1,5 @@
 package com.aixbox.common.doc.config.properties;
 
-
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.Paths;
@@ -15,11 +14,12 @@ import java.util.List;
 
 /**
  * swagger 配置属性
+ *
+ * @author Lion Li
  */
 @Data
 @ConfigurationProperties(prefix = "springdoc")
 public class SpringDocProperties {
-
 
     /**
      * 文档基本信息
