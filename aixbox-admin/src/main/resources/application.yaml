@@ -62,6 +62,8 @@ security:
 
 knife4j:
   enable: false
+  setting:
+    language: zh_cn
 
 
 springdoc:
