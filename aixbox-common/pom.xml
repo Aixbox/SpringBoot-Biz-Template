@@ -23,6 +23,7 @@
         <module>aixbox-common-security</module>
         <module>aixbox-common-social</module>
         <module>aixbox-common-excel</module>
+        <module>aixbox-common-log</module>
     </modules>
 
     <properties>

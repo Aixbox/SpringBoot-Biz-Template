@@ -80,6 +80,12 @@
                 <version>${revision}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.aixbox</groupId>
+                <artifactId>aixbox-common-log</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
