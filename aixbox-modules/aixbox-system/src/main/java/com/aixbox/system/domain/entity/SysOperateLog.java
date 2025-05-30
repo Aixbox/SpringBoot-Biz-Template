@@ -33,7 +33,7 @@ public class SysOperateLog extends BaseDO {
     /**
     * 用户类型
     */
-    private Long userType;
+    private String userType;
 
     /**
     * 操作模块类型

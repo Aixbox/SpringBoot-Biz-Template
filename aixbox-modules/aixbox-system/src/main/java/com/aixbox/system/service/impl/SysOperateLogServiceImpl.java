@@ -1,5 +1,6 @@
 package com.aixbox.system.service.impl;
 
+import com.aixbox.common.core.logger.dto.OperateLogCreateReqDto;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
@@ -74,6 +75,12 @@ public class SysOperateLogServiceImpl implements SysOperateLogService {
     @Override
     public PageResult<SysOperateLog> getSysOperateLogPage(SysOperateLogPageReq pageReq) {
         return sysOperateLogMapper.selectPage(pageReq);
+    }
+
+    @Override
+    public void createOperateLog(OperateLogCreateReqDto createReqDTO) {
+        SysOperateLog log = BeanUtils.toBean(createReqDTO, SysOperateLog.class);
+        sysOperateLogMapper.insert(log);
     }
 }
 

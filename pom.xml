@@ -36,6 +36,8 @@
         <justauth.version>1.16.7</justauth.version>
         <easyexcel.version>4.0.3</easyexcel.version>
         <knife4j.version>4.5.0</knife4j.version>
+        <bizlog-sdk.version>3.0.6</bizlog-sdk.version>
+        <skywalking.version>9.4.0</skywalking.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
@@ -256,6 +258,24 @@
             </dependency>
 
 
+            <dependency>
+                <groupId>io.github.mouzt</groupId>
+                <artifactId>bizlog-sdk</artifactId>
+                <version>${bizlog-sdk.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>spring-boot-starter</artifactId>
+                        <groupId>org.springframework.boot</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.apache.skywalking</groupId>
+                <artifactId>apm-toolkit-trace</artifactId>
+                <version>${skywalking.version}</version>
+            </dependency>
 
             <!--  #############################  本项目模块声明  ############################################# -->
 

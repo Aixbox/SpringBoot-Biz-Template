@@ -38,6 +38,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mzt.logapi.starter.annotation.LogRecord;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,8 @@ import static com.aixbox.common.core.exception.util.ServiceExceptionUtil.excepti
 import static com.aixbox.system.constant.ErrorCodeConstants.DELETE_USER_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.USERNAME_NO_PERMISSION;
 import static com.aixbox.system.constant.ErrorCodeConstants.USERNAME_SUPER_ADMIN;
+import static com.aixbox.system.constant.LogRecordConstants.SYSTEM_USER_OPERATE_LOG_TYPE;
+import static com.aixbox.system.constant.LogRecordConstants.SYSTEM_USER_TYPE;
 
 /**
 * 用户 Service实现类
@@ -112,6 +115,8 @@ public class SysUserServiceImpl implements SysUserService {
      * @param pageReqVO 分页查询参数
      * @return 用户分页对象
      */
+    @LogRecord(type = SYSTEM_USER_TYPE, bizNo = "{{#pageReqVO.pageNo}}",
+            success = SYSTEM_USER_OPERATE_LOG_TYPE )
     @Override
     public PageResult<SysUser> getSysUserPage(SysUserPageReqVO pageReqVO) {
         SysUserBo sysUser = BeanUtils.toBean(pageReqVO, SysUserBo.class);

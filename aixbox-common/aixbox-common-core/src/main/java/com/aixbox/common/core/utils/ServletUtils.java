@@ -148,6 +148,15 @@ public class ServletUtils extends JakartaServletUtil {
     }
 
     /**
+     * @param request 请求
+     * @return ua
+     */
+    public static String getUserAgent(HttpServletRequest request) {
+        String ua = request.getHeader("User-Agent");
+        return ua != null ? ua : "";
+    }
+
+    /**
      * 获取当前请求的 HttpSession 对象
      * <p>
      * 如果当前请求已经关联了一个会话（即已经存在有效的 session ID），

@@ -1,5 +1,6 @@
 package com.aixbox.system.service;
 
+import com.aixbox.common.core.logger.OperateLogCommonApi;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.system.domain.entity.SysOperateLog;
 import com.aixbox.system.domain.vo.request.SysOperateLogPageReq;
@@ -11,7 +12,7 @@ import java.util.List;
 /**
 * 操作日志 Service接口
 */
-public interface SysOperateLogService {
+public interface SysOperateLogService extends OperateLogCommonApi {
 
     /**
      * 新增操作日志
