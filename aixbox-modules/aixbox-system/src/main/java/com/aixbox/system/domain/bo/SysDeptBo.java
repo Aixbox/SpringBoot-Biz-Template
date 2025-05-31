@@ -40,5 +40,30 @@ public class SysDeptBo {
      */
     private Long belongDeptId;
 
+    /**
+     * 祖级列表
+     */
+    private String ancestors;
+
+    /**
+     * 显示顺序
+     */
+    private Long orderNum;
+
+    /**
+     * 负责人
+     */
+    private Long leader;
+
+    /**
+     * 联系电话
+     */
+    private String phone;
+
+    /**
+     * 邮箱
+     */
+    private String email;
+
 
 }
