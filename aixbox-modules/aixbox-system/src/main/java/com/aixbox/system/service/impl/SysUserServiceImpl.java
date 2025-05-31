@@ -46,6 +46,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static com.aixbox.common.core.exception.util.ServiceExceptionUtil.exception;
 import static com.aixbox.system.constant.ErrorCodeConstants.DELETE_USER_ERROR;
@@ -126,6 +127,7 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     private Wrapper<SysUser> buildQueryWrapper(SysUserBo user) {
+        Map<String, Object> params = user.getParams();
         QueryWrapper<SysUser> wrapper = Wrappers.query();
         wrapper.eq("u.deleted", SystemConstants.NORMAL)
                .eq(ObjectUtil.isNotNull(user.getId()), "u.id", user.getId())
@@ -133,6 +135,8 @@ public class SysUserServiceImpl implements SysUserService {
                .like(StrUtils.isNotBlank(user.getUserName()), "u.user_name", user.getUserName())
                .eq(StrUtils.isNotBlank(user.getStatus()), "u.status", user.getStatus())
                .like(StrUtils.isNotBlank(user.getPhonenumber()), "u.phonenumber", user.getPhonenumber())
+               .between(params.get("beginTime") != null && params.get("endTime") != null,
+                       "u.create_time", params.get("beginTime"), params.get("endTime"))
                .and(ObjectUtil.isNotNull(user.getDeptId()), w -> {
                    List<SysDept> deptList = deptMapper.selectListByParentId(user.getDeptId());
                    List<Long> ids = StreamUtils.toList(deptList, SysDept::getId);

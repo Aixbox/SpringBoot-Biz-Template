@@ -145,6 +145,16 @@ public class SysDeptController {
     }
 
     /**
+     * 获取部门列表
+     */
+    @SaCheckPermission("system:dept:list")
+    @GetMapping("/list")
+    public CommonResult<List<SysDeptResp>> list(SysDeptBo dept) {
+        List<SysDeptResp> depts = sysDeptService.selectDeptList(dept);
+        return success(depts);
+    }
+
+    /**
      * 查询部门列表（排除节点）
      *
      * @param deptId 部门ID

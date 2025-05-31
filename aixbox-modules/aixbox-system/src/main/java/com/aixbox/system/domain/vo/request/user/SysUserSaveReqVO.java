@@ -30,7 +30,7 @@ public class SysUserSaveReqVO {
     /**
     * 岗位编号数组
     */
-    private String postIds;
+    private Long[] postIds;
     /**
     * 用户邮箱
     */
