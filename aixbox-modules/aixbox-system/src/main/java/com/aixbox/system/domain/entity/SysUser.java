@@ -43,11 +43,6 @@ public class SysUser extends BaseDO {
     private String userType;
 
     /**
-    * 岗位编号数组
-    */
-    private String postIds;
-
-    /**
     * 用户邮箱
     */
     private String email;

@@ -301,14 +301,14 @@ public class SysUserServiceImpl implements SysUserService {
      * @return 结果
      */
     @Override
-    @CacheEvict(cacheNames = CacheNames.SYS_NICKNAME, key = "#user.userId")
+    @CacheEvict(cacheNames = CacheNames.SYS_NICKNAME, key = "#user.id")
     @Transactional(rollbackFor = Exception.class)
     public int updateUser(SysUserBo user) {
         // 新增用户与角色管理
         insertUserRole(user, true);
         // 新增用户与岗位管理
         insertUserPost(user, true);
-        SysUser sysUser = MapstructUtils.convert(user, SysUser.class);
+        SysUser sysUser = BeanUtils.toBean(user, SysUser.class);
         // 防止错误更新后导致的数据误删除
         int flag = sysUserMapper.updateById(sysUser);
         if (flag < 1) {
