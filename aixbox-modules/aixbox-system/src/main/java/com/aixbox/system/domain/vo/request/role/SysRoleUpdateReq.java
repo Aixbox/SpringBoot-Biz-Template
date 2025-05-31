@@ -17,7 +17,7 @@ public class SysRoleUpdateReq {
     * 角色ID
     */
     @NotNull
-    private Long roleId;
+    private Long id;
     /**
     * 角色名称
     */
@@ -37,16 +37,16 @@ public class SysRoleUpdateReq {
     /**
     * 菜单树选择项是否关联显示
     */
-    private Long menuCheckStrictly;
+    private Boolean menuCheckStrictly;
     /**
     * 部门树选择项是否关联显示
     */
-    private Long deptCheckStrictly;
+    private Boolean deptCheckStrictly;
     /**
     * 角色状态（0正常 1停用）
     */
     private String status;
-                                            /**
+    /**
     * 备注
     */
     private String remark;

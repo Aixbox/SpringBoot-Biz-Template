@@ -46,12 +46,12 @@ public class SysRole extends BaseDO {
     /**
     * 菜单树选择项是否关联显示
     */
-    private Long menuCheckStrictly;
+    private Boolean menuCheckStrictly;
 
     /**
     * 部门树选择项是否关联显示
     */
-    private Long deptCheckStrictly;
+    private Boolean deptCheckStrictly;
 
     /**
     * 角色状态（0正常 1停用）

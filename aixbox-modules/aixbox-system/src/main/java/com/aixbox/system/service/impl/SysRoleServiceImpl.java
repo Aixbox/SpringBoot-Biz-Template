@@ -38,7 +38,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -277,18 +276,18 @@ public class SysRoleServiceImpl implements SysRoleService {
      */
     @Override
     public void checkRoleAllowed(SysRoleBo role) {
-        if (ObjectUtil.isNotNull(role.getRoleId()) && LoginHelper.isSuperAdmin(role.getRoleId())) {
+        if (ObjectUtil.isNotNull(role.getId()) && LoginHelper.isSuperAdmin(role.getId())) {
             throw new ServiceException("不允许操作超级管理员角色");
         }
         String[] keys = new String[]{AdminConstants.SUPER_ADMIN_ROLE_KEY};
         // 新增不允许使用 管理员标识符
-        if (ObjectUtil.isNull(role.getRoleId())
+        if (ObjectUtil.isNull(role.getId())
                 && StringUtils.equalsAny(role.getRoleKey(), keys)) {
             throw new ServiceException("不允许使用系统内置管理员角色标识符!");
         }
         // 修改不允许修改 管理员标识符
-        if (ObjectUtil.isNotNull(role.getRoleId())) {
-            SysRole sysRole = sysRoleMapper.selectById(role.getRoleId());
+        if (ObjectUtil.isNotNull(role.getId())) {
+            SysRole sysRole = sysRoleMapper.selectById(role.getId());
             // 如果标识符不相等 判断为修改了管理员标识符
             if (!StringUtils.equals(sysRole.getRoleKey(), role.getRoleKey())) {
                 if (StringUtils.equalsAny(sysRole.getRoleKey(), keys)) {
@@ -362,7 +361,7 @@ public class SysRoleServiceImpl implements SysRoleService {
     public boolean checkRoleNameUnique(SysRoleBo sysRolebo) {
         boolean exist = sysRoleMapper.exists(new LambdaQueryWrapper<SysRole>()
                 .eq(SysRole::getRoleName, sysRolebo.getRoleName())
-                .ne(ObjectUtil.isNotNull(sysRolebo.getRoleId()), SysRole::getId, sysRolebo.getRoleId()));
+                .ne(ObjectUtil.isNotNull(sysRolebo.getId()), SysRole::getId, sysRolebo.getId()));
         return !exist;
     }
 
@@ -376,7 +375,7 @@ public class SysRoleServiceImpl implements SysRoleService {
     public boolean checkRoleKeyUnique(SysRoleBo sysRolebo) {
         boolean exist = sysRoleMapper.exists(new LambdaQueryWrapper<SysRole>()
                 .eq(SysRole::getRoleKey, sysRolebo.getRoleKey())
-                .ne(ObjectUtil.isNotNull(sysRolebo.getRoleId()), SysRole::getId, sysRolebo.getRoleId()));
+                .ne(ObjectUtil.isNotNull(sysRolebo.getId()), SysRole::getId, sysRolebo.getId()));
         return !exist;
     }
 
@@ -425,12 +424,15 @@ public class SysRoleServiceImpl implements SysRoleService {
 
 
     private Wrapper<SysRole> buildQueryWrapper(SysRoleBo bo) {
+        Map<String, Object> params = bo.getParams();
         QueryWrapper<SysRole> wrapper = Wrappers.query();
         wrapper.eq("r.deleted", SystemConstants.NORMAL)
-               .eq(ObjectUtil.isNotNull(bo.getRoleId()), "r.id", bo.getRoleId())
+               .eq(ObjectUtil.isNotNull(bo.getId()), "r.id", bo.getId())
                .like(StringUtils.isNotBlank(bo.getRoleName()), "r.role_name", bo.getRoleName())
                .eq(StringUtils.isNotBlank(bo.getStatus()), "r.status", bo.getStatus())
                .like(StringUtils.isNotBlank(bo.getRoleKey()), "r.role_key", bo.getRoleKey())
+               .between(params.get("beginTime") != null && params.get("endTime") != null,
+                       "u.create_time", params.get("beginTime"), params.get("endTime"))
                .orderByAsc("r.role_sort").orderByAsc("r.create_time");
         return wrapper;
     }

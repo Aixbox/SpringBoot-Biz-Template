@@ -13,7 +13,7 @@ public class SysRoleChangeStatusReq {
     /**
      * 角色ID
      */
-    private Long roleId;
+    private Long id;
 
 
     /**

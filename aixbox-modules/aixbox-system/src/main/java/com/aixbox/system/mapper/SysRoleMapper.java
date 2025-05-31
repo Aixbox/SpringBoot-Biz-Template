@@ -23,21 +23,6 @@ import java.util.List;
 public interface SysRoleMapper extends BaseMapperX<SysRole> {
 
     /**
-    * 分页查询
-    * @param reqVO 请求参数
-    * @return demo分页对象
-    */
-    default PageResult<SysRole> selectPage(SysRolePageReqVO reqVO) {
-        return selectPage(reqVO, new LambdaQueryWrapperX<SysRole>()
-                .likeIfPresent(SysRole::getRoleName, reqVO.getKeyword())
-                .likeIfPresent(SysRole::getRoleKey, reqVO.getKeyword())
-                .likeIfPresent(SysRole::getDataScope, reqVO.getKeyword())
-                .likeIfPresent(SysRole::getStatus, reqVO.getKeyword())
-                .likeIfPresent(SysRole::getRemark, reqVO.getKeyword())
-                .orderByDesc(BaseDO::getCreateTime));
-    }
-
-    /**
      * 根据用户ID查询角色
      *
      * @param userId 用户ID

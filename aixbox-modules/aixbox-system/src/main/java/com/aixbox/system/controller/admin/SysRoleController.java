@@ -132,8 +132,9 @@ public class SysRoleController {
     @PutMapping("/changeStatus")
     public CommonResult<Void> changeStatus(@RequestBody SysRoleChangeStatusReq role) {
         sysRoleService.checkRoleAllowed(BeanUtils.toBean(role, SysRoleBo.class));
-        sysRoleService.checkRoleDataScope(role.getRoleId());
-        return toAjax(sysRoleService.updateRoleStatus(role.getRoleId(), role.getStatus()), CHANGE_STATUS_ERROR);
+        sysRoleService.checkRoleDataScope(role.getId());
+        return toAjax(sysRoleService.updateRoleStatus(role.getId(), role.getStatus()),
+                CHANGE_STATUS_ERROR);
     }
 
 
@@ -212,14 +213,14 @@ public class SysRoleController {
     public CommonResult<Boolean> edit(@Valid @RequestBody SysRoleUpdateReq updateReqVO) {
         SysRoleBo roleBo = BeanUtils.toBean(updateReqVO, SysRoleBo.class);
         sysRoleService.checkRoleAllowed(roleBo);
-        sysRoleService.checkRoleDataScope(roleBo.getRoleId());
+        sysRoleService.checkRoleDataScope(roleBo.getId());
         if (!sysRoleService.checkRoleNameUnique(roleBo)) {
             return error(UPDATE_ROLE_NAME_EXIST, updateReqVO.getRoleName());
         } else if (!sysRoleService.checkRoleKeyUnique(roleBo)) {
             return error(UPDATE_ROLE_KEY_EXIST, updateReqVO.getRoleName());
         }
         if (sysRoleService.updateSysRole(updateReqVO)) {
-            sysRoleService.cleanOnlineUserByRole(updateReqVO.getRoleId());
+            sysRoleService.cleanOnlineUserByRole(updateReqVO.getId());
             return success();
         }
         return error(UPDATE_ROLE_ERROR, updateReqVO.getRoleName());

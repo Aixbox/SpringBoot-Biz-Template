@@ -10,6 +10,7 @@ import com.aixbox.system.domain.vo.request.menu.SysMenuPageReqVO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -86,7 +87,7 @@ public interface SysMenuMapper extends BaseMapperX<SysMenu> {
      * @param menuCheckStrictly 菜单树选择项是否关联显示
      * @return 选中菜单列表
      */
-    List<Long> selectMenuListByRoleId(Long roleId, Long menuCheckStrictly);
+    List<Long> selectMenuListByRoleId(@Param("roleId") Long roleId, @Param("menuCheckStrictly") boolean menuCheckStrictly);
 }
 
 

@@ -1,9 +1,11 @@
 package com.aixbox.system.domain.bo;
 
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 业务对象
@@ -14,7 +16,7 @@ public class SysRoleBo {
     /**
      * 角色ID
      */
-    private Long roleId;
+    private Long id;
 
     /**
      * 角色权限字符串
@@ -30,5 +32,11 @@ public class SysRoleBo {
      * 角色名称
      */
     private String roleName;
+
+    /**
+     * 请求参数
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Map<String, Object> params = new HashMap<>();
 
 }
