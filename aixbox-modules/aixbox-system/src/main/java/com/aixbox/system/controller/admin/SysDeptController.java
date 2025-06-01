@@ -11,15 +11,14 @@ import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.system.domain.bo.SysDeptBo;
 import com.aixbox.system.domain.entity.SysDept;
 import com.aixbox.system.domain.vo.request.dept.SysDeptPageReqVO;
-import com.aixbox.system.domain.vo.request.dept.SysDeptSaveReqVO;
-import com.aixbox.system.domain.vo.request.dept.SysDeptUpdateReqVO;
+import com.aixbox.system.domain.vo.request.dept.SysDeptSaveReq;
+import com.aixbox.system.domain.vo.request.dept.SysDeptUpdateReq;
 import com.aixbox.system.domain.vo.response.SysDeptResp;
 import com.aixbox.system.service.SysDeptService;
 import com.aixbox.system.service.SysPostService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,10 +29,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static com.aixbox.common.core.pojo.CommonResult.error;
+import static com.aixbox.common.core.exception.util.ServiceExceptionUtil.exception;
 import static com.aixbox.common.core.pojo.CommonResult.success;
 import static com.aixbox.common.core.pojo.CommonResult.toAjax;
 import static com.aixbox.system.constant.ErrorCodeConstants.ADD_DEPT_ERROR;
@@ -51,6 +49,7 @@ import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_DEPT_PARENT_E
 /**
  * 部门 Controller
  */
+@Validated
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/dept")
@@ -66,11 +65,11 @@ public class SysDeptController {
      */
     @SaCheckPermission("system:dept:add")
     @PostMapping("/add")
-    public CommonResult<Void> add(@Valid @RequestBody SysDeptSaveReqVO addReqVO) {
+    public CommonResult<Void> add(@RequestBody SysDeptSaveReq addReqVO) {
         SysDeptBo sysDept = BeanUtils.toBean(addReqVO, SysDeptBo.class);
         SysDept dept = BeanUtils.toBean(addReqVO, SysDept.class);
         if (!sysDeptService.checkDeptNameUnique(sysDept)) {
-            return error(DEPT_NAME_EXIST, sysDept.getDeptName());
+            throw exception(DEPT_NAME_EXIST, sysDept.getDeptName());
         }
         return toAjax(sysDeptService.insertDept(dept), ADD_DEPT_ERROR);
     }
@@ -80,20 +79,21 @@ public class SysDeptController {
      * @param updateReqVO 修改参数
      * @return 是否成功
      */
+    @SaCheckPermission("system:dept:edit")
     @PutMapping("/update")
-    public CommonResult<Void> edit(@Valid @RequestBody SysDeptUpdateReqVO updateReqVO) {
+    public CommonResult<Void> edit(@RequestBody SysDeptUpdateReq updateReqVO) {
         Long deptId = updateReqVO.getId();
         SysDeptBo dept = BeanUtils.toBean(updateReqVO, SysDeptBo.class);
         sysDeptService.checkDeptDataScope(deptId);
         if (!sysDeptService.checkDeptNameUnique(dept)) {
-            return error(UPDATE_DEPT_NAME_EXIST, dept.getDeptName());
+            throw exception(UPDATE_DEPT_NAME_EXIST, dept.getDeptName());
         } else if (dept.getParentId().equals(deptId)) {
-            return error(UPDATE_DEPT_PARENT_ERROR, dept.getDeptName());
+            throw exception(UPDATE_DEPT_PARENT_ERROR, dept.getDeptName());
         } else if (StrUtils.equals(SystemConstants.DISABLE, dept.getStatus())) {
             if (sysDeptService.selectNormalChildrenDeptById(deptId) > 0) {
-                return error(DEPT_EXIST_CHILD);
+                throw exception(DEPT_EXIST_CHILD);
             } else if (sysDeptService.checkDeptExistUser(deptId)) {
-                return error(DEPT_EXIST_USER);
+                throw exception(DEPT_EXIST_USER);
             }
         }
         return toAjax(sysDeptService.updateDept(dept), UPDATE_DEPT_ERROR);
@@ -108,13 +108,13 @@ public class SysDeptController {
     @DeleteMapping("/{id}")
     public CommonResult<Void> remove(@PathVariable Long id) {
         if (sysDeptService.hasChildByDeptId(id)) {
-            return error(EXIST_CHILD_DEPT);
+            throw exception(EXIST_CHILD_DEPT);
         }
         if (sysDeptService.checkDeptExistUser(id)) {
-            return error(EXIST_USER);
+            throw exception(EXIST_USER);
         }
         if (sysPostService.countPostByDeptId(id) > 0) {
-            return error(EXIST_POST);
+            throw exception(EXIST_POST);
         }
         sysDeptService.checkDeptDataScope(id);
         return toAjax(sysDeptService.deleteDeptById(id), DELETE_DEPT_ERROR);
@@ -125,6 +125,7 @@ public class SysDeptController {
      * @param id 数据id
      * @return demo对象
      */
+    @SaCheckPermission("system:dept:query")
     @GetMapping("/{id}")
     public CommonResult<SysDeptResp> getSysDept(@PathVariable("id") Long id) {
         sysDeptService.checkDeptDataScope(id);

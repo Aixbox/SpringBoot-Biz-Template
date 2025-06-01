@@ -22,8 +22,8 @@ import com.aixbox.system.domain.entity.SysDept;
 import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.entity.SysUser;
 import com.aixbox.system.domain.vo.request.dept.SysDeptPageReqVO;
-import com.aixbox.system.domain.vo.request.dept.SysDeptSaveReqVO;
-import com.aixbox.system.domain.vo.request.dept.SysDeptUpdateReqVO;
+import com.aixbox.system.domain.vo.request.dept.SysDeptSaveReq;
+import com.aixbox.system.domain.vo.request.dept.SysDeptUpdateReq;
 import com.aixbox.system.domain.vo.response.SysDeptResp;
 import com.aixbox.system.mapper.SysDeptMapper;
 import com.aixbox.system.mapper.SysRoleMapper;
@@ -36,7 +36,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,7 +63,7 @@ public class SysDeptServiceImpl implements SysDeptService {
      * @return 新增数据id
      */
     @Override
-    public Long addSysDept(SysDeptSaveReqVO addReqVO) {
+    public Long addSysDept(SysDeptSaveReq addReqVO) {
         SysDept sysDept = BeanUtils.toBean(addReqVO, SysDept.class);
         sysDeptMapper.insert(sysDept);
         return sysDept.getId();
@@ -76,7 +75,7 @@ public class SysDeptServiceImpl implements SysDeptService {
      * @return 是否成功
      */
     @Override
-    public Boolean updateSysDept(SysDeptUpdateReqVO updateReqVO) {
+    public Boolean updateSysDept(SysDeptUpdateReq updateReqVO) {
         SysDept sysDept = MapstructUtils.convert(updateReqVO, SysDept.class);
         return sysDeptMapper.updateById(sysDept) > 0;
     }

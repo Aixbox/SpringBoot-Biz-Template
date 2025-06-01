@@ -5,8 +5,8 @@ import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.system.domain.bo.SysDeptBo;
 import com.aixbox.system.domain.entity.SysDept;
 import com.aixbox.system.domain.vo.request.dept.SysDeptPageReqVO;
-import com.aixbox.system.domain.vo.request.dept.SysDeptSaveReqVO;
-import com.aixbox.system.domain.vo.request.dept.SysDeptUpdateReqVO;
+import com.aixbox.system.domain.vo.request.dept.SysDeptSaveReq;
+import com.aixbox.system.domain.vo.request.dept.SysDeptUpdateReq;
 import com.aixbox.system.domain.vo.response.SysDeptResp;
 
 import java.util.List;
@@ -21,14 +21,14 @@ public interface SysDeptService {
      * @param addReqVO 新增参数
      * @return 新增数据id
      */
-    Long addSysDept(SysDeptSaveReqVO addReqVO);
+    Long addSysDept(SysDeptSaveReq addReqVO);
 
     /**
      * 修改部门
      * @param updateReqVO 修改参数
      * @return 是否成功
      */
-    Boolean updateSysDept(SysDeptUpdateReqVO updateReqVO);
+    Boolean updateSysDept(SysDeptUpdateReq updateReqVO);
 
     /**
      * 删除部门
