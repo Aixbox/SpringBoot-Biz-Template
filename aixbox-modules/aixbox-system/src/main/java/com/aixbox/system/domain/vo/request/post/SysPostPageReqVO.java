@@ -13,8 +13,16 @@ import lombok.EqualsAndHashCode;
 public class SysPostPageReqVO extends PageParam {
 
     /**
-     * 关键字
+     * 岗位编码
      */
-    private String keyword;
+    private String postCode;
+    /**
+     * 岗位名称
+     */
+    private String postName;
+    /**
+     * 状态（0正常 1停用）
+     */
+    private String status;
 
 }

@@ -24,21 +24,6 @@ import java.util.List;
 public interface SysPostMapper extends BaseMapperX<SysPost> {
 
     /**
-    * 分页查询
-    * @param reqVO 请求参数
-    * @return demo分页对象
-    */
-    default PageResult<SysPost> selectPage(SysPostPageReqVO reqVO) {
-        return selectPage(reqVO, new LambdaQueryWrapperX<SysPost>()
-                .likeIfPresent(SysPost::getPostCode, reqVO.getKeyword())
-                .likeIfPresent(SysPost::getPostCategory, reqVO.getKeyword())
-                .likeIfPresent(SysPost::getPostName, reqVO.getKeyword())
-                .likeIfPresent(SysPost::getStatus, reqVO.getKeyword())
-                .likeIfPresent(SysPost::getRemark, reqVO.getKeyword())
-                .orderByDesc(BaseDO::getCreateTime));
-    }
-
-    /**
      * 查询用户所属岗位组
      *
      * @param userId 用户ID

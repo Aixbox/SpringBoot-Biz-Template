@@ -9,6 +9,7 @@ import com.aixbox.common.core.utils.StrUtils;
 import com.aixbox.common.core.utils.StreamUtils;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
+import com.aixbox.common.mybatis.core.dataobject.BaseDO;
 import com.aixbox.system.domain.bo.SysPostBo;
 import com.aixbox.system.domain.entity.SysDept;
 import com.aixbox.system.domain.entity.SysPost;
@@ -27,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
 * 岗位 Service实现类
@@ -98,7 +100,7 @@ public class SysPostServiceImpl implements SysPostService {
         SysPostBo postBo = BeanUtils.toBean(pageReqVO, SysPostBo.class);
         Page<SysPost> page = sysPostMapper.selectPagePostList(new Page<>(pageReqVO.getPageNo(), pageReqVO.getPageSize()),
                 buildQueryWrapper(postBo));
-        return sysPostMapper.selectPage(pageReqVO);
+        return new PageResult<>(page.getRecords(), page.getTotal());
     }
 
     /**
@@ -214,6 +216,7 @@ public class SysPostServiceImpl implements SysPostService {
                .like(StrUtils.isNotBlank(bo.getPostCategory()), SysPost::getPostCategory, bo.getPostCategory())
                .like(StrUtils.isNotBlank(bo.getPostName()), SysPost::getPostName, bo.getPostName())
                .eq(StrUtils.isNotBlank(bo.getStatus()), SysPost::getStatus, bo.getStatus())
+                .eq(BaseDO::getDeleted, 0)
                .orderByAsc(SysPost::getPostSort);
         if (ObjectUtil.isNotNull(bo.getDeptId())) {
             //优先单部门搜索
