@@ -16,17 +16,15 @@ import com.aixbox.system.domain.bo.SysMenuBo;
 import com.aixbox.system.domain.entity.SysMenu;
 import com.aixbox.system.domain.vo.request.menu.SysMenuListReq;
 import com.aixbox.system.domain.vo.request.menu.SysMenuPageReqVO;
-import com.aixbox.system.domain.vo.request.menu.SysMenuSaveReqVO;
-import com.aixbox.system.domain.vo.request.menu.SysMenuUpdateReqVO;
+import com.aixbox.system.domain.vo.request.menu.SysMenuSaveReq;
+import com.aixbox.system.domain.vo.request.menu.SysMenuUpdateReq;
 import com.aixbox.system.domain.vo.response.MenuTreeSelectResp;
 import com.aixbox.system.domain.vo.response.RouterVO;
 import com.aixbox.system.domain.vo.response.SysMenuResp;
 import com.aixbox.system.service.SysMenuService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,7 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.aixbox.common.core.pojo.CommonResult.error;
+import static com.aixbox.common.core.exception.util.ServiceExceptionUtil.exception;
 import static com.aixbox.common.core.pojo.CommonResult.success;
 import static com.aixbox.common.core.pojo.CommonResult.toAjax;
 import static com.aixbox.system.constant.ErrorCodeConstants.ADDRESS_NOT_HTTP;
@@ -54,6 +52,7 @@ import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_MENU_PARENT_E
 /**
  * 菜单 Controller
  */
+@Validated
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/menu")
@@ -129,11 +128,6 @@ public class SysMenuController {
     }
 
 
-
-
-
-
-
     /**
      * 新增菜单
      * @param addReqVO 新增参数
@@ -142,12 +136,12 @@ public class SysMenuController {
     @SaCheckRole(AdminConstants.SUPER_ADMIN_ROLE_KEY)
     @SaCheckPermission("system:menu:add")
     @PostMapping("/add")
-    public CommonResult<Long> add(@Valid @RequestBody SysMenuSaveReqVO addReqVO) {
+    public CommonResult<Long> add(@RequestBody SysMenuSaveReq addReqVO) {
         SysMenuBo menuBo = BeanUtils.toBean(addReqVO, SysMenuBo.class);
         if (!sysMenuService.checkMenuNameUnique(menuBo)) {
-            return error(MENU_NAME_EXIST, addReqVO.getMenuName());
+            throw exception(MENU_NAME_EXIST, addReqVO.getMenuName());
         } else if (SystemConstants.YES_FRAME.equals(addReqVO.getIsFrame()) && !StrUtils.ishttp(addReqVO.getPath())) {
-            return error(ADDRESS_NOT_HTTP, addReqVO.getMenuName());
+            throw exception(ADDRESS_NOT_HTTP, addReqVO.getMenuName());
         }
         Long sysMenuId = sysMenuService.addSysMenu(addReqVO);
         return success(sysMenuId);
@@ -158,15 +152,17 @@ public class SysMenuController {
      * @param updateReqVO 修改参数
      * @return 是否成功
      */
+    @SaCheckRole(AdminConstants.SUPER_ADMIN_ROLE_KEY)
+    @SaCheckPermission("system:menu:edit")
     @PutMapping("/update")
-    public CommonResult<Void> edit(@Valid @RequestBody SysMenuUpdateReqVO updateReqVO) {
+    public CommonResult<Void> edit(@RequestBody SysMenuUpdateReq updateReqVO) {
         SysMenuBo menuBo = BeanUtils.toBean(updateReqVO, SysMenuBo.class);
         if (!sysMenuService.checkMenuNameUnique(menuBo)) {
-            return error(UPDATE_MENU_NAME_EXIST, updateReqVO.getMenuName());
+            throw exception(UPDATE_MENU_NAME_EXIST, updateReqVO.getMenuName());
         } else if (SystemConstants.YES_FRAME.equals(updateReqVO.getIsFrame()) && !StrUtils.ishttp(updateReqVO.getPath())) {
-            return error(UPDATE_MENU_ADDRESS_NOT_HTTP, updateReqVO.getMenuName());
+            throw exception(UPDATE_MENU_ADDRESS_NOT_HTTP, updateReqVO.getMenuName());
         } else if (updateReqVO.getId().equals(updateReqVO.getParentId())) {
-            return error(UPDATE_MENU_PARENT_ERROR, updateReqVO.getMenuName());
+            throw exception(UPDATE_MENU_PARENT_ERROR, updateReqVO.getMenuName());
         }
         Boolean result = sysMenuService.updateSysMenu(updateReqVO);
         return toAjax(result, UPDATE_MENU_ERROR);
@@ -177,13 +173,15 @@ public class SysMenuController {
      * @param id 删除id
      * @return 是否成功
      */
+    @SaCheckRole(AdminConstants.SUPER_ADMIN_ROLE_KEY)
+    @SaCheckPermission("system:menu:remove")
     @DeleteMapping("/{id}")
     public CommonResult<Boolean> remove(@PathVariable Long id) {
         if (sysMenuService.hasChildByMenuId(id)) {
-            return error(EXIST_CHILD_MENU);
+            throw exception(EXIST_CHILD_MENU);
         }
         if (sysMenuService.checkMenuExistRole(id)) {
-            return error(MENU_EXIST_ROLE);
+            throw exception(MENU_EXIST_ROLE);
         }
         Boolean result = sysMenuService.deleteSysMenu(Arrays.asList(id));
         return success(result);
@@ -194,6 +192,10 @@ public class SysMenuController {
      * @param pageReqVO 分页参数
      * @return demo分页对象
      */
+    @SaCheckRole(value = {
+            AdminConstants.SUPER_ADMIN_ROLE_KEY
+    }, mode = SaMode.OR)
+    @SaCheckPermission("system:menu:query")
     @GetMapping("/page")
     public CommonResult<PageResult<SysMenuResp>> getSysMenuPage(@Valid SysMenuPageReqVO pageReqVO) {
         PageResult<SysMenu> pageResult = sysMenuService.getSysMenuPage(pageReqVO);

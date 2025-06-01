@@ -17,8 +17,8 @@ import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.entity.SysRoleMenu;
 import com.aixbox.system.domain.vo.request.menu.SysMenuListReq;
 import com.aixbox.system.domain.vo.request.menu.SysMenuPageReqVO;
-import com.aixbox.system.domain.vo.request.menu.SysMenuSaveReqVO;
-import com.aixbox.system.domain.vo.request.menu.SysMenuUpdateReqVO;
+import com.aixbox.system.domain.vo.request.menu.SysMenuSaveReq;
+import com.aixbox.system.domain.vo.request.menu.SysMenuUpdateReq;
 import com.aixbox.system.domain.vo.response.MetaVO;
 import com.aixbox.system.domain.vo.response.RouterVO;
 import com.aixbox.system.domain.vo.response.SysMenuResp;
@@ -26,7 +26,6 @@ import com.aixbox.system.mapper.SysMenuMapper;
 import com.aixbox.system.mapper.SysRoleMapper;
 import com.aixbox.system.mapper.SysRoleMenuMapper;
 import com.aixbox.system.service.SysMenuService;
-import com.aixbox.system.service.SysRoleMenuService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -56,7 +55,7 @@ public class SysMenuServiceImpl implements SysMenuService {
      * @return 新增数据id
      */
     @Override
-    public Long addSysMenu(SysMenuSaveReqVO addReqVO) {
+    public Long addSysMenu(SysMenuSaveReq addReqVO) {
         SysMenu sysMenu = BeanUtils.toBean(addReqVO, SysMenu.class);
         sysMenuMapper.insert(sysMenu);
         return sysMenu.getId();
@@ -68,7 +67,7 @@ public class SysMenuServiceImpl implements SysMenuService {
      * @return 是否成功
      */
     @Override
-    public Boolean updateSysMenu(SysMenuUpdateReqVO updateReqVO) {
+    public Boolean updateSysMenu(SysMenuUpdateReq updateReqVO) {
         SysMenu sysMenu = MapstructUtils.convert(updateReqVO, SysMenu.class);
         return sysMenuMapper.updateById(sysMenu) > 0;
     }

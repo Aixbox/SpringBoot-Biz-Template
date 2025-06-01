@@ -6,11 +6,10 @@ import com.aixbox.system.domain.bo.SysMenuBo;
 import com.aixbox.system.domain.entity.SysMenu;
 import com.aixbox.system.domain.vo.request.menu.SysMenuListReq;
 import com.aixbox.system.domain.vo.request.menu.SysMenuPageReqVO;
-import com.aixbox.system.domain.vo.request.menu.SysMenuSaveReqVO;
-import com.aixbox.system.domain.vo.request.menu.SysMenuUpdateReqVO;
+import com.aixbox.system.domain.vo.request.menu.SysMenuSaveReq;
+import com.aixbox.system.domain.vo.request.menu.SysMenuUpdateReq;
 import com.aixbox.system.domain.vo.response.RouterVO;
 import com.aixbox.system.domain.vo.response.SysMenuResp;
-import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;
 import java.util.Set;
@@ -25,14 +24,14 @@ public interface SysMenuService {
      * @param addReqVO 新增参数
      * @return 新增数据id
      */
-    Long addSysMenu(SysMenuSaveReqVO addReqVO);
+    Long addSysMenu(SysMenuSaveReq addReqVO);
 
     /**
      * 修改菜单
      * @param updateReqVO 修改参数
      * @return 是否成功
      */
-    Boolean updateSysMenu(SysMenuUpdateReqVO updateReqVO);
+    Boolean updateSysMenu(SysMenuUpdateReq updateReqVO);
 
     /**
      * 删除菜单
