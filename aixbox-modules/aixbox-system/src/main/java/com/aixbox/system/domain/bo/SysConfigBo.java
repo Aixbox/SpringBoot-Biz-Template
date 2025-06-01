@@ -1,7 +1,12 @@
 package com.aixbox.system.domain.bo;
 
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -26,5 +31,11 @@ public class SysConfigBo {
      * 系统内置（Y是 N否）
      */
     private String configType;
+
+    /**
+     * 请求参数
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Map<String, Object> params = new HashMap<>();
 
 }

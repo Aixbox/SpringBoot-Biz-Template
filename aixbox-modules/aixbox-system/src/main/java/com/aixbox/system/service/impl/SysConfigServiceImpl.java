@@ -8,6 +8,7 @@ import com.aixbox.common.core.utils.StrUtils;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
 import com.aixbox.common.core.utils.object.ObjectUtils;
+import com.aixbox.common.mybatis.core.dataobject.BaseDO;
 import com.aixbox.common.redis.utils.CacheUtils;
 import com.aixbox.system.constant.CacheNames;
 import com.aixbox.system.domain.bo.SysConfigBo;
@@ -169,10 +170,14 @@ public class SysConfigServiceImpl implements SysConfigService {
      * @return 参数配置集合
      */
     private LambdaQueryWrapper<SysConfig> buildQueryWrapper(SysConfigBo bo) {
+        Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<SysConfig> lqw = Wrappers.lambdaQuery();
         lqw.like(StrUtils.isNotBlank(bo.getConfigName()), SysConfig::getConfigName, bo.getConfigName());
         lqw.eq(StrUtils.isNotBlank(bo.getConfigType()), SysConfig::getConfigType, bo.getConfigType());
         lqw.like(StrUtils.isNotBlank(bo.getConfigKey()), SysConfig::getConfigKey, bo.getConfigKey());
+        lqw.eq(BaseDO::getDeleted, 0);
+        lqw.between(params.get("beginTime") != null && params.get("endTime") != null,
+                SysConfig::getCreateTime, params.get("beginTime"), params.get("endTime"));
         lqw.orderByAsc(SysConfig::getId);
         return lqw;
     }
