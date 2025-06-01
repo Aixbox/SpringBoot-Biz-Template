@@ -15,8 +15,8 @@ import com.aixbox.system.domain.entity.SysDept;
 import com.aixbox.system.domain.entity.SysPost;
 import com.aixbox.system.domain.entity.SysUserPost;
 import com.aixbox.system.domain.vo.request.post.SysPostPageReqVO;
-import com.aixbox.system.domain.vo.request.post.SysPostSaveReqVO;
-import com.aixbox.system.domain.vo.request.post.SysPostUpdateReqVO;
+import com.aixbox.system.domain.vo.request.post.SysPostSaveReq;
+import com.aixbox.system.domain.vo.request.post.SysPostUpdateReq;
 import com.aixbox.system.domain.vo.response.SysPostResp;
 import com.aixbox.system.mapper.SysDeptMapper;
 import com.aixbox.system.mapper.SysPostMapper;
@@ -28,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 /**
 * 岗位 Service实现类
@@ -47,7 +46,7 @@ public class SysPostServiceImpl implements SysPostService {
      * @return 新增数据id
      */
     @Override
-    public Long addSysPost(SysPostSaveReqVO addReqVO) {
+    public Long addSysPost(SysPostSaveReq addReqVO) {
         SysPost sysPost = BeanUtils.toBean(addReqVO, SysPost.class);
         sysPostMapper.insert(sysPost);
         return sysPost.getId();
@@ -59,7 +58,7 @@ public class SysPostServiceImpl implements SysPostService {
      * @return 是否成功
      */
     @Override
-    public Boolean updateSysPost(SysPostUpdateReqVO updateReqVO) {
+    public Boolean updateSysPost(SysPostUpdateReq updateReqVO) {
         SysPost sysPost = MapstructUtils.convert(updateReqVO, SysPost.class);
         return sysPostMapper.updateById(sysPost) > 0;
     }

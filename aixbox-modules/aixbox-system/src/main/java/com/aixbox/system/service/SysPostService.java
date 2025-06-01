@@ -4,8 +4,8 @@ import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.system.domain.bo.SysPostBo;
 import com.aixbox.system.domain.entity.SysPost;
 import com.aixbox.system.domain.vo.request.post.SysPostPageReqVO;
-import com.aixbox.system.domain.vo.request.post.SysPostSaveReqVO;
-import com.aixbox.system.domain.vo.request.post.SysPostUpdateReqVO;
+import com.aixbox.system.domain.vo.request.post.SysPostSaveReq;
+import com.aixbox.system.domain.vo.request.post.SysPostUpdateReq;
 import com.aixbox.system.domain.vo.response.SysPostResp;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,14 +21,14 @@ public interface SysPostService {
      * @param addReqVO 新增参数
      * @return 新增数据id
      */
-    Long addSysPost(SysPostSaveReqVO addReqVO);
+    Long addSysPost(SysPostSaveReq addReqVO);
 
     /**
      * 修改岗位
      * @param updateReqVO 修改参数
      * @return 是否成功
      */
-    Boolean updateSysPost(SysPostUpdateReqVO updateReqVO);
+    Boolean updateSysPost(SysPostUpdateReq updateReqVO);
 
     /**
      * 删除岗位
