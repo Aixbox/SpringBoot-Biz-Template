@@ -16,8 +16,6 @@ import com.aixbox.system.domain.vo.response.SysDictTypeResp;
 import com.aixbox.system.service.SysDictTypeService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
