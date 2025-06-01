@@ -13,8 +13,18 @@ import lombok.EqualsAndHashCode;
 public class SysClientPageReqVO extends PageParam {
 
     /**
-     * 关键字
+     * 客户端key
      */
-    private String keyword;
+    private String clientKey;
+
+    /**
+     * 客户端秘钥
+     */
+    private String clientSecret;
+
+    /**
+     * 状态（0正常 1停用）
+     */
+    private String status;
 
 }

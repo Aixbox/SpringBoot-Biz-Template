@@ -1,19 +1,24 @@
 package com.aixbox.system.controller.admin;
 
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
+import com.aixbox.common.excel.utils.ExcelUtil;
+import com.aixbox.system.domain.bo.SysClientBo;
 import com.aixbox.system.domain.entity.SysClient;
 import com.aixbox.system.domain.vo.request.client.SysClientPageReqVO;
 import com.aixbox.system.domain.vo.request.client.SysClientSaveReqVO;
 import com.aixbox.system.domain.vo.request.client.SysClientUpdateReqVO;
-import com.aixbox.system.domain.vo.response.SysClientRespVO;
+import com.aixbox.system.domain.vo.response.SysClientResp;
 import com.aixbox.system.service.SysClientService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,8 +29,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static com.aixbox.common.core.pojo.CommonResult.success;
+import static com.aixbox.common.core.pojo.CommonResult.toAjax;
+import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_CLIENT_STATUS_ERROR;
 
 /**
  * 客户端 Controller
@@ -60,6 +68,15 @@ public class SysClientController {
     }
 
     /**
+     * 状态修改
+     */
+    @SaCheckPermission("system:client:edit")
+    @PutMapping("/changeStatus")
+    public CommonResult<Void> changeStatus(@RequestBody SysClientBo bo) {
+        return toAjax(sysClientService.updateClientStatus(bo.getClientId(), bo.getStatus()), UPDATE_CLIENT_STATUS_ERROR);
+    }
+
+    /**
      * 删除客户端
      * @param ids 删除id数组
      * @return 是否成功
@@ -77,10 +94,11 @@ public class SysClientController {
      * @return demo对象
      */
     @GetMapping("/{id}")
-    public CommonResult<SysClientRespVO> getSysClient(@NotNull(message = "主键不能为空")
-                                                    @PathVariable("id") Long id) {
+    public CommonResult<SysClientResp> getSysClient(@PathVariable("id") Long id) {
         SysClient sysClient = sysClientService.getSysClient(id);
-        return success(BeanUtils.toBean(sysClient, SysClientRespVO.class));
+        SysClientResp sysClientResp = BeanUtils.toBean(sysClient, SysClientResp.class);
+        sysClientResp.setGrantTypeList(List.of(sysClientResp.getGrantType().split(",")));
+        return success(sysClientResp);
     }
 
     /**
@@ -89,9 +107,19 @@ public class SysClientController {
      * @return demo 分页对象
      */
     @GetMapping("/page")
-    public CommonResult<PageResult<SysClientRespVO>> getSysClientPage(@Valid SysClientPageReqVO pageReqVO) {
-        PageResult<SysClient> pageResult = sysClientService.getSysClientPage(pageReqVO);
-        return success(BeanUtils.toBean(pageResult, SysClientRespVO.class));
+    public CommonResult<PageResult<SysClientResp>> getSysClientPage(@Valid SysClientPageReqVO pageReqVO) {
+        PageResult<SysClientResp> pageResult = sysClientService.getSysClientPage(pageReqVO);
+        return success(pageResult);
+    }
+
+    /**
+     * 导出客户端管理列表
+     */
+    @SaCheckPermission("system:client:export")
+    @PostMapping("/export")
+    public void export(SysClientBo bo, HttpServletResponse response) {
+        List<SysClientResp> list = sysClientService.queryList(bo);
+        ExcelUtil.exportExcel(list, "客户端管理", SysClientResp.class, response);
     }
 
 

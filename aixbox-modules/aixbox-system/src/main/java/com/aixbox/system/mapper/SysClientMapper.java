@@ -14,22 +14,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface SysClientMapper extends BaseMapperX<SysClient> {
 
-    /**
-    * 分页查询
-    * @param reqVO 请求参数
-    * @return demo分页对象
-    */
-    default PageResult<SysClient> selectPage(SysClientPageReqVO reqVO) {
-        return selectPage(reqVO, new LambdaQueryWrapperX<SysClient>()
-                .likeIfPresent(SysClient::getClientId, reqVO.getKeyword())
-                .likeIfPresent(SysClient::getClientKey, reqVO.getKeyword())
-                .likeIfPresent(SysClient::getClientSecret, reqVO.getKeyword())
-                .likeIfPresent(SysClient::getGrantType, reqVO.getKeyword())
-                .likeIfPresent(SysClient::getDeviceType, reqVO.getKeyword())
-                .likeIfPresent(SysClient::getStatus, reqVO.getKeyword())
-                .orderByDesc(BaseDO::getCreateTime));
-    }
-
 }
 
 

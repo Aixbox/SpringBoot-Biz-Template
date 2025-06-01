@@ -1,4 +1,4 @@
-package com.aixbox.system.domain.vo.request.client;
+package com.aixbox.system.domain.bo;
 
 
 import jakarta.validation.constraints.NotNull;
@@ -7,42 +7,47 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * 客户端 新增参数
+ *
  */
 @Data
-public class SysClientSaveReqVO {
+public class SysClientBo {
 
-            /**
-    * 客户端id
-    */
+    /**
+     * id
+     */
+    @NotNull
+    private Long id;
+    /**
+     * 客户端id
+     */
     private String clientId;
     /**
-    * 客户端key
-    */
+     * 客户端key
+     */
     private String clientKey;
     /**
-    * 客户端秘钥
-    */
+     * 客户端秘钥
+     */
     private String clientSecret;
     /**
-    * 授权类型
-    */
+     * 授权类型
+     */
     private String grantType;
     /**
-    * 设备类型
-    */
+     * 设备类型
+     */
     private String deviceType;
     /**
-    * token活跃超时时间
-    */
+     * token活跃超时时间
+     */
     private Long activeTimeout;
     /**
-    * token固定超时
-    */
+     * token固定超时
+     */
     private Long timeout;
     /**
-    * 状态（0正常 1停用）
-    */
+     * 状态（0正常 1停用）
+     */
     private String status;
 
     /**
@@ -50,5 +55,5 @@ public class SysClientSaveReqVO {
      */
     @NotNull(message = "授权类型不能为空")
     private List<String> grantTypeList;
-                                        
+
 }

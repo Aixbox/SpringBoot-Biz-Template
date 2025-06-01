@@ -2,10 +2,12 @@ package com.aixbox.system.service;
 
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.system.constant.CacheNames;
+import com.aixbox.system.domain.bo.SysClientBo;
 import com.aixbox.system.domain.entity.SysClient;
 import com.aixbox.system.domain.vo.request.client.SysClientPageReqVO;
 import com.aixbox.system.domain.vo.request.client.SysClientSaveReqVO;
 import com.aixbox.system.domain.vo.request.client.SysClientUpdateReqVO;
+import com.aixbox.system.domain.vo.response.SysClientResp;
 import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
@@ -48,8 +50,18 @@ public interface SysClientService {
      * @param pageReqVO 分页查询参数
      * @return 客户端分页对象
      */
-    PageResult<SysClient> getSysClientPage(SysClientPageReqVO pageReqVO);
+    PageResult<SysClientResp> getSysClientPage(SysClientPageReqVO pageReqVO);
 
-    @Cacheable(cacheNames = CacheNames.SYS_CLIENT, key = "#clientId")
+
     SysClient queryByClientId(String clientId);
+
+    /**
+     * 修改状态
+     */
+    int updateClientStatus(String clientId, String status);
+
+    /**
+     * 查询客户端管理列表
+     */
+    List<SysClientResp> queryList(SysClientBo bo);
 }

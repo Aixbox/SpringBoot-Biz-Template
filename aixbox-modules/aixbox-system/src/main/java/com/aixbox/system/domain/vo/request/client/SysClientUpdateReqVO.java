@@ -2,8 +2,10 @@ package com.aixbox.system.domain.vo.request.client;
 
 import com.aixbox.system.domain.entity.SysClient;
 import io.github.linpeilie.annotations.AutoMapper;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.wildfly.common.annotation.NotNull;
+
+import java.util.List;
 
 
 /**
@@ -50,5 +52,11 @@ public class SysClientUpdateReqVO {
     * 状态（0正常 1停用）
     */
     private String status;
+
+    /**
+     * 授权类型
+     */
+    @NotNull(message = "授权类型不能为空")
+    private List<String> grantTypeList;
                                         
 }

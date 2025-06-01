@@ -1,14 +1,16 @@
 package com.aixbox.system.domain.vo.response;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 客户端 返回参数
  */
 @Data
-public class SysClientRespVO {
+public class SysClientResp {
 
     /**
     * id
@@ -50,6 +52,12 @@ public class SysClientRespVO {
     * 创建时间
     */
     private LocalDateTime createTime;
+
+    /**
+     * 授权类型
+     */
+    @ExcelProperty(value = "授权类型")
+    private List<String> grantTypeList;
                         
 
 }

@@ -97,5 +97,8 @@ public interface ErrorCodeConstants {
     ErrorCode CONFIG_KEY_EXIST = new ErrorCode(1_002_007_000, "新增参数'{}'失败，参数键名已存在");
     ErrorCode UPDATE_CONFIG_KEY_EXIST = new ErrorCode(1_002_007_000, "修改参数''失败，参数键名已存在");
 
+    //  ========== 客户端模块 模块 1-002-008-??? ==========
+    ErrorCode UPDATE_CLIENT_STATUS_ERROR = new ErrorCode(1_002_008_000, "修改客户端状态失败");
+
 
 }
