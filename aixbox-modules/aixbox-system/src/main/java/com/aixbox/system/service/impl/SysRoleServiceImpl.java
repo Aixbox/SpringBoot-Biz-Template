@@ -19,9 +19,9 @@ import com.aixbox.system.domain.bo.SysRoleBo;
 import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.entity.SysRoleMenu;
 import com.aixbox.system.domain.entity.SysUserRole;
-import com.aixbox.system.domain.vo.request.role.SysRolePageReqVO;
+import com.aixbox.system.domain.vo.request.role.SysRolePageReq;
 import com.aixbox.system.domain.vo.request.role.SysRoleQueryReq;
-import com.aixbox.system.domain.vo.request.role.SysRoleSaveReqVO;
+import com.aixbox.system.domain.vo.request.role.SysRoleSaveReq;
 import com.aixbox.system.domain.vo.request.role.SysRoleUpdateDataScopeReq;
 import com.aixbox.system.domain.vo.request.role.SysRoleUpdateReq;
 import com.aixbox.system.mapper.SysRoleMapper;
@@ -60,7 +60,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      * @return 新增数据id
      */
     @Override
-    public Long addSysRole(SysRoleSaveReqVO addReqVO) {
+    public Long addSysRole(SysRoleSaveReq addReqVO) {
         SysRole sysRole = BeanUtils.toBean(addReqVO, SysRole.class);
         sysRoleMapper.insert(sysRole);
         return sysRole.getId();
@@ -115,7 +115,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      * @return 角色分页对象
      */
     @Override
-    public PageResult<SysRole> getSysRolePage(SysRolePageReqVO pageReqVO) {
+    public PageResult<SysRole> getSysRolePage(SysRolePageReq pageReqVO) {
         SysRoleBo roleBo = BeanUtils.toBean(pageReqVO, SysRoleBo.class);
         Page<SysRole> page = sysRoleMapper.selectPageRoleList(new Page<>(pageReqVO.getPageNo(),
                         pageReqVO.getPageSize()), this.buildQueryWrapper(roleBo));

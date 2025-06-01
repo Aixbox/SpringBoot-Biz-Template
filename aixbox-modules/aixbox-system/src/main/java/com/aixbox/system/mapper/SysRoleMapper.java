@@ -1,13 +1,9 @@
 package com.aixbox.system.mapper;
 
-import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.datePermission.annotation.DataColumn;
 import com.aixbox.common.datePermission.annotation.DataPermission;
-import com.aixbox.common.mybatis.core.dataobject.BaseDO;
 import com.aixbox.common.mybatis.core.mapper.BaseMapperX;
-import com.aixbox.common.mybatis.core.query.LambdaQueryWrapperX;
 import com.aixbox.system.domain.entity.SysRole;
-import com.aixbox.system.domain.vo.request.role.SysRolePageReqVO;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

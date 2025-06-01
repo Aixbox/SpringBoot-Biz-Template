@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class SysRolePageReqVO extends PageParam {
+public class SysRolePageReq extends PageParam {
 
 
     /**

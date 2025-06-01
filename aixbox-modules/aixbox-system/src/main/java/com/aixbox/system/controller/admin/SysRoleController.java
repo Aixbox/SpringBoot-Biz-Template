@@ -13,9 +13,9 @@ import com.aixbox.system.domain.bo.SysUserBo;
 import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.entity.SysUserRole;
 import com.aixbox.system.domain.vo.request.role.SysRoleChangeStatusReq;
-import com.aixbox.system.domain.vo.request.role.SysRolePageReqVO;
+import com.aixbox.system.domain.vo.request.role.SysRolePageReq;
 import com.aixbox.system.domain.vo.request.role.SysRoleQueryReq;
-import com.aixbox.system.domain.vo.request.role.SysRoleSaveReqVO;
+import com.aixbox.system.domain.vo.request.role.SysRoleSaveReq;
 import com.aixbox.system.domain.vo.request.role.SysRoleUpdateDataScopeReq;
 import com.aixbox.system.domain.vo.request.role.SysRoleUpdateReq;
 import com.aixbox.system.domain.vo.request.user.SysUserQueryReq;
@@ -26,10 +26,8 @@ import com.aixbox.system.service.SysDeptService;
 import com.aixbox.system.service.SysRoleService;
 import com.aixbox.system.service.SysUserService;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,7 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.aixbox.common.core.pojo.CommonResult.error;
+import static com.aixbox.common.core.exception.util.ServiceExceptionUtil.exception;
 import static com.aixbox.common.core.pojo.CommonResult.success;
 import static com.aixbox.common.core.pojo.CommonResult.toAjax;
 import static com.aixbox.system.constant.ErrorCodeConstants.BULK_AUTH_USER_ERROR;
@@ -59,6 +57,7 @@ import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_ROLE_NAME_EXI
 /**
  * 角色 Controller
  */
+@Validated
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/role")
@@ -74,8 +73,7 @@ public class SysRoleController {
      */
     @SaCheckPermission("system:role:list")
     @GetMapping("/authUser/allocatedList")
-    public CommonResult<PageResult<SysUserResp>> allocatedList( SysUserQueryReq user,
-                                                               @Valid PageParam pageQuery) {
+    public CommonResult<PageResult<SysUserResp>> allocatedList(SysUserQueryReq user, PageParam pageQuery) {
         PageResult<SysUserResp> pageResult = sysUserService.selectAllocatedList(user, pageQuery);
         return success(pageResult);
     }
@@ -85,7 +83,7 @@ public class SysRoleController {
      */
     @SaCheckPermission("system:role:list")
     @GetMapping("/authUser/unallocatedList")
-    public CommonResult<PageResult<SysUserResp>> unallocatedList(SysUserBo user, @Valid  PageParam pageQuery) {
+    public CommonResult<PageResult<SysUserResp>> unallocatedList(SysUserBo user, PageParam pageQuery) {
         return success(sysUserService.selectUnallocatedList(user, pageQuery));
     }
 
@@ -177,14 +175,6 @@ public class SysRoleController {
     }
 
 
-
-
-
-
-
-
-
-
     /**
      * 新增角色
      * @param addReqVO 新增参数
@@ -192,13 +182,13 @@ public class SysRoleController {
      */
     @SaCheckPermission("system:role:add")
     @PostMapping("/add")
-    public CommonResult<Long> add(@Valid @RequestBody SysRoleSaveReqVO addReqVO) {
+    public CommonResult<Long> add(@RequestBody SysRoleSaveReq addReqVO) {
         SysRoleBo sysRolebo = BeanUtils.toBean(addReqVO, SysRoleBo.class);
         sysRoleService.checkRoleAllowed(sysRolebo);
         if (!sysRoleService.checkRoleNameUnique(sysRolebo)) {
-            return error(ROLE_NAME_EXIST, addReqVO.getRoleName());
+            throw exception(ROLE_NAME_EXIST, addReqVO.getRoleName());
         } else if (!sysRoleService.checkRoleKeyUnique(sysRolebo)) {
-            return error(ROLE_KEY_EXIST, addReqVO.getRoleName());
+            throw exception(ROLE_KEY_EXIST, addReqVO.getRoleName());
         }
         Long sysRoleId = sysRoleService.addSysRole(addReqVO);
         return success(sysRoleId);
@@ -209,21 +199,22 @@ public class SysRoleController {
      * @param updateReqVO 修改参数
      * @return 是否成功
      */
+    @SaCheckPermission("system:role:edit")
     @PutMapping("/update")
-    public CommonResult<Boolean> edit(@Valid @RequestBody SysRoleUpdateReq updateReqVO) {
+    public CommonResult<Boolean> edit(@RequestBody SysRoleUpdateReq updateReqVO) {
         SysRoleBo roleBo = BeanUtils.toBean(updateReqVO, SysRoleBo.class);
         sysRoleService.checkRoleAllowed(roleBo);
         sysRoleService.checkRoleDataScope(roleBo.getId());
         if (!sysRoleService.checkRoleNameUnique(roleBo)) {
-            return error(UPDATE_ROLE_NAME_EXIST, updateReqVO.getRoleName());
+            throw exception(UPDATE_ROLE_NAME_EXIST, updateReqVO.getRoleName());
         } else if (!sysRoleService.checkRoleKeyUnique(roleBo)) {
-            return error(UPDATE_ROLE_KEY_EXIST, updateReqVO.getRoleName());
+            throw exception(UPDATE_ROLE_KEY_EXIST, updateReqVO.getRoleName());
         }
         if (sysRoleService.updateSysRole(updateReqVO)) {
             sysRoleService.cleanOnlineUserByRole(updateReqVO.getId());
             return success();
         }
-        return error(UPDATE_ROLE_ERROR, updateReqVO.getRoleName());
+        throw exception(UPDATE_ROLE_ERROR, updateReqVO.getRoleName());
     }
 
     /**
@@ -231,6 +222,7 @@ public class SysRoleController {
      * @param ids 删除id数组
      * @return 是否成功
      */
+    @SaCheckPermission("system:role:remove")
     @DeleteMapping("/{ids}")
     public CommonResult<Boolean> remove(@PathVariable Long[] ids) {
         Boolean result = sysRoleService.deleteSysRole(Arrays.asList(ids));
@@ -242,6 +234,7 @@ public class SysRoleController {
      * @param id 数据id
      * @return demo对象
      */
+    @SaCheckPermission("system:role:query")
     @GetMapping("/{id}")
     public CommonResult<SysRoleResp> getSysRole(@PathVariable("id") Long id) {
         SysRole sysRole = sysRoleService.getSysRole(id);
@@ -253,8 +246,9 @@ public class SysRoleController {
      * @param pageReqVO 分页参数
      * @return demo分页对象
      */
+    @SaCheckPermission("system:role:list")
     @GetMapping("/page")
-    public CommonResult<PageResult<SysRoleResp>> getSysRolePage(@Valid SysRolePageReqVO pageReqVO) {
+    public CommonResult<PageResult<SysRoleResp>> getSysRolePage(SysRolePageReq pageReqVO) {
         PageResult<SysRole> pageResult = sysRoleService.getSysRolePage(pageReqVO);
         return success(BeanUtils.toBean(pageResult, SysRoleResp.class));
     }

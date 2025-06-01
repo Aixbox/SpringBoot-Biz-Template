@@ -4,9 +4,9 @@ import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.system.domain.bo.SysRoleBo;
 import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.entity.SysUserRole;
-import com.aixbox.system.domain.vo.request.role.SysRolePageReqVO;
+import com.aixbox.system.domain.vo.request.role.SysRolePageReq;
 import com.aixbox.system.domain.vo.request.role.SysRoleQueryReq;
-import com.aixbox.system.domain.vo.request.role.SysRoleSaveReqVO;
+import com.aixbox.system.domain.vo.request.role.SysRoleSaveReq;
 import com.aixbox.system.domain.vo.request.role.SysRoleUpdateDataScopeReq;
 import com.aixbox.system.domain.vo.request.role.SysRoleUpdateReq;
 
@@ -23,7 +23,7 @@ public interface SysRoleService {
      * @param addReqVO 新增参数
      * @return 新增数据id
      */
-    Long addSysRole(SysRoleSaveReqVO addReqVO);
+    Long addSysRole(SysRoleSaveReq addReqVO);
 
     /**
      * 修改角色
@@ -51,7 +51,7 @@ public interface SysRoleService {
      * @param pageReqVO 分页查询参数
      * @return 角色分页对象
      */
-    PageResult<SysRole> getSysRolePage(SysRolePageReqVO pageReqVO);
+    PageResult<SysRole> getSysRolePage(SysRolePageReq pageReqVO);
 
     Set<String> selectRolePermissionByUserId(Long userId);
 
