@@ -4,13 +4,12 @@ import com.aixbox.common.core.pojo.PageParam;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.system.domain.bo.SysUserBo;
 import com.aixbox.system.domain.entity.SysUser;
-import com.aixbox.system.domain.vo.request.user.SysUserPageReqVO;
+import com.aixbox.system.domain.vo.request.user.SysUserPageReq;
 import com.aixbox.system.domain.vo.request.user.SysUserQueryReq;
-import com.aixbox.system.domain.vo.request.user.SysUserSaveReqVO;
-import com.aixbox.system.domain.vo.request.user.SysUserUpdateReqVO;
+import com.aixbox.system.domain.vo.request.user.SysUserSaveReq;
+import com.aixbox.system.domain.vo.request.user.SysUserUpdateReq;
 import com.aixbox.system.domain.vo.response.SysUserResp;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -24,14 +23,14 @@ public interface SysUserService {
      * @param addReqVO 新增参数
      * @return 新增数据id
      */
-    Long addSysUser(SysUserSaveReqVO addReqVO);
+    Long addSysUser(SysUserSaveReq addReqVO);
 
     /**
      * 修改用户
      * @param updateReqVO 修改参数
      * @return 是否成功
      */
-    Boolean updateSysUser(SysUserUpdateReqVO updateReqVO);
+    Boolean updateSysUser(SysUserUpdateReq updateReqVO);
 
     /**
      * 删除用户
@@ -52,7 +51,7 @@ public interface SysUserService {
      * @param pageReqVO 分页查询参数
      * @return 用户分页对象
      */
-    PageResult<SysUser> getSysUserPage(SysUserPageReqVO pageReqVO);
+    PageResult<SysUser> getSysUserPage(SysUserPageReq pageReqVO);
 
     /**
      * 注册用户信息

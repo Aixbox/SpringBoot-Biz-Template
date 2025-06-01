@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class SysUserPageReqVO extends PageParam {
+public class SysUserPageReq extends PageParam {
 
     /**
      * 用户账号

@@ -19,6 +19,11 @@ import java.util.Objects;
 public class CommonResult<T> implements Serializable {
 
     /**
+     * 成功
+     */
+    public static final int SUCCESS_CODE = GlobalErrorCodeConstants.SUCCESS.getCode();
+
+    /**
      * 错误码
      *
      * @see ErrorCode#getCode()
@@ -69,18 +74,23 @@ public class CommonResult<T> implements Serializable {
     }
 
     public static <T> CommonResult<T> success(T data) {
-        CommonResult<T> result = new CommonResult<>();
-        result.code = GlobalErrorCodeConstants.SUCCESS.getCode();
-        result.data = data;
-        result.msg = "";
-        return result;
+        return restResult(data, SUCCESS_CODE, "");
+    }
+
+    public static <T> CommonResult<T> success(String msg) {
+        return restResult(null, SUCCESS_CODE, msg);
     }
 
     public static <T> CommonResult<T> success() {
-        CommonResult<T> result = new CommonResult<>();
-        result.code = GlobalErrorCodeConstants.SUCCESS.getCode();
-        result.msg = "";
-        return result;
+        return restResult(null, SUCCESS_CODE, "");
+    }
+
+    private static <T> CommonResult<T> restResult(T data, int code, String msg) {
+        CommonResult<T> r = new CommonResult<>();
+        r.setCode(code);
+        r.setData(data);
+        r.setMsg(msg);
+        return r;
     }
 
     /**

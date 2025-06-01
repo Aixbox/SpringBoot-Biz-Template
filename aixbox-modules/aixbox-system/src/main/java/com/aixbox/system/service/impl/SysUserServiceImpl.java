@@ -20,10 +20,10 @@ import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.entity.SysUser;
 import com.aixbox.system.domain.entity.SysUserPost;
 import com.aixbox.system.domain.entity.SysUserRole;
-import com.aixbox.system.domain.vo.request.user.SysUserPageReqVO;
+import com.aixbox.system.domain.vo.request.user.SysUserPageReq;
 import com.aixbox.system.domain.vo.request.user.SysUserQueryReq;
-import com.aixbox.system.domain.vo.request.user.SysUserSaveReqVO;
-import com.aixbox.system.domain.vo.request.user.SysUserUpdateReqVO;
+import com.aixbox.system.domain.vo.request.user.SysUserSaveReq;
+import com.aixbox.system.domain.vo.request.user.SysUserUpdateReq;
 import com.aixbox.system.domain.vo.response.SysRoleResp;
 import com.aixbox.system.domain.vo.response.SysUserResp;
 import com.aixbox.system.mapper.SysDeptMapper;
@@ -74,7 +74,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @return 新增数据id
      */
     @Override
-    public Long addSysUser(SysUserSaveReqVO addReqVO) {
+    public Long addSysUser(SysUserSaveReq addReqVO) {
         SysUser sysUser = BeanUtils.toBean(addReqVO, SysUser.class);
         sysUserMapper.insert(sysUser);
         return sysUser.getId();
@@ -86,7 +86,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @return 是否成功
      */
     @Override
-    public Boolean updateSysUser(SysUserUpdateReqVO updateReqVO) {
+    public Boolean updateSysUser(SysUserUpdateReq updateReqVO) {
         SysUser sysUser = MapstructUtils.convert(updateReqVO, SysUser.class);
         return sysUserMapper.updateById(sysUser) > 0;
     }
@@ -119,7 +119,7 @@ public class SysUserServiceImpl implements SysUserService {
     @LogRecord(type = SYSTEM_USER_TYPE, bizNo = "{{#pageReqVO.pageNo}}",
             success = SYSTEM_USER_OPERATE_LOG_TYPE )
     @Override
-    public PageResult<SysUser> getSysUserPage(SysUserPageReqVO pageReqVO) {
+    public PageResult<SysUser> getSysUserPage(SysUserPageReq pageReqVO) {
         SysUserBo sysUser = BeanUtils.toBean(pageReqVO, SysUserBo.class);
         Page<SysUser> sysUserPage = sysUserMapper.selectPageUserList(new Page<>(pageReqVO.getPageNo(),
                 pageReqVO.getPageSize()), this.buildQueryWrapper(sysUser));

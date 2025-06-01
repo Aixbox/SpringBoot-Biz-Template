@@ -1,5 +1,7 @@
 package com.aixbox.system.domain.vo.response;
 
+import com.aixbox.common.excel.annotation.ExcelDictFormat;
+import com.aixbox.common.excel.convert.ExcelDictConvert;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
@@ -47,10 +49,13 @@ public class SysUserResp {
     /**
     * 手机号码
     */
+    @ExcelProperty(value = "手机号码")
     private String phonenumber;
     /**
     * 用户性别（0男 1女 2未知）
     */
+    @ExcelProperty(value = "用户性别", converter = ExcelDictConvert.class)
+    @ExcelDictFormat(dictType = "sys_user_sex")
     private String sex;
     /**
     * 头像地址
@@ -59,15 +64,29 @@ public class SysUserResp {
     /**
     * 账号状态（0正常 1停用）
     */
+    @ExcelProperty(value = "帐号状态", converter = ExcelDictConvert.class)
+    @ExcelDictFormat(dictType = "sys_normal_disable")
     private String status;
     /**
     * 最后登录IP
     */
+    @ExcelProperty(value = "最后登录IP")
     private String loginIp;
     /**
     * 最后登录时间
     */
+    @ExcelProperty(value = "最后登录时间")
     private LocalDateTime loginDate;
+    /**
+     * 部门名称
+     */
+    @ExcelProperty(value = "部门名称")
+    private String deptName;
+    /**
+     * 负责人
+     */
+    @ExcelProperty(value = "部门负责人")
+    private String leaderName;
     /**
     * 创建时间
     */

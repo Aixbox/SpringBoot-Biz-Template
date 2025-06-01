@@ -18,17 +18,14 @@ import com.aixbox.common.excel.utils.ExcelUtil;
 import com.aixbox.common.security.utils.LoginHelper;
 import com.aixbox.system.domain.bo.SysDeptBo;
 import com.aixbox.system.domain.bo.SysPostBo;
-import com.aixbox.system.domain.bo.SysRoleBo;
 import com.aixbox.system.domain.bo.SysUserBo;
 import com.aixbox.system.domain.bo.SysUserImportBo;
-import com.aixbox.system.domain.entity.SysPost;
 import com.aixbox.system.domain.entity.SysRole;
 import com.aixbox.system.domain.entity.SysUser;
 import com.aixbox.system.domain.vo.request.role.SysRoleQueryReq;
-import com.aixbox.system.domain.vo.request.user.SysUserPageReqVO;
-import com.aixbox.system.domain.vo.request.user.SysUserSaveReqVO;
-import com.aixbox.system.domain.vo.request.user.SysUserUpdateReqVO;
-import com.aixbox.system.domain.vo.response.SysPostResp;
+import com.aixbox.system.domain.vo.request.user.SysUserPageReq;
+import com.aixbox.system.domain.vo.request.user.SysUserSaveReq;
+import com.aixbox.system.domain.vo.request.user.SysUserUpdateReq;
 import com.aixbox.system.domain.vo.response.SysRoleResp;
 import com.aixbox.system.domain.vo.response.SysUserInfoResp;
 import com.aixbox.system.domain.vo.response.SysUserResp;
@@ -39,12 +36,9 @@ import com.aixbox.system.service.SysPostService;
 import com.aixbox.system.service.SysRoleService;
 import com.aixbox.system.service.SysUserService;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,7 +54,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.aixbox.common.core.pojo.CommonResult.error;
+import static com.aixbox.common.core.exception.util.ServiceExceptionUtil.exception;
 import static com.aixbox.common.core.pojo.CommonResult.success;
 import static com.aixbox.common.core.pojo.CommonResult.toAjax;
 import static com.aixbox.system.constant.ErrorCodeConstants.ADD_USER_ERROR;
@@ -76,11 +70,11 @@ import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_STATUS_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_USERNAME_EXIST;
 import static com.aixbox.system.constant.ErrorCodeConstants.USERNAME_NOT_EXIST_OR_NOT_ENABLE;
 import static com.aixbox.system.constant.ErrorCodeConstants.USERNAME_NO_PERMISSION;
-import static net.sf.jsqlparser.util.validation.metadata.NamedObject.user;
 
 /**
  * 用户 Controller
  */
+@Validated
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/user")
@@ -104,7 +98,7 @@ public class SysUserController {
         LoginUser loginUser = LoginHelper.getLoginUser();
         SysUserResp user = sysUserService.selectUserById(loginUser.getUserId());
         if (ObjectUtil.isNull(user)) {
-            return error(USERNAME_NO_PERMISSION);
+            throw exception(USERNAME_NO_PERMISSION);
         }
         userInfoVo.setUser(user);
         userInfoVo.setPermissions(loginUser.getMenuPermission());
@@ -136,7 +130,7 @@ public class SysUserController {
     public CommonResult<Void> importData(@RequestPart("file") MultipartFile file, boolean updateSupport) throws Exception {
         ExcelResult<SysUserImportBo> result = ExcelUtil.importExcel(file.getInputStream(),
                 SysUserImportBo.class, new SysUserImportListener(updateSupport));
-        return success();
+        return success(result.getAnalysis());
     }
 
     /**
@@ -148,26 +142,22 @@ public class SysUserController {
     }
 
 
-
-
-
-
-
     /**
      * 新增用户
      * @param addReqVO 新增参数
      * @return 新增数据id
      */
+    @SaCheckPermission("system:user:add")
     @PostMapping("/add")
-    public CommonResult<Void> add(@Valid @RequestBody SysUserSaveReqVO addReqVO) {
+    public CommonResult<Void> add(@RequestBody SysUserSaveReq addReqVO) {
         SysUserBo user = BeanUtils.toBean(addReqVO, SysUserBo.class);
         sysDeptService.checkDeptDataScope(addReqVO.getDeptId());
         if (!sysUserService.checkUserNameUnique(user)) {
-            return error(USERNAME_NOT_EXIST_OR_NOT_ENABLE, user.getUserName());
+            throw exception(USERNAME_NOT_EXIST_OR_NOT_ENABLE, user.getUserName());
         } else if (StrUtils.isNotEmpty(user.getPhonenumber()) && !sysUserService.checkPhoneUnique(user)) {
-            return error(PHONE_EXIST, user.getUserName());
+            throw exception(PHONE_EXIST, user.getUserName());
         } else if (StrUtils.isNotEmpty(user.getEmail()) && !sysUserService.checkEmailUnique(user)) {
-            return error(EMAIL_EXIST);
+            throw exception(EMAIL_EXIST);
         }
         user.setPassword(BCrypt.hashpw(user.getPassword()));
 
@@ -181,17 +171,17 @@ public class SysUserController {
      */
     @SaCheckPermission("system:user:edit")
     @PutMapping("/update")
-    public CommonResult<Void> edit(@Valid @RequestBody SysUserUpdateReqVO updateReqVO) {
+    public CommonResult<Void> edit(@RequestBody SysUserUpdateReq updateReqVO) {
         SysUserBo user = BeanUtils.toBean(updateReqVO, SysUserBo.class);
         sysUserService.checkUserAllowed(user.getId());
         sysUserService.checkUserDataScope(user.getId());
         sysDeptService.checkDeptDataScope(user.getDeptId());
         if (!sysUserService.checkUserNameUnique(user)) {
-            return error(UPDATE_USERNAME_EXIST, user.getUserName());
+            throw exception(UPDATE_USERNAME_EXIST, user.getUserName());
         } else if (StrUtils.isNotEmpty(user.getPhonenumber()) && !sysUserService.checkPhoneUnique(user)) {
-            return error(UPDATE_PHONE_EXIST, user.getUserName());
+            throw exception(UPDATE_PHONE_EXIST, user.getUserName());
         } else if (StrUtils.isNotEmpty(user.getEmail()) && !sysUserService.checkEmailUnique(user)) {
-            return error(UPDATE_EMAIL_EXIST, user.getUserName());
+            throw exception(UPDATE_EMAIL_EXIST, user.getUserName());
         }
         return toAjax(sysUserService.updateUser(user), UPDATE_ERROR);
     }
@@ -217,7 +207,7 @@ public class SysUserController {
     @DeleteMapping("/{ids}")
     public CommonResult<Void> remove(@PathVariable Long[] ids) {
         if (ArrayUtil.contains(ids, LoginHelper.getUserId())) {
-            return error(DELETE_CURRENT_USER_ERROR);
+            throw exception(DELETE_CURRENT_USER_ERROR);
         }
         return toAjax(sysUserService.deleteUserByIds(Arrays.asList(ids)), DELETE_USER_ERROR);
     }
@@ -248,7 +238,7 @@ public class SysUserController {
      */
     @SaCheckPermission("system:user:list")
     @GetMapping("/list/dept/{deptId}")
-    public CommonResult<List<SysUserResp>> listByDept(@PathVariable @NotNull Long deptId) {
+    public CommonResult<List<SysUserResp>> listByDept(@PathVariable Long deptId) {
         return success(sysUserService.selectUserListByDept(deptId));
     }
 
@@ -287,8 +277,9 @@ public class SysUserController {
      * @param pageReqVO 分页参数
      * @return demo分页对象
      */
+    @SaCheckPermission("system:user:list")
     @GetMapping("/page")
-    public CommonResult<PageResult<SysUserResp>> getSysUserPage(@Valid SysUserPageReqVO pageReqVO) {
+    public CommonResult<PageResult<SysUserResp>> getSysUserPage(SysUserPageReq pageReqVO) {
         PageResult<SysUser> pageResult = sysUserService.getSysUserPage(pageReqVO);
         return success(BeanUtils.toBean(pageResult, SysUserResp.class));
     }
