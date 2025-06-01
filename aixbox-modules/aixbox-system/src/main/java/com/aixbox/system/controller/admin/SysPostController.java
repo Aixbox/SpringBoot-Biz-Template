@@ -16,7 +16,6 @@ import com.aixbox.system.domain.vo.request.post.SysPostUpdateReq;
 import com.aixbox.system.domain.vo.response.SysPostResp;
 import com.aixbox.system.service.SysPostService;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
