@@ -14,11 +14,7 @@ import com.aixbox.system.domain.vo.request.SysConfigUpdateReq;
 import com.aixbox.system.domain.vo.response.SysConfigResp;
 import com.aixbox.system.service.SysConfigService;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.aixbox.common.core.pojo.CommonResult.error;
+import static com.aixbox.common.core.exception.util.ServiceExceptionUtil.exception;
 import static com.aixbox.common.core.pojo.CommonResult.success;
 import static com.aixbox.system.constant.ErrorCodeConstants.CONFIG_KEY_EXIST;
 import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_CONFIG_KEY_EXIST;
@@ -53,11 +49,12 @@ public class SysConfigController {
      * @param addReq 新增参数
      * @return 新增数据id
      */
+    @SaCheckPermission("system:config:add")
     @PostMapping("/add")
     public CommonResult<Long> add(@RequestBody SysConfigSaveReq addReq) {
         SysConfigBo config = BeanUtils.toBean(addReq, SysConfigBo.class);
         if (!sysConfigService.checkConfigKeyUnique(config)) {
-            return error(CONFIG_KEY_EXIST, config.getConfigName());
+            throw exception(CONFIG_KEY_EXIST, config.getConfigName());
         }
         Long sysConfigId = sysConfigService.addSysConfig(addReq);
         return success(sysConfigId);
@@ -68,11 +65,12 @@ public class SysConfigController {
      * @param updateReq 修改参数
      * @return 是否成功
      */
+    @SaCheckPermission("system:config:edit")
     @PutMapping("/update")
     public CommonResult<Boolean> edit(@RequestBody SysConfigUpdateReq updateReq) {
         SysConfigBo configBo = BeanUtils.toBean(updateReq, SysConfigBo.class);
         if (!sysConfigService.checkConfigKeyUnique(configBo)) {
-            return error(UPDATE_CONFIG_KEY_EXIST, configBo.getConfigName());
+            throw exception(UPDATE_CONFIG_KEY_EXIST, configBo.getConfigName());
         }
         Boolean result = sysConfigService.updateSysConfig(configBo);
         return success(result);
@@ -83,6 +81,7 @@ public class SysConfigController {
      * @param ids 删除id数组
      * @return 是否成功
      */
+    @SaCheckPermission("system:config:remove")
     @DeleteMapping("/{ids}")
     public CommonResult<Boolean> remove(@PathVariable Long[] ids) {
         Boolean result = sysConfigService.deleteSysConfig(Arrays.asList(ids));
@@ -94,8 +93,9 @@ public class SysConfigController {
      * @param id 数据id
      * @return 参数配置对象
      */
+    @SaCheckPermission("system:config:query")
     @GetMapping("/{id}")
-    public CommonResult<SysConfigResp> getSysConfig(@PathVariable("id") Long id) {
+    public CommonResult<SysConfigResp> getSysConfig(@PathVariable Long id) {
         SysConfig sysConfig = sysConfigService.getSysConfig(id);
         return success(BeanUtils.toBean(sysConfig, SysConfigResp.class));
     }
@@ -105,6 +105,7 @@ public class SysConfigController {
      * @param pageReq 分页参数
      * @return 参数配置分页对象
      */
+    @SaCheckPermission("system:config:list")
     @GetMapping("/page")
     public CommonResult<PageResult<SysConfigResp>> getSysConfigPage(SysConfigPageReq pageReq) {
         PageResult<SysConfig> pageResult = sysConfigService.getSysConfigPage(pageReq);

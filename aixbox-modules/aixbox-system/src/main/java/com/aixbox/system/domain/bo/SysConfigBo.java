@@ -1,7 +1,6 @@
 package com.aixbox.system.domain.bo;
 
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
@@ -31,6 +30,16 @@ public class SysConfigBo {
      * 系统内置（Y是 N否）
      */
     private String configType;
+
+    /**
+     * 参数键值
+     */
+    private String configValue;
+
+    /**
+     * 备注
+     */
+    private String remark;
 
     /**
      * 请求参数
