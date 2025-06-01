@@ -1,14 +1,12 @@
 package com.aixbox.system.service;
 
 import com.aixbox.common.core.pojo.PageResult;
-import com.aixbox.system.constant.CacheNames;
 import com.aixbox.system.domain.bo.SysClientBo;
 import com.aixbox.system.domain.entity.SysClient;
 import com.aixbox.system.domain.vo.request.client.SysClientPageReqVO;
-import com.aixbox.system.domain.vo.request.client.SysClientSaveReqVO;
-import com.aixbox.system.domain.vo.request.client.SysClientUpdateReqVO;
+import com.aixbox.system.domain.vo.request.client.SysClientSaveReq;
+import com.aixbox.system.domain.vo.request.client.SysClientUpdateReq;
 import com.aixbox.system.domain.vo.response.SysClientResp;
-import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -22,14 +20,14 @@ public interface SysClientService {
      * @param addReqVO 新增参数
      * @return 新增数据id
      */
-    Long addSysClient(SysClientSaveReqVO addReqVO);
+    Long addSysClient(SysClientSaveReq addReqVO);
 
     /**
      * 修改客户端
      * @param updateReqVO 修改参数
      * @return 是否成功
      */
-    Boolean updateSysClient(SysClientUpdateReqVO updateReqVO);
+    Boolean updateSysClient(SysClientUpdateReq updateReqVO);
 
     /**
      * 删除客户端

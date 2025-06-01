@@ -9,15 +9,14 @@ import com.aixbox.system.constant.CacheNames;
 import com.aixbox.system.domain.bo.SysClientBo;
 import com.aixbox.system.domain.entity.SysClient;
 import com.aixbox.system.domain.vo.request.client.SysClientPageReqVO;
-import com.aixbox.system.domain.vo.request.client.SysClientSaveReqVO;
-import com.aixbox.system.domain.vo.request.client.SysClientUpdateReqVO;
+import com.aixbox.system.domain.vo.request.client.SysClientSaveReq;
+import com.aixbox.system.domain.vo.request.client.SysClientUpdateReq;
 import com.aixbox.system.domain.vo.response.SysClientResp;
 import com.aixbox.system.mapper.SysClientMapper;
 import com.aixbox.system.service.SysClientService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -40,7 +39,7 @@ public class SysClientServiceImpl implements SysClientService {
      * @return 新增数据id
      */
     @Override
-    public Long addSysClient(SysClientSaveReqVO addReqVO) {
+    public Long addSysClient(SysClientSaveReq addReqVO) {
         SysClient add = BeanUtils.toBean(addReqVO, SysClient.class);
         validEntityBeforeSave(add);
         add.setGrantType(String.join(",", addReqVO.getGrantTypeList()));
@@ -69,7 +68,7 @@ public class SysClientServiceImpl implements SysClientService {
      * @return 是否成功
      */
     @Override
-    public Boolean updateSysClient(SysClientUpdateReqVO updateReqVO) {
+    public Boolean updateSysClient(SysClientUpdateReq updateReqVO) {
         SysClient sysClient = MapstructUtils.convert(updateReqVO, SysClient.class);
         validEntityBeforeSave(sysClient);
         sysClient.setGrantType(String.join(",", updateReqVO.getGrantTypeList()));

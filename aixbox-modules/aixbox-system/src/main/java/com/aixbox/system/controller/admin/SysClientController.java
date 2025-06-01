@@ -9,16 +9,13 @@ import com.aixbox.common.excel.utils.ExcelUtil;
 import com.aixbox.system.domain.bo.SysClientBo;
 import com.aixbox.system.domain.entity.SysClient;
 import com.aixbox.system.domain.vo.request.client.SysClientPageReqVO;
-import com.aixbox.system.domain.vo.request.client.SysClientSaveReqVO;
-import com.aixbox.system.domain.vo.request.client.SysClientUpdateReqVO;
+import com.aixbox.system.domain.vo.request.client.SysClientSaveReq;
+import com.aixbox.system.domain.vo.request.client.SysClientUpdateReq;
 import com.aixbox.system.domain.vo.response.SysClientResp;
 import com.aixbox.system.service.SysClientService;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,11 +30,13 @@ import java.util.List;
 
 import static com.aixbox.common.core.pojo.CommonResult.success;
 import static com.aixbox.common.core.pojo.CommonResult.toAjax;
+import static com.aixbox.system.constant.ErrorCodeConstants.DELETE_CLIENT_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_CLIENT_STATUS_ERROR;
 
 /**
  * 客户端 Controller
  */
+@Validated
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/client")
@@ -50,8 +49,9 @@ public class SysClientController {
      * @param addReqVO 新增参数
      * @return 新增数据id
      */
+    @SaCheckPermission("system:client:add")
     @PostMapping("/add")
-    public CommonResult<Long> add(@Valid @RequestBody SysClientSaveReqVO addReqVO) {
+    public CommonResult<Long> add(@RequestBody SysClientSaveReq addReqVO) {
         Long sysClientId = sysClientService.addSysClient(addReqVO);
         return success(sysClientId);
     }
@@ -61,8 +61,9 @@ public class SysClientController {
      * @param updateReqVO 修改参数
      * @return 是否成功
      */
+    @SaCheckPermission("system:client:edit")
     @PutMapping("/update")
-    public CommonResult<Boolean> edit(@Valid @RequestBody SysClientUpdateReqVO updateReqVO) {
+    public CommonResult<Boolean> edit(@RequestBody SysClientUpdateReq updateReqVO) {
         Boolean result = sysClientService.updateSysClient(updateReqVO);
         return success(result);
     }
@@ -81,11 +82,11 @@ public class SysClientController {
      * @param ids 删除id数组
      * @return 是否成功
      */
+    @SaCheckPermission("system:client:remove")
     @DeleteMapping("/{ids}")
-    public CommonResult<Boolean> remove(@NotEmpty(message = "主键不能为空")
-                                     @PathVariable Long[] ids) {
+    public CommonResult<Void> remove(@PathVariable Long[] ids) {
         Boolean result = sysClientService.deleteSysClient(Arrays.asList(ids));
-        return success(result);
+        return toAjax(result, DELETE_CLIENT_ERROR);
     }
 
     /**
@@ -93,6 +94,7 @@ public class SysClientController {
      * @param id 数据id
      * @return demo对象
      */
+    @SaCheckPermission("system:client:query")
     @GetMapping("/{id}")
     public CommonResult<SysClientResp> getSysClient(@PathVariable("id") Long id) {
         SysClient sysClient = sysClientService.getSysClient(id);
@@ -106,8 +108,9 @@ public class SysClientController {
      * @param pageReqVO 分页参数
      * @return demo 分页对象
      */
+    @SaCheckPermission("system:client:list")
     @GetMapping("/page")
-    public CommonResult<PageResult<SysClientResp>> getSysClientPage(@Valid SysClientPageReqVO pageReqVO) {
+    public CommonResult<PageResult<SysClientResp>> getSysClientPage(SysClientPageReqVO pageReqVO) {
         PageResult<SysClientResp> pageResult = sysClientService.getSysClientPage(pageReqVO);
         return success(pageResult);
     }

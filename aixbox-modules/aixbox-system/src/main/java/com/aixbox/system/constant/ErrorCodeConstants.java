@@ -99,6 +99,7 @@ public interface ErrorCodeConstants {
 
     //  ========== 客户端模块 模块 1-002-008-??? ==========
     ErrorCode UPDATE_CLIENT_STATUS_ERROR = new ErrorCode(1_002_008_000, "修改客户端状态失败");
+    ErrorCode DELETE_CLIENT_ERROR = new ErrorCode(1_002_008_000, "删除客户端失败");
 
 
 }

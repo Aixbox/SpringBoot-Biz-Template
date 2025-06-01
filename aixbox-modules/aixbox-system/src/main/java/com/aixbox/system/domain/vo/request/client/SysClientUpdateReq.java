@@ -2,6 +2,7 @@ package com.aixbox.system.domain.vo.request.client;
 
 import com.aixbox.system.domain.entity.SysClient;
 import io.github.linpeilie.annotations.AutoMapper;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -13,12 +14,12 @@ import java.util.List;
  */
 @Data
 @AutoMapper(target = SysClient.class)
-public class SysClientUpdateReqVO {
+public class SysClientUpdateReq {
 
     /**
     * id
     */
-    @NotNull
+    @NotNull(message = "id不能为空")
     private Long id;
     /**
     * 客户端id
@@ -27,10 +28,12 @@ public class SysClientUpdateReqVO {
     /**
     * 客户端key
     */
+    @NotBlank(message = "客户端key不能为空")
     private String clientKey;
     /**
     * 客户端秘钥
     */
+    @NotBlank(message = "客户端秘钥不能为空")
     private String clientSecret;
     /**
     * 授权类型
