@@ -7,6 +7,7 @@ import com.aixbox.generator.domain.entity.GenTable;
 import com.aixbox.generator.domain.entity.GenTableColumn;
 
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -134,6 +135,14 @@ public interface GenTableService {
      * @param tableIds 需要删除的表数据ID
      */
     void deleteGenTableByIds(Long[] tableIds);
+
+    /**
+     * 预览代码
+     *
+     * @param tableId 表编号
+     * @return 预览数据列表
+     */
+    Map<String, String> previewCode(Long tableId);
 }
 
 

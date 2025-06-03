@@ -476,6 +476,40 @@ public class GenTableServiceImpl implements GenTableService {
     }
 
     /**
+     * 预览代码
+     *
+     * @param tableId 表编号
+     * @return 预览数据列表
+     */
+    @Override
+    public Map<String, String> previewCode(Long tableId) {
+        Map<String, String> dataMap = new LinkedHashMap<>();
+        // 查询表信息
+        GenTable table = genTableMapper.selectGenTableById(tableId);
+        List<Long> menuIds = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            menuIds.add(identifierGenerator.nextId(null).longValue());
+        }
+        table.setMenuIds(menuIds);
+        // 设置主键列信息
+        setPkColumn(table);
+        VelocityInitializer.initVelocity();
+
+        VelocityContext context = VelocityUtils.prepareContext(table);
+
+        // 获取模板列表
+        List<String> templates = VelocityUtils.getTemplateList(table.getTplCategory());
+        for (String template : templates) {
+            // 渲染模板
+            StringWriter sw = new StringWriter();
+            Template tpl = Velocity.getTemplate(template, Constants.UTF8);
+            tpl.merge(context, sw);
+            dataMap.put(template, sw.toString());
+        }
+        return dataMap;
+    }
+
+    /**
      * 设置代码生成其他选项值
      *
      * @param genTable 设置后的生成对象

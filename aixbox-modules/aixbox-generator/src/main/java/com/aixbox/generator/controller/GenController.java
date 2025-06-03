@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -129,6 +130,21 @@ public class GenController {
         genTableService.deleteGenTableByIds(tableIds);
         return success();
     }
+
+    /**
+     * 预览代码
+     *
+     * @param tableId 表ID
+     */
+    @SaCheckPermission("tool:gen:preview")
+    @GetMapping("/preview/{tableId}")
+    public CommonResult<Map<String, String>> preview(@PathVariable("tableId") Long tableId) throws IOException {
+        Map<String, String> dataMap = genTableService.previewCode(tableId);
+        return success(dataMap);
+    }
+
+
+
 
 
 }
