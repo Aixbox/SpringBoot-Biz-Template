@@ -7,6 +7,8 @@ import cn.hutool.core.io.IoUtil;
 import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageParam;
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.common.mybatis.core.util.JdbcUtils;
+import com.aixbox.common.mybatis.core.util.MyBatisUtils;
 import com.aixbox.generator.domain.entity.GenTable;
 import com.aixbox.generator.domain.entity.GenTableColumn;
 import com.aixbox.generator.service.GenTableService;
@@ -192,6 +194,15 @@ public class GenController {
         String[] tableIds = Convert.toStrArray(tableIdStr);
         byte[] data = genTableService.downloadCode(tableIds);
         genCode(response, data);
+    }
+
+    /**
+     * 查询数据源名称列表
+     */
+    @SaCheckPermission("tool:gen:list")
+    @GetMapping(value = "/getDataNames")
+    public CommonResult<Object> getCurrentDataSourceNameList(){
+        return success(JdbcUtils.getDataSourceNameList());
     }
 
 

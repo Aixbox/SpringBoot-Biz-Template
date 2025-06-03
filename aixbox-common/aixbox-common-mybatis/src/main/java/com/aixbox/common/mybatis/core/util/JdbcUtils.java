@@ -12,6 +12,8 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * JDBC 工具类
@@ -83,6 +85,14 @@ public class JdbcUtils {
      */
     public static boolean isSQLServer(DbType dbType) {
         return ObjectUtils.equalsAny(dbType, DbType.SQL_SERVER, DbType.SQL_SERVER2005);
+    }
+
+    /**
+     * 获取当前加载的数据库名
+     */
+    public static List<String> getDataSourceNameList() {
+        DynamicRoutingDataSource dynamicRoutingDataSource = SpringUtils.getBean(DynamicRoutingDataSource.class);
+        return new ArrayList<>(dynamicRoutingDataSource.getDataSources().keySet());
     }
 
 }
