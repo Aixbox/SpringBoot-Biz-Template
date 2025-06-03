@@ -1,5 +1,6 @@
 package com.aixbox.demo.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
@@ -13,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.aixbox.common.core.exception.util.ServiceExceptionUtil.exception;
+import static com.aixbox.demo.constant.ErrorCodeConstants.DEMO_NOT_EXISTS;
 
 /**
 * 【请填写功能名称】 Service实现类
@@ -55,7 +59,15 @@ public class DemoTestServiceImpl implements DemoTestService {
      */
     @Override
     public Boolean deleteDemoTest(List<Long> ids) {
+        validateDemo01ContactExists(ids);
         return demoTestMapper.deleteByIds(ids) > 0;
+    }
+
+    private void validateDemo01ContactExists(List<Long> ids) {
+        List<DemoTest> list = demoTestMapper.selectByIds(ids);
+        if (CollUtil.isEmpty(list) || list.size() != ids.size()) {
+            throw exception(DEMO_NOT_EXISTS);
+        }
     }
 
     /**

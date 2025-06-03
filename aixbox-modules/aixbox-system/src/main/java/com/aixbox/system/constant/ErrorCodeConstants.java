@@ -3,8 +3,6 @@ package com.aixbox.system.constant;
 
 import com.aixbox.common.core.exception.ErrorCode;
 
-import static net.sf.jsqlparser.util.validation.metadata.NamedObject.role;
-
 /**
  * System 错误码枚举类
  *

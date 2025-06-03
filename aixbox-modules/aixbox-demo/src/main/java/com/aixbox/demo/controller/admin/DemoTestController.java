@@ -28,6 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Arrays;
 
 import static com.aixbox.common.core.pojo.CommonResult.success;
+import static com.aixbox.common.core.pojo.CommonResult.toAjax;
+import static com.aixbox.demo.constant.ErrorCodeConstants.DELETE_DEMO_ERROR;
+import static com.aixbox.demo.constant.ErrorCodeConstants.UPDATE_DEMO_ERROR;
 
 /**
  * 【请填写功能名称】 Controller
@@ -59,9 +62,9 @@ public class DemoTestController {
      */
     @SaCheckPermission("system:menu:update")
     @PutMapping("/update")
-    public CommonResult<Boolean> update(@Valid @RequestBody DemoTestUpdateReq updateReq) {
+    public CommonResult<Void> update(@Valid @RequestBody DemoTestUpdateReq updateReq) {
         Boolean result = demoTestService.updateDemoTest(updateReq);
-        return success(result);
+        return toAjax(result, UPDATE_DEMO_ERROR);
     }
 
     /**
@@ -69,11 +72,12 @@ public class DemoTestController {
      * @param ids 删除id数组
      * @return 是否成功
      */
+    @SaCheckPermission("system:menu:remove")
     @DeleteMapping("/{ids}")
-    public CommonResult<Boolean> remove(@NotEmpty(message = "主键不能为空")
+    public CommonResult<Void> remove(@NotEmpty(message = "主键不能为空")
                                      @PathVariable Long[] ids) {
         Boolean result = demoTestService.deleteDemoTest(Arrays.asList(ids));
-        return success(result);
+        return toAjax(result, DELETE_DEMO_ERROR);
     }
 
     /**

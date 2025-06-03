@@ -112,6 +112,7 @@ public class CommonResult<T> implements Serializable {
      * @return 操作结果
      */
     public static CommonResult<Void> toAjax(boolean result, ErrorCode errorCode) {
+        //todo 使用throw的方式
         return result ? success() : error(errorCode);
     }
 
