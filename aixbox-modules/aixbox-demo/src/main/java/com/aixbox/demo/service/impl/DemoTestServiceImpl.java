@@ -31,18 +31,20 @@ public class DemoTestServiceImpl implements DemoTestService {
     @Override
     public Long addDemoTest(DemoTestSaveReq addReq) {
         DemoTest demoTest = BeanUtils.toBean(addReq, DemoTest.class);
+        validEntityBeforeSave(demoTest);
         demoTestMapper.insert(demoTest);
         return demoTest.getId();
     }
 
     /**
      * 修改【请填写功能名称】
-     * @param updateReqVO 修改参数
+     * @param updateReq 修改参数
      * @return 是否成功
      */
     @Override
-    public Boolean updateDemoTest(DemoTestUpdateReq updateReqVO) {
-        DemoTest demoTest = MapstructUtils.convert(updateReqVO, DemoTest.class);
+    public Boolean updateDemoTest(DemoTestUpdateReq updateReq) {
+        DemoTest demoTest = BeanUtils.toBean(updateReq, DemoTest.class);
+        validEntityBeforeSave(demoTest);
         return demoTestMapper.updateById(demoTest) > 0;
     }
 
@@ -74,6 +76,13 @@ public class DemoTestServiceImpl implements DemoTestService {
     @Override
     public PageResult<DemoTest> getDemoTestPage(DemoTestPageReqVO pageReqVO) {
         return demoTestMapper.selectPage(pageReqVO);
+    }
+
+    /**
+     * 保存前的数据校验
+     */
+    private void validEntityBeforeSave(DemoTest entity){
+        //TODO 做一些数据校验,如唯一约束
     }
 }
 

@@ -22,10 +22,10 @@ public interface DemoTestService {
 
     /**
      * 修改【请填写功能名称】
-     * @param updateReqVO 修改参数
+     * @param updateReq 修改参数
      * @return 是否成功
      */
-    Boolean updateDemoTest(DemoTestUpdateReq updateReqVO);
+    Boolean updateDemoTest(DemoTestUpdateReq updateReq);
 
     /**
      * 删除【请填写功能名称】

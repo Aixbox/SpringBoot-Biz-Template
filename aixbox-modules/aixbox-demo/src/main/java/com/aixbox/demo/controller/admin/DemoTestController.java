@@ -1,6 +1,7 @@
 package com.aixbox.demo.controller.admin;
 
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
@@ -44,6 +45,7 @@ public class DemoTestController {
      * @param addReq 新增参数
      * @return 新增数据id
      */
+    @SaCheckPermission("system:menu:add")
     @PostMapping("/add")
     public CommonResult<Long> add(@Valid @RequestBody DemoTestSaveReq addReq) {
         Long demoTestId = demoTestService.addDemoTest(addReq);
@@ -55,8 +57,9 @@ public class DemoTestController {
      * @param updateReq 修改参数
      * @return 是否成功
      */
+    @SaCheckPermission("system:menu:update")
     @PutMapping("/update")
-    public CommonResult<Boolean> edit(@Valid @RequestBody DemoTestUpdateReq updateReq) {
+    public CommonResult<Boolean> update(@Valid @RequestBody DemoTestUpdateReq updateReq) {
         Boolean result = demoTestService.updateDemoTest(updateReq);
         return success(result);
     }
