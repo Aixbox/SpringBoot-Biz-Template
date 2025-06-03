@@ -85,9 +85,9 @@ public class DemoTestController {
      * @param id 数据id
      * @return demo对象
      */
+    @SaCheckPermission("system:menu:query")
     @GetMapping("/{id}")
-    public CommonResult<DemoTestRespVO> getDemoTest(@Valid @NotNull(message = "主键不能为空")
-                                                    @PathVariable("id") Long id) {
+    public CommonResult<DemoTestRespVO> getDemoTest(@PathVariable("id") Long id) {
         DemoTest demoTest = demoTestService.getDemoTest(id);
         return success(BeanUtils.toBean(demoTest, DemoTestRespVO.class));
     }
