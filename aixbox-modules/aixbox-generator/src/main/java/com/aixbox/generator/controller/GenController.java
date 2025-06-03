@@ -3,12 +3,14 @@ package com.aixbox.generator.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.io.IoUtil;
 import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageParam;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.generator.domain.entity.GenTable;
 import com.aixbox.generator.domain.entity.GenTableColumn;
 import com.aixbox.generator.service.GenTableService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.validation.annotation.Validated;
@@ -143,6 +145,42 @@ public class GenController {
         return success(dataMap);
     }
 
+    /**
+     * 生成代码（下载方式）
+     *
+     * @param tableId 表ID
+     */
+    @SaCheckPermission("tool:gen:code")
+    @GetMapping("/download/{tableId}")
+    public void download(HttpServletResponse response, @PathVariable("tableId") Long tableId) throws IOException {
+        byte[] data = genTableService.downloadCode(tableId);
+        genCode(response, data);
+    }
+
+    /**
+     * 生成代码（自定义路径）
+     *
+     * @param tableId 表ID
+     */
+    @SaCheckPermission("tool:gen:code")
+    @GetMapping("/genCode/{tableId}")
+    public CommonResult<Void> genCode(@PathVariable("tableId") Long tableId) {
+        genTableService.generatorCode(tableId);
+        return success();
+    }
+
+    /**
+     * 生成zip文件
+     */
+    private void genCode(HttpServletResponse response, byte[] data) throws IOException {
+        response.reset();
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Expose-Headers", "Content-Disposition");
+        response.setHeader("Content-Disposition", "attachment; filename=\"ruoyi.zip\"");
+        response.addHeader("Content-Length", "" + data.length);
+        response.setContentType("application/octet-stream; charset=UTF-8");
+        IoUtil.write(response.getOutputStream(), false, data);
+    }
 
 
 

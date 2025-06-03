@@ -11,6 +11,7 @@ import com.aixbox.common.core.pojo.PageParam;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.StrUtils;
 import com.aixbox.common.core.utils.StreamUtils;
+import com.aixbox.common.core.utils.file.FileUtils;
 import com.aixbox.common.core.utils.json.JsonUtils;
 import com.aixbox.common.core.utils.spring.SpringUtils;
 import com.aixbox.generator.constant.GenConstants;
@@ -507,6 +508,55 @@ public class GenTableServiceImpl implements GenTableService {
             dataMap.put(template, sw.toString());
         }
         return dataMap;
+    }
+
+    /**
+     * 生成代码（自定义路径）
+     *
+     * @param tableId 表名称
+     */
+    @Override
+    public void generatorCode(Long tableId) {
+        // 查询表信息
+        GenTable table = genTableMapper.selectGenTableById(tableId);
+        // 设置主键列信息
+        setPkColumn(table);
+
+        VelocityInitializer.initVelocity();
+
+        VelocityContext context = VelocityUtils.prepareContext(table);
+
+        // 获取模板列表
+        List<String> templates = VelocityUtils.getTemplateList(table.getTplCategory());
+        for (String template : templates) {
+            if (!StringUtils.containsAny(template, "sql.vm", "api.ts.vm", "types.ts.vm", "index.vue.vm", "index-tree.vue.vm")) {
+                // 渲染模板
+                StringWriter sw = new StringWriter();
+                Template tpl = Velocity.getTemplate(template, Constants.UTF8);
+                tpl.merge(context, sw);
+                try {
+                    String path = getGenPath(table, template);
+                    FileUtils.writeUtf8String(sw.toString(), path);
+                } catch (Exception e) {
+                    throw new ServiceException("渲染模板失败，表名：" + table.getTableName());
+                }
+            }
+        }
+    }
+
+    /**
+     * 获取代码生成地址
+     *
+     * @param table    业务表信息
+     * @param template 模板文件路径
+     * @return 生成地址
+     */
+    public static String getGenPath(GenTable table, String template) {
+        String genPath = table.getGenPath();
+        if (StringUtils.equals(genPath, "/")) {
+            return System.getProperty("user.dir") + File.separator + "src" + File.separator + VelocityUtils.getFileName(template, table);
+        }
+        return genPath + File.separator + VelocityUtils.getFileName(template, table);
     }
 
     /**

@@ -143,6 +143,13 @@ public interface GenTableService {
      * @return 预览数据列表
      */
     Map<String, String> previewCode(Long tableId);
+
+    /**
+     * 生成代码（自定义路径）
+     *
+     * @param tableId 表名称
+     */
+    void generatorCode(Long tableId);
 }
 
 
