@@ -150,6 +150,14 @@ public interface GenTableService {
      * @param tableId 表名称
      */
     void generatorCode(Long tableId);
+
+    /**
+     * 批量生成代码（下载方式）
+     *
+     * @param tableIds 表ID数组
+     * @return 数据
+     */
+    byte[] downloadCode(String[] tableIds);
 }
 
 

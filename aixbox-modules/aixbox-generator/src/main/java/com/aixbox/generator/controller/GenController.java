@@ -170,6 +170,32 @@ public class GenController {
     }
 
     /**
+     * 同步数据库
+     *
+     * @param tableId 表ID
+     */
+    @SaCheckPermission("tool:gen:edit")
+    @GetMapping("/synchDb/{tableId}")
+    public CommonResult<Void> synchDb(@PathVariable("tableId") Long tableId) {
+        genTableService.synchDb(tableId);
+        return success();
+    }
+
+    /**
+     * 批量生成代码
+     *
+     * @param tableIdStr 表ID串
+     */
+    @SaCheckPermission("tool:gen:code")
+    @GetMapping("/batchGenCode")
+    public void batchGenCode(HttpServletResponse response, String tableIdStr) throws IOException {
+        String[] tableIds = Convert.toStrArray(tableIdStr);
+        byte[] data = genTableService.downloadCode(tableIds);
+        genCode(response, data);
+    }
+
+
+    /**
      * 生成zip文件
      */
     private void genCode(HttpServletResponse response, byte[] data) throws IOException {

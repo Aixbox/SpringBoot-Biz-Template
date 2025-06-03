@@ -545,6 +545,23 @@ public class GenTableServiceImpl implements GenTableService {
     }
 
     /**
+     * 批量生成代码（下载方式）
+     *
+     * @param tableIds 表ID数组
+     * @return 数据
+     */
+    @Override
+    public byte[] downloadCode(String[] tableIds) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ZipOutputStream zip = new ZipOutputStream(outputStream);
+        for (String tableId : tableIds) {
+            generatorCode(Long.parseLong(tableId), zip);
+        }
+        IoUtil.close(zip);
+        return outputStream.toByteArray();
+    }
+
+    /**
      * 获取代码生成地址
      *
      * @param table    业务表信息
