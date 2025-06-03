@@ -3,12 +3,17 @@ package com.aixbox.generator.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.constant.Constants;
 import com.aixbox.common.core.exception.ServiceException;
+import com.aixbox.common.core.pojo.PageParam;
+import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.StrUtils;
 import com.aixbox.common.core.utils.StreamUtils;
+import com.aixbox.common.core.utils.json.JsonUtils;
 import com.aixbox.common.core.utils.spring.SpringUtils;
+import com.aixbox.generator.constant.GenConstants;
 import com.aixbox.generator.domain.entity.GenTable;
 import com.aixbox.generator.domain.entity.GenTableColumn;
 import com.aixbox.generator.mapper.GenTableColumnMapper;
@@ -17,13 +22,19 @@ import com.aixbox.generator.service.GenTableService;
 import com.aixbox.generator.util.GenUtils;
 import com.aixbox.generator.util.VelocityInitializer;
 import com.aixbox.generator.util.VelocityUtils;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.anyline.metadata.Column;
 import org.anyline.metadata.Table;
 import org.anyline.proxy.ServiceProxy;
 import org.anyline.util.DateUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -35,7 +46,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -312,9 +326,156 @@ public class GenTableServiceImpl implements GenTableService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateGenTable(GenTable genTable) {
-        int row = genTableMapper.updateById(genTable);
+        genTableMapper.updateById(genTable);
     }
 
+    /**
+     * 查询业务列表
+     *
+     * @param genTable 业务信息
+     * @return 业务集合
+     */
+    @Override
+    public PageResult<GenTable> selectPageGenTableList(GenTable genTable, PageParam pageQuery) {
+        return genTableMapper.selectPage(pageQuery,
+                this.buildGenTableQueryWrapper(genTable, pageQuery.getParams()));
+    }
+
+    /**
+     * 查询数据表信息
+     *
+     * @param tableId 数据表id
+     * @return 业务信息
+     */
+    @Override
+    public GenTable selectGenTableById(Long tableId) {
+        GenTable genTable = genTableMapper.selectGenTableById(tableId);
+        setTableFromOptions(genTable);
+        return genTable;
+    }
+
+    /**
+     * 查询所有表信息
+     *
+     * @return 表信息集合
+     */
+    @Override
+    public List<GenTable> selectGenTableAll() {
+        return genTableMapper.selectGenTableAll();
+    }
+
+    /**
+     * 查询业务字段列表
+     *
+     * @param tableId 业务字段编号
+     * @return 业务字段集合
+     */
+    @Override
+    public List<GenTableColumn> selectGenTableColumnListByTableId(Long tableId) {
+        return genTableColumnMapper.selectList(new LambdaQueryWrapper<GenTableColumn>()
+                .eq(GenTableColumn::getTableId, tableId)
+                .orderByAsc(GenTableColumn::getSort));
+    }
+
+    /**
+     * 查询据库列表
+     *
+     * @param genTable 业务信息
+     * @return 数据库表集合
+     */
+    @Override
+    public PageResult<GenTable> selectPageDbTableList(GenTable genTable, PageParam pageQuery) {
+        // 获取查询条件
+        String tableName = genTable.getTableName();
+        String tableComment = genTable.getTableComment();
+
+        LinkedHashMap<String, Table<?>> tablesMap = ServiceProxy.metadata().tables();
+        if (CollUtil.isEmpty(tablesMap)) {
+            return PageResult.empty();
+        }
+        List<String> tableNames = genTableMapper.selectTableNameList(genTable.getDataName());
+        String[] tableArrays;
+        if (CollUtil.isNotEmpty(tableNames)) {
+            tableArrays = tableNames.toArray(new String[0]);
+        } else {
+            tableArrays = new String[0];
+        }
+        // 过滤并转换表格数据
+        List<GenTable> tables = tablesMap.values().stream()
+                                         .filter(x -> !StrUtils.startWithAnyIgnoreCase(x.getName(), TABLE_IGNORE))
+                                         .filter(x -> {
+                                             if (CollUtil.isEmpty(tableNames)) {
+                                                 return true;
+                                             }
+                                             return !StringUtils.equalsAnyIgnoreCase(x.getName(), tableArrays);
+                                         })
+                                         .filter(x -> {
+                                             boolean nameMatches = true;
+                                             boolean commentMatches = true;
+                                             // 进行表名称的模糊查询
+                                             if (StringUtils.isNotBlank(tableName)) {
+                                                 nameMatches = StringUtils.containsIgnoreCase(x.getName(), tableName);
+                                             }
+                                             // 进行表描述的模糊查询
+                                             if (StringUtils.isNotBlank(tableComment)) {
+                                                 commentMatches = StringUtils.containsIgnoreCase(x.getComment(), tableComment);
+                                             }
+                                             // 同时匹配名称和描述
+                                             return nameMatches && commentMatches;
+                                         })
+                                         .map(x -> {
+                                             GenTable gen = new GenTable();
+                                             gen.setTableName(x.getName());
+                                             gen.setTableComment(x.getComment());
+                                             // postgresql的表元数据没有创建时间这个东西(好奇葩) 只能new Date代替
+                                             LocalDateTime createTime = DateUtil.localDateTime(ObjectUtil.defaultIfNull(x.getCreateTime(), new Date()));
+                                             gen.setCreateTime(createTime);
+                                             gen.setUpdateTime(DateUtil.localDateTime(x.getUpdateTime()));
+                                             return gen;
+                                         }).sorted(Comparator.comparing(GenTable::getCreateTime).reversed())
+                                         .toList();
+
+        PageResult<GenTable> result = new PageResult<>();
+        result.setTotal((long) tables.size());
+        result.setList(CollUtil.page(pageQuery.getPageNo() - 1, pageQuery.getPageSize(),
+                tables));
+        return result;
+    }
+
+    /**
+     * 设置代码生成其他选项值
+     *
+     * @param genTable 设置后的生成对象
+     */
+    public void setTableFromOptions(GenTable genTable) {
+        Dict paramsObj = JsonUtils.parseMap(genTable.getOptions());
+        if (ObjectUtil.isNotNull(paramsObj)) {
+            String treeCode = paramsObj.getStr(GenConstants.TREE_CODE);
+            String treeParentCode = paramsObj.getStr(GenConstants.TREE_PARENT_CODE);
+            String treeName = paramsObj.getStr(GenConstants.TREE_NAME);
+            Long parentMenuId = paramsObj.getLong(GenConstants.PARENT_MENU_ID);
+            String parentMenuName = paramsObj.getStr(GenConstants.PARENT_MENU_NAME);
+
+            genTable.setTreeCode(treeCode);
+            genTable.setTreeParentCode(treeParentCode);
+            genTable.setTreeName(treeName);
+            genTable.setParentMenuId(parentMenuId);
+            genTable.setParentMenuName(parentMenuName);
+        }
+    }
+
+    private QueryWrapper<GenTable> buildGenTableQueryWrapper(GenTable genTable, Map<String,
+            Object> params) {
+        QueryWrapper<GenTable> wrapper = Wrappers.query();
+        wrapper
+                .eq(StringUtils.isNotEmpty(genTable.getDataName()), "data_name", genTable.getDataName())
+                .like(StringUtils.isNotBlank(genTable.getTableName()), "lower(table_name)", StringUtils.lowerCase(genTable.getTableName()))
+                .like(StringUtils.isNotBlank(genTable.getTableComment()), "lower(table_comment)", StringUtils.lowerCase(genTable.getTableComment()))
+                .between(params.get("beginTime") != null && params.get("endTime") != null,
+                        "create_time", params.get("beginTime"), params.get("endTime"))
+                .orderByDesc("update_time");
+        return wrapper;
+    }
 
 
     /**
