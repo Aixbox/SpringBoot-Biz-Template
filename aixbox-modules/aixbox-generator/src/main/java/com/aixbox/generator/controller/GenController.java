@@ -15,6 +15,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -104,5 +106,15 @@ public class GenController {
         return success();
     }
 
+    /**
+     * 修改保存代码生成业务
+     */
+    @SaCheckPermission("tool:gen:edit")
+    @PutMapping
+    public CommonResult<Void> editSave(@Validated @RequestBody GenTable genTable) {
+        genTableService.validateEdit(genTable);
+        genTableService.updateGenTable(genTable);
+        return success();
+    }
 
 }

@@ -443,6 +443,26 @@ public class GenTableServiceImpl implements GenTableService {
     }
 
     /**
+     * 修改保存参数校验
+     *
+     * @param genTable 业务信息
+     */
+    @Override
+    public void validateEdit(GenTable genTable) {
+        if (GenConstants.TPL_TREE.equals(genTable.getTplCategory())) {
+            String options = JsonUtils.toJsonString(genTable.getParams());
+            Dict paramsObj = JsonUtils.parseMap(options);
+            if (StringUtils.isEmpty(paramsObj.getStr(GenConstants.TREE_CODE))) {
+                throw new ServiceException("树编码字段不能为空");
+            } else if (StringUtils.isEmpty(paramsObj.getStr(GenConstants.TREE_PARENT_CODE))) {
+                throw new ServiceException("树父编码字段不能为空");
+            } else if (StringUtils.isEmpty(paramsObj.getStr(GenConstants.TREE_NAME))) {
+                throw new ServiceException("树名称字段不能为空");
+            }
+        }
+    }
+
+    /**
      * 设置代码生成其他选项值
      *
      * @param genTable 设置后的生成对象
