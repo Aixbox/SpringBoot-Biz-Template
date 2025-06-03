@@ -3,8 +3,8 @@ package com.aixbox.demo.service;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.demo.domain.entity.DemoTest;
 import com.aixbox.demo.domain.vo.request.DemoTestPageReqVO;
-import com.aixbox.demo.domain.vo.request.DemoTestSaveReqVO;
-import com.aixbox.demo.domain.vo.request.DemoTestUpdateReqVO;
+import com.aixbox.demo.domain.vo.request.DemoTestSaveReq;
+import com.aixbox.demo.domain.vo.request.DemoTestUpdateReq;
 
 import java.util.List;
 
@@ -15,17 +15,17 @@ public interface DemoTestService {
 
     /**
      * 新增【请填写功能名称】
-     * @param addReqVO 新增参数
+     * @param addReq 新增参数
      * @return 新增数据id
      */
-    Long addDemoTest(DemoTestSaveReqVO addReqVO);
+    Long addDemoTest(DemoTestSaveReq addReq);
 
     /**
      * 修改【请填写功能名称】
      * @param updateReqVO 修改参数
      * @return 是否成功
      */
-    Boolean updateDemoTest(DemoTestUpdateReqVO updateReqVO);
+    Boolean updateDemoTest(DemoTestUpdateReq updateReqVO);
 
     /**
      * 删除【请填写功能名称】

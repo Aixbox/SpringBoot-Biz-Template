@@ -5,8 +5,8 @@ import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
 import com.aixbox.demo.domain.entity.DemoTest;
 import com.aixbox.demo.domain.vo.request.DemoTestPageReqVO;
-import com.aixbox.demo.domain.vo.request.DemoTestSaveReqVO;
-import com.aixbox.demo.domain.vo.request.DemoTestUpdateReqVO;
+import com.aixbox.demo.domain.vo.request.DemoTestSaveReq;
+import com.aixbox.demo.domain.vo.request.DemoTestUpdateReq;
 import com.aixbox.demo.mapper.DemoTestMapper;
 import com.aixbox.demo.service.DemoTestService;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +25,12 @@ public class DemoTestServiceImpl implements DemoTestService {
 
     /**
      * 新增【请填写功能名称】
-     * @param addReqVO 新增参数
+     * @param addReq 新增参数
      * @return 新增数据id
      */
     @Override
-    public Long addDemoTest(DemoTestSaveReqVO addReqVO) {
-        DemoTest demoTest = BeanUtils.toBean(addReqVO, DemoTest.class);
+    public Long addDemoTest(DemoTestSaveReq addReq) {
+        DemoTest demoTest = BeanUtils.toBean(addReq, DemoTest.class);
         demoTestMapper.insert(demoTest);
         return demoTest.getId();
     }
@@ -41,7 +41,7 @@ public class DemoTestServiceImpl implements DemoTestService {
      * @return 是否成功
      */
     @Override
-    public Boolean updateDemoTest(DemoTestUpdateReqVO updateReqVO) {
+    public Boolean updateDemoTest(DemoTestUpdateReq updateReqVO) {
         DemoTest demoTest = MapstructUtils.convert(updateReqVO, DemoTest.class);
         return demoTestMapper.updateById(demoTest) > 0;
     }

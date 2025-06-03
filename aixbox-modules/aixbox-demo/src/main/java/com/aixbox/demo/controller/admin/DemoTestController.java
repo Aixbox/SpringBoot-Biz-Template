@@ -6,14 +6,15 @@ import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.demo.domain.entity.DemoTest;
 import com.aixbox.demo.domain.vo.request.DemoTestPageReqVO;
-import com.aixbox.demo.domain.vo.request.DemoTestSaveReqVO;
-import com.aixbox.demo.domain.vo.request.DemoTestUpdateReqVO;
+import com.aixbox.demo.domain.vo.request.DemoTestSaveReq;
+import com.aixbox.demo.domain.vo.request.DemoTestUpdateReq;
 import com.aixbox.demo.domain.vo.response.DemoTestRespVO;
 import com.aixbox.demo.service.DemoTestService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ import static com.aixbox.common.core.pojo.CommonResult.success;
 /**
  * 【请填写功能名称】 Controller
  */
+@Validated
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/demo/test")
@@ -39,23 +41,23 @@ public class DemoTestController {
 
     /**
      * 新增【请填写功能名称】
-     * @param addReqVO 新增参数
+     * @param addReq 新增参数
      * @return 新增数据id
      */
     @PostMapping("/add")
-    public CommonResult<Long> add(@Valid @RequestBody DemoTestSaveReqVO addReqVO) {
-        Long demoTestId = demoTestService.addDemoTest(addReqVO);
+    public CommonResult<Long> add(@Valid @RequestBody DemoTestSaveReq addReq) {
+        Long demoTestId = demoTestService.addDemoTest(addReq);
         return success(demoTestId);
     }
 
     /**
      * 修改【请填写功能名称】
-     * @param updateReqVO 修改参数
+     * @param updateReq 修改参数
      * @return 是否成功
      */
     @PutMapping("/update")
-    public CommonResult<Boolean> edit(@Valid @RequestBody DemoTestUpdateReqVO updateReqVO) {
-        Boolean result = demoTestService.updateDemoTest(updateReqVO);
+    public CommonResult<Boolean> edit(@Valid @RequestBody DemoTestUpdateReq updateReq) {
+        Boolean result = demoTestService.updateDemoTest(updateReq);
         return success(result);
     }
 
@@ -77,7 +79,7 @@ public class DemoTestController {
      * @return demo对象
      */
     @GetMapping("/{id}")
-    public CommonResult<DemoTestRespVO> getDemoTest(@NotNull(message = "主键不能为空")
+    public CommonResult<DemoTestRespVO> getDemoTest(@Valid @NotNull(message = "主键不能为空")
                                                     @PathVariable("id") Long id) {
         DemoTest demoTest = demoTestService.getDemoTest(id);
         return success(BeanUtils.toBean(demoTest, DemoTestRespVO.class));
