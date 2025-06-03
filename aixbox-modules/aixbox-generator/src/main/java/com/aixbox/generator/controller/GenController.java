@@ -2,6 +2,7 @@ package com.aixbox.generator.controller;
 
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.hutool.core.convert.Convert;
 import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageParam;
 import com.aixbox.common.core.pojo.PageResult;
@@ -9,9 +10,11 @@ import com.aixbox.generator.domain.entity.GenTable;
 import com.aixbox.generator.domain.entity.GenTableColumn;
 import com.aixbox.generator.service.GenTableService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -85,6 +88,21 @@ public class GenController {
         return success(dataInfo);
     }
 
+
+    /**
+     * 导入表结构（保存）
+     *
+     * @param tables 表名串
+     */
+    @SaCheckPermission("tool:gen:import")
+    @PostMapping("/importTable")
+    public CommonResult<Void> importTableSave(String tables, String dataName) {
+        String[] tableNames = Convert.toStrArray(tables);
+        // 查询表信息
+        List<GenTable> tableList = genTableService.selectDbTableListByNames(tableNames, dataName);
+        genTableService.importGenTable(tableList, dataName);
+        return success();
+    }
 
 
 }
