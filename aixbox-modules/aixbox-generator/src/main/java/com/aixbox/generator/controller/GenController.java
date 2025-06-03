@@ -12,6 +12,7 @@ import com.aixbox.generator.service.GenTableService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -116,5 +117,18 @@ public class GenController {
         genTableService.updateGenTable(genTable);
         return success();
     }
+
+    /**
+     * 删除代码生成
+     *
+     * @param tableIds 表ID串
+     */
+    @SaCheckPermission("tool:gen:remove")
+    @DeleteMapping("/{tableIds}")
+    public CommonResult<Void> remove(@PathVariable Long[] tableIds) {
+        genTableService.deleteGenTableByIds(tableIds);
+        return success();
+    }
+
 
 }

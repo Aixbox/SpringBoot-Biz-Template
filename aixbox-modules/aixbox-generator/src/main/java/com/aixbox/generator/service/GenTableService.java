@@ -127,4 +127,39 @@ public interface GenTableService {
      * @param genTable 业务信息
      */
     void validateEdit(GenTable genTable);
+
+    /**
+     * 删除业务信息
+     *
+     * @param tableIds 需要删除的表数据ID
+     */
+    void deleteGenTableByIds(Long[] tableIds);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

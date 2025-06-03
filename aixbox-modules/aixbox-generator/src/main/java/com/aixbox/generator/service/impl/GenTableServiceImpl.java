@@ -48,6 +48,7 @@ import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
@@ -460,6 +461,18 @@ public class GenTableServiceImpl implements GenTableService {
                 throw new ServiceException("树名称字段不能为空");
             }
         }
+    }
+
+    /**
+     * 删除业务对象
+     *
+     * @param tableIds 需要删除的数据ID
+     */
+    @Override
+    public void deleteGenTableByIds(Long[] tableIds) {
+        List<Long> ids = Arrays.asList(tableIds);
+        genTableMapper.deleteByIds(ids);
+        genTableColumnMapper.delete(new LambdaQueryWrapper<GenTableColumn>().in(GenTableColumn::getTableId, ids));
     }
 
     /**
