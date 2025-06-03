@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class DemoTestPageReqVO extends PageParam {
+public class DemoTestPageReq extends PageParam {
 
     /**
      * 关键字

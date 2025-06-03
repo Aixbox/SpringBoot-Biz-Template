@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
  * 【请填写功能名称】 返回参数
  */
 @Data
-public class DemoTestRespVO {
+public class DemoTestResp {
 
     /**
     * id

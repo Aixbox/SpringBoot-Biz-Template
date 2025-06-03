@@ -21,6 +21,12 @@
             <groupId>com.aixbox</groupId>
             <artifactId>aixbox-common-test</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.aixbox</groupId>
+            <artifactId>aixbox-common-excel</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

@@ -2,7 +2,7 @@ package com.aixbox.demo.service;
 
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.demo.domain.entity.DemoTest;
-import com.aixbox.demo.domain.vo.request.DemoTestPageReqVO;
+import com.aixbox.demo.domain.vo.request.DemoTestPageReq;
 import com.aixbox.demo.domain.vo.request.DemoTestSaveReq;
 import com.aixbox.demo.domain.vo.request.DemoTestUpdateReq;
 
@@ -43,8 +43,8 @@ public interface DemoTestService {
 
     /**
      * 分页查询【请填写功能名称】
-     * @param pageReqVO 分页查询参数
+     * @param pageReq 分页查询参数
      * @return 【请填写功能名称】分页对象
      */
-    PageResult<DemoTest> getDemoTestPage(DemoTestPageReqVO pageReqVO);
+    PageResult<DemoTest> getDemoTestPage(DemoTestPageReq pageReq);
 }

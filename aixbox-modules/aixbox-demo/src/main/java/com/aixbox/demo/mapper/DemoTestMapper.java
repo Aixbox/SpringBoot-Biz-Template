@@ -5,7 +5,7 @@ import com.aixbox.common.mybatis.core.dataobject.BaseDO;
 import com.aixbox.common.mybatis.core.mapper.BaseMapperX;
 import com.aixbox.common.mybatis.core.query.LambdaQueryWrapperX;
 import com.aixbox.demo.domain.entity.DemoTest;
-import com.aixbox.demo.domain.vo.request.DemoTestPageReqVO;
+import com.aixbox.demo.domain.vo.request.DemoTestPageReq;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -19,7 +19,7 @@ public interface DemoTestMapper extends BaseMapperX<DemoTest> {
     * @param reqVO 请求参数
     * @return demo分页对象
     */
-    default PageResult<DemoTest> selectPage(DemoTestPageReqVO reqVO) {
+    default PageResult<DemoTest> selectPage(DemoTestPageReq reqVO) {
         return selectPage(reqVO, new LambdaQueryWrapperX<DemoTest>()
                 .likeIfPresent(DemoTest::getName, reqVO.getKeyword())
                 .orderByDesc(BaseDO::getCreateTime));
