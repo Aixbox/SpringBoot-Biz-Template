@@ -1,4 +1,4 @@
-package com.aixbox.generator.controller;
+package com.aixbox.generator.controller.admin;
 
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
@@ -8,13 +8,11 @@ import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageParam;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.mybatis.core.util.JdbcUtils;
-import com.aixbox.common.mybatis.core.util.MyBatisUtils;
 import com.aixbox.generator.domain.entity.GenTable;
 import com.aixbox.generator.domain.entity.GenTableColumn;
 import com.aixbox.generator.service.GenTableService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
