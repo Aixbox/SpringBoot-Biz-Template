@@ -4,11 +4,9 @@ package com.aixbox.generator.util;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Dict;
-import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.utils.StrUtils;
 import com.aixbox.common.core.utils.date.DateUtils;
 import com.aixbox.common.core.utils.json.JsonUtils;
-import com.aixbox.common.core.utils.object.ObjectUtils;
 import com.aixbox.common.mybatis.core.util.JdbcUtils;
 import com.aixbox.generator.constant.GenConstants;
 import com.aixbox.generator.domain.entity.GenTable;
@@ -269,17 +267,17 @@ public class VelocityUtils {
      */
     public static List<String> getTemplateList(String tplCategory) {
         List<String> templates = new ArrayList<>();
-        templates.add("vm/java/controller/Controller.vm");
-        templates.add("vm/java/domain/entity.vm");
-        templates.add("vm/java/domain/PageReq.vm");
-        templates.add("vm/java/domain/Resp.vm");
-        templates.add("vm/java/domain/SaveReq.vm");
-        templates.add("vm/java/domain/UpdateReq.vm");
-        templates.add("vm/java/mapper/Mapper.vm");
+        templates.add("vm/java/controller/Controller.java.vm");
+        templates.add("vm/java/domain/entity.java.vm");
+        templates.add("vm/java/domain/PageReq.java.vm");
+        templates.add("vm/java/domain/Resp.java.vm");
+        templates.add("vm/java/domain/SaveReq.java.vm");
+        templates.add("vm/java/domain/UpdateReq.java.vm");
+        templates.add("vm/java/mapper/Mapper.java.vm");
         templates.add("vm/java/mapper/Mapper.xml.vm");
-        templates.add("vm/java/service/Service.vm");
-        templates.add("vm/java/service/ServiceImpl.vm");
-        templates.add("vm/java/test/ServiceImplTest.vm");
+        templates.add("vm/java/service/Service.java.vm");
+        templates.add("vm/java/service/ServiceImpl.java.vm");
+        templates.add("vm/java/test/ServiceImplTest.java.vm");
         templates.add("vm/sql/h2.sql.vm");
         DbType dbType = JdbcUtils.getDbType();
         //todo 要修改为自己的vm文件
@@ -322,25 +320,25 @@ public class VelocityUtils {
         String vuePath = "vue";
 
         //todo 文件路径修改成自己的路径
-        if (template.contains("Controller.vm")) {
+        if (template.contains("Controller.java.vm")) {
             fileName = StrUtils.format("{}/controller/admin/{}Controller.java", javaPath, className);
-        } else if (template.contains("entity.vm")) {
+        } else if (template.contains("entity.java.vm")) {
             fileName = StrUtils.format("{}/domain/entity/{}.java", javaPath, className);
-        } else if (template.contains("PageReq.vm")) {
+        } else if (template.contains("PageReq.java.vm")) {
             fileName = StrUtils.format("{}/domain/vo/request/{}PageReq.java", javaPath, className);
-        } else if (template.contains("Resp.vm")) {
+        } else if (template.contains("Resp.java.vm")) {
             fileName = StrUtils.format("{}/domain/vo/response/{}Resp.java", javaPath, className);
-        } else if (template.contains("SaveReq.vm")) {
+        } else if (template.contains("SaveReq.java.vm")) {
             fileName = StrUtils.format("{}/domain/vo/request/{}SaveReq.java", javaPath, className);
-        } else if (template.contains("UpdateReq.vm")) {
+        } else if (template.contains("UpdateReq.java.vm")) {
             fileName = StrUtils.format("{}/domain/vo/request/{}UpdateReq.java", javaPath, className);
-        } else if (template.contains("Mapper.vm")) {
+        } else if (template.contains("Mapper.java.vm")) {
             fileName = StrUtils.format("{}/mapper/{}Mapper.java", javaPath, className);
         } else if (template.contains("Mapper.xml.vm")) {
             fileName = StrUtils.format("{}/{}Mapper.xml", mybatisPath, className);
-        } else if (template.contains("Service.vm")) {
+        } else if (template.contains("Service.java.vm")) {
             fileName = StrUtils.format("{}/service/{}Service.java", javaPath, className);
-        } else if (template.contains("ServiceImpl.vm")) {
+        } else if (template.contains("ServiceImpl.java.vm")) {
             fileName = StrUtils.format("{}/service/impl/{}ServiceImpl.java", javaPath, className);
         } else if (template.contains("h2.sql.vm")) {
             fileName = StrUtils.format("sql/{}H2.sql", className);
