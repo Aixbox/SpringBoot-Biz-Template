@@ -8,6 +8,8 @@ import com.aixbox.demo.domain.entity.DemoTest;
 import com.aixbox.demo.domain.vo.request.DemoTestPageReq;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
 * 【请填写功能名称】 Mapper接口
 */
@@ -25,6 +27,9 @@ public interface DemoTestMapper extends BaseMapperX<DemoTest> {
                 .orderByDesc(BaseDO::getCreateTime));
     }
 
+    default Long countByIds(List<Long> ids) {
+        return selectCount(new LambdaQueryWrapperX<DemoTest>().in(DemoTest::getId, ids));
+    }
 }
 
 

@@ -1,16 +1,13 @@
 package com.aixbox.demo.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
-import com.aixbox.common.mybatis.core.query.LambdaQueryWrapperX;
 import com.aixbox.demo.domain.entity.DemoTest;
 import com.aixbox.demo.domain.vo.request.DemoTestPageReq;
 import com.aixbox.demo.domain.vo.request.DemoTestSaveReq;
 import com.aixbox.demo.domain.vo.request.DemoTestUpdateReq;
 import com.aixbox.demo.mapper.DemoTestMapper;
 import com.aixbox.demo.service.DemoTestService;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -69,7 +66,7 @@ public class DemoTestServiceImpl implements DemoTestService {
      * @param ids id数组
      */
     private void validateDemoContactExists(List<Long> ids) {
-        Long count = demoTestMapper.selectCount(new LambdaQueryWrapper<DemoTest>().in(DemoTest::getId, ids));
+        Long count = demoTestMapper.countByIds(ids);
         if (count != ids.size()) {
             throw exception(DEMO_NOT_EXISTS);
         }

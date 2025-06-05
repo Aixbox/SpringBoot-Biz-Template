@@ -1,10 +1,7 @@
 package ${packageName}.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
-import com.aixbox.common.mybatis.core.query.LambdaQueryWrapperX;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ${packageName}.domain.entity.${ClassName};
@@ -69,7 +66,7 @@ public class ${ClassName}ServiceImpl implements ${ClassName}Service {
      * @param ${pkColumn.javaField}s ${functionName}id数组
      */
     private void validate${ClassName}Exists(List<${pkColumn.javaType}> ${pkColumn.javaField}s) {
-        Long count = ${className}Mapper.selectCount(new LambdaQueryWrapper<${ClassName}>().in(${ClassName}::get$pkColumn.javaField.substring(0,1).toUpperCase()${pkColumn.javaField.substring(1)}, ${pkColumn.javaField}s));
+        Long count = ${className}Mapper.countByIds(ids);
         if (count != ids.size()) {
             throw exception(${CLASS_NAME}_NOT_EXISTS);
         }
