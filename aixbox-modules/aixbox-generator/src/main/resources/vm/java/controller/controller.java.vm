@@ -1,0 +1,127 @@
+package ${packageName}.controller.admin;
+
+
+import cn.dev33.satoken.annotation.SaCheckPermission;
+import com.aixbox.common.core.pojo.CommonResult;
+import com.aixbox.common.core.pojo.PageParam;
+import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.common.core.utils.object.BeanUtils;
+import com.aixbox.common.excel.utils.ExcelUtil;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import ${packageName}.domain.entity.${ClassName};
+import ${packageName}.domain.vo.request.${ClassName}PageReq;
+import ${packageName}.domain.vo.request.${ClassName}SaveReq;
+import ${packageName}.domain.vo.request.${ClassName}UpdateReq;
+import ${packageName}.domain.vo.response.${ClassName}Resp;
+import ${packageName}.service.${ClassName}Service;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static com.aixbox.common.core.pojo.CommonResult.success;
+import static com.aixbox.common.core.pojo.CommonResult.toAjax;
+
+//todo 这里的 DELETE_DEMO_ERROR 需要在util添加上下文数据，全大写的函数名
+import static ${packageName}.constant.ErrorCodeConstants.DELETE_${CLASS_NAME}_ERROR;
+import static ${packageName}.constant.ErrorCodeConstants.UPDATE_${CLASS_NAME}_ERROR;
+
+/**
+ * ${functionName} Controller
+ */
+@Validated
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/${moduleName}/${businessName}")
+public class ${ClassName}Controller {
+
+    private final ${ClassName}Service ${className}Service;
+
+    /**
+     * 新增${functionName}
+     * @param addReq 新增参数
+     * @return ${functionName} id
+     */
+    @SaCheckPermission("${permissionPrefix}:add")
+    @PostMapping("/add")
+    public CommonResult<${pkColumn.javaType}> add(@Valid @RequestBody ${ClassName}SaveReq addReq) {
+        ${pkColumn.javaType} ${className}Id = ${className}Service.add${ClassName}(addReq);
+        return success(${className}Id);
+    }
+
+    /**
+     * 修改${functionName}
+     * @param updateReq 修改参数
+     * @return 是否成功
+     */
+    @SaCheckPermission("${permissionPrefix}:update")
+    @PutMapping("/update")
+    public CommonResult<Void> update(@Valid @RequestBody ${ClassName}UpdateReq updateReq) {
+        Boolean result = ${className}Service.update${ClassName}(updateReq);
+        return toAjax(result, UPDATE_${CLASS_NAME}_ERROR);
+    }
+
+    /**
+     * 删除${functionName}
+     * @param ${pkColumn.javaField}s 删除id数组
+     * @return 是否成功
+     */
+    @SaCheckPermission("${permissionPrefix}:remove")
+    @DeleteMapping("/{ids}")
+    public CommonResult<Void> remove(@NotEmpty(message = "主键不能为空")
+                                     @PathVariable ${pkColumn.javaType}[] ${pkColumn.javaField}s) {
+        Boolean result = ${className}Service.delete${ClassName}(Arrays.asList(${pkColumn.javaField}s));
+        return toAjax(result, DELETE_${CLASS_NAME}_ERROR);
+    }
+
+    /**
+     * 获取${functionName}详细信息
+     * @param ${pkColumn.javaField} ${functionName}id
+     * @return ${ClassName}Resp 对象
+     */
+    @SaCheckPermission("${permissionPrefix}:query")
+    @GetMapping("/{id}")
+    public CommonResult<${ClassName}Resp> get${ClassName}(@PathVariable("id") ${pkColumn.javaType} ${pkColumn.javaField}) {
+        ${ClassName} ${className} = ${className}Service.get${ClassName}(${pkColumn.javaField});
+        return success(BeanUtils.toBean(${className}, ${ClassName}Resp.class));
+    }
+
+    /**
+     * 分页查询${functionName}
+     * @param pageReq 分页参数
+     * @return ${ClassName}Resp分页对象
+     */
+    @SaCheckPermission("${permissionPrefix}:list")
+    @GetMapping("/page")
+    public CommonResult<PageResult<${ClassName}Resp>> get${ClassName}Page(@Valid ${ClassName}PageReq pageReq) {
+        PageResult<${ClassName}> pageResult = ${className}Service.get${ClassName}Page(pageReq);
+        return success(BeanUtils.toBean(pageResult, ${ClassName}Resp.class));
+    }
+
+    /**
+     * 导出${functionName}列表
+     */
+    @SaCheckPermission("${permissionPrefix}:export")
+    @PostMapping("/export")
+    public void export(@Valid ${ClassName}PageReq pageReq, HttpServletResponse response) {
+        pageReq.setPageSize(PageParam.PAGE_SIZE_NONE);
+        List<${ClassName}> list = ${className}Service.get${ClassName}Page(pageReq).getList();
+        List<${ClassName}Resp> respList = BeanUtils.toBean(list, ${ClassName}Resp.class);
+        ExcelUtil.exportExcel(respList, "${functionName}", ${ClassName}Resp.class, response);
+    }
+
+
+
+}
