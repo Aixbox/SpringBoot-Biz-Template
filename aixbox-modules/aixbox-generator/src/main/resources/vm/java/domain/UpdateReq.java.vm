@@ -1,35 +1,32 @@
 package ${packageName}.domain.vo.request;
 
-import ${packageName}.domain.entity.${ClassName};
+import com.aixbox.demo.domain.entity.DemoTest;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import org.wildfly.common.annotation.NotNull;
-#foreach ($import in $importList)
-import ${import};
-#end
 
 
 /**
- * ${functionName} 更新参数
+ * ${functionName}更新参数
  */
 @Data
-@AutoMapper(target = ${ClassName}.class)
 public class ${ClassName}UpdateReq {
 
-#foreach ($column in $columns)
-    #set($skipFields = ["updateTime", "creator", "updater", "deleted", "createTime"])
-    #set($isSkipField = $skipFields.contains($column.javaField))
-    #if($isSkipField)
-        ## 跳过这些字段
-    #else
-    /**
-    * $column.columnComment
-    */
-    #if($column.isPk==1)
-    @NotNull
+    #foreach ($column in $columns)
+        #if(!$table.isSuperColumn($column.javaField) && $column.edit)
+            /**
+             * $column.columnComment
+             */
+            #if($column.required)
+                #if($column.javaType == 'String')
+                @NotBlank(message = "$column.columnComment不能为空")
+                #else
+                @NotNull(message = "$column.columnComment不能为空")
+                #end
+            #end
+        private $column.javaType $column.javaField;
+
+        #end
     #end
-    private #if($column.javaType == 'Date')LocalDateTime#else${column.javaType}#end $column.javaField;
-    #end
-#end
 
 }

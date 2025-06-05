@@ -279,6 +279,7 @@ public class VelocityUtils {
         templates.add("vm/java/service/Service.java.vm");
         templates.add("vm/java/service/ServiceImpl.java.vm");
         templates.add("vm/java/test/ServiceImplTest.java.vm");
+        templates.add("vm/java/constant/ErrorCodeConstants.java.vm");
         templates.add("vm/sql/h2.sql.vm");
         DbType dbType = JdbcUtils.getDbType();
         //todo 要修改为自己的vm文件
@@ -341,6 +342,8 @@ public class VelocityUtils {
             fileName = StrUtils.format("{}/service/{}Service.java", javaPath, className);
         } else if (template.contains("ServiceImpl.java.vm")) {
             fileName = StrUtils.format("{}/service/impl/{}ServiceImpl.java", javaPath, className);
+        } else if (template.contains("ErrorCodeConstants.java.vm")) {
+            fileName = StrUtils.format("{}/constant/ErrorCodeConstants.java", javaPath, className);
         } else if (template.contains("h2.sql.vm")) {
             fileName = StrUtils.format("sql/{}H2.sql", className);
         }

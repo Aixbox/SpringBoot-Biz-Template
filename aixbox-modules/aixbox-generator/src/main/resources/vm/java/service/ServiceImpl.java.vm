@@ -2,20 +2,22 @@ package ${packageName}.service.impl;
 
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
-import com.aixbox.common.core.utils.object.MapstructUtils;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import ${packageName}.domain.entity.${ClassName};
 import ${packageName}.domain.vo.request.${ClassName}PageReq;
 import ${packageName}.domain.vo.request.${ClassName}SaveReq;
 import ${packageName}.domain.vo.request.${ClassName}UpdateReq;
 import ${packageName}.mapper.${ClassName}Mapper;
 import ${packageName}.service.${ClassName}Service;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.aixbox.common.core.exception.util.ServiceExceptionUtil.exception;
+import static ${packageName}.constant.ErrorCodeConstants.${CLASS_NAME}_NOT_EXISTS;
+
 /**
-* ${functionName} Service实现类
+* ${functionName}Service实现类
 */
 @RequiredArgsConstructor
 @Service
@@ -26,11 +28,12 @@ public class ${ClassName}ServiceImpl implements ${ClassName}Service {
     /**
      * 新增${functionName}
      * @param addReq 新增参数
-     * @return 新增数据id
+     * @return ${functionName}id
      */
     @Override
     public Long add${ClassName}(${ClassName}SaveReq addReq) {
-        ${ClassName} ${className} = BeanUtils.toBean(addReq, ${ClassName}.class);
+        ${ClassName}  ${className} = BeanUtils.toBean(addReq, ${ClassName}.class);
+        validEntityBeforeSave(${className});
         ${className}Mapper.insert(${className});
         return ${className}.getId();
     }
@@ -42,28 +45,41 @@ public class ${ClassName}ServiceImpl implements ${ClassName}Service {
      */
     @Override
     public Boolean update${ClassName}(${ClassName}UpdateReq updateReq) {
-        ${ClassName} ${className} = MapstructUtils.convert(updateReq, ${ClassName}.class);
+        ${ClassName} ${className} = BeanUtils.toBean(updateReq, ${ClassName}.class);
+        validEntityBeforeSave(${className});
         return ${className}Mapper.updateById(${className}) > 0;
     }
 
     /**
      * 删除${functionName}
-     * @param ids 删除id数组
+     * @param ${pkColumn.javaField}s ${functionName}id数组
      * @return 是否成功
      */
     @Override
-    public Boolean delete${ClassName}(List<Long> ids) {
-        return ${className}Mapper.deleteByIds(ids) > 0;
+    public Boolean delete${ClassName}(List<${pkColumn.javaType}> ${pkColumn.javaField}s) {
+        validate${ClassName}Exists(ids);
+        return ${className}Mapper.deleteByIds(${pkColumn.javaField}s) > 0;
+    }
+
+    /**
+     * 验证${functionName}是否存在
+     * @param ${pkColumn.javaField}s ${functionName}id数组
+     */
+    private void validate${ClassName}Exists(List<${pkColumn.javaType}> ${pkColumn.javaField}s) {
+        Long count = ${className}Mapper.countByIds(ids);
+        if (count != ids.size()) {
+            throw exception(${CLASS_NAME}_NOT_EXISTS);
+        }
     }
 
     /**
      * 获取${functionName}详细数据
-     * @param id 数据id
+     * @param ${pkColumn.javaField} ${functionName}id
      * @return ${functionName}对象
      */
     @Override
-    public ${ClassName} get${ClassName}(Long id) {
-        return ${className}Mapper.selectById(id);
+    public ${ClassName} get${ClassName}(${pkColumn.javaType} ${pkColumn.javaField}) {
+        return ${className}Mapper.selectById(${pkColumn.javaField});
     }
 
     /**
@@ -74,6 +90,13 @@ public class ${ClassName}ServiceImpl implements ${ClassName}Service {
     @Override
     public PageResult<${ClassName}> get${ClassName}Page(${ClassName}PageReq pageReq) {
         return ${className}Mapper.selectPage(pageReq);
+    }
+
+    /**
+     * 保存前的数据校验
+     */
+    private void validEntityBeforeSave(${ClassName} entity){
+        //TODO 做一些数据校验,如唯一约束
     }
 }
 

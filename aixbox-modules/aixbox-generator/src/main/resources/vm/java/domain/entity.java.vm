@@ -5,9 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-#foreach ($import in $importList)
-import ${import};
-#end
 
 /**
  * ${functionName}对象
@@ -17,23 +14,18 @@ import ${import};
 @EqualsAndHashCode(callSuper = true)
 public class ${ClassName} extends BaseDO {
 
-#foreach ($column in $columns)
-    #if(!$table.isSuperColumn($column.javaField))
-    /**
-    * $column.columnComment
-    */
-    #if($column.javaField=='delFlag')
-    @TableLogic
-    #end
-    #if($column.javaField=='version')
-    @Version
-    #end
-    #if($column.isPk==1)
-    @TableId(value = "$column.columnName")
-    #end
-    private #if($column.javaType == 'Date')LocalDateTime#else${column.javaType}#end $column.javaField;
+    #foreach ($column in $columns)
+        #if(!$table.isSuperColumn($column.javaField))
+            /**
+             * $column.columnComment
+             */
+            #if($column.isPk==1)
+            @TableId(value = "$column.columnName")
+            #end
+            private $column.javaType $column.javaField;
 
+        #end
     #end
-#end
+
 
 }

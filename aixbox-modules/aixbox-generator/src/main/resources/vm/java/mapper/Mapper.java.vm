@@ -4,34 +4,65 @@ import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.mybatis.core.dataobject.BaseDO;
 import com.aixbox.common.mybatis.core.mapper.BaseMapperX;
 import com.aixbox.common.mybatis.core.query.LambdaQueryWrapperX;
+import org.apache.ibatis.annotations.Mapper;
 import ${packageName}.domain.entity.${ClassName};
 import ${packageName}.domain.vo.request.${ClassName}PageReq;
-import org.apache.ibatis.annotations.Mapper;
+
+
+## 字段模板
+#macro(listCondition)
+    #foreach ($column in $columns)
+        #if (${column.query})
+            #set ($JavaField = $column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})##首字母大写
+            #if (${column.queryType} == "EQ")##情况一，= 的时候
+                    .eqIfPresent(${ClassName}::get${JavaField}, reqVO.get${JavaField}())
+            #end
+            #if (${column.queryType} == "NE")##情况二，!= 的时候
+                    .neIfPresent(${ClassName}::get${JavaField}, reqVO.get${JavaField}())
+            #end
+            #if (${column.queryType} == "GT")##情况三，> 的时候
+                    .gtIfPresent(${ClassName}::get${JavaField}, reqVO.get${JavaField}())
+            #end
+            #if (${column.queryType} == "GE")##情况四，>= 的时候
+                    .geIfPresent(${ClassName}::get${JavaField}, reqVO.get${JavaField}())
+            #end
+            #if (${column.queryType} == "LT")##情况五，< 的时候
+                    .ltIfPresent(${ClassName}::get${JavaField}, reqVO.get${JavaField}())
+            #end
+            #if (${column.queryType} == "LE")##情况五，<= 的时候
+                    .leIfPresent(${ClassName}::get${JavaField}, reqVO.get${JavaField}())
+            #end
+            #if (${column.queryType} == "LIKE")##情况七，Like 的时候
+                    .likeIfPresent(${ClassName}::get${JavaField}, reqVO.get${JavaField}())
+            #end
+            #if (${column.queryType} == "BETWEEN")##情况八，Between 的时候
+                    .betweenIfPresent(${ClassName}::get${JavaField}, reqVO.get${JavaField}())
+            #end
+        #end
+    #end
+#end
+
 
 /**
 * ${functionName} Mapper接口
 */
 @Mapper
 public interface ${ClassName}Mapper extends BaseMapperX<${ClassName}> {
-
+#set($AttrName=$pkColumn.javaField.substring(0,1).toUpperCase() + ${pkColumn.javaField.substring(1)})
     /**
     * 分页查询
-    * @param req 请求参数
-    * @return demo分页对象
+    * @param reqVO 请求参数
+    * @return ${ClassName}分页对象
     */
-    default PageResult<${ClassName}> selectPage(${ClassName}PageReq req) {
-        return selectPage(req, new LambdaQueryWrapperX<${ClassName}>()
-#foreach ($column in $columns)
-    #set($skipFields = ["updateTime", "creator", "updater", "deleted", "createTime"])
-    #set($isSkipField = $skipFields.contains($column.javaField))
-    #if(!$column.javaType.equals("String") || $isSkipField)
-    #else
-                .likeIfPresent(${ClassName}::get${column.javaField.substring(0,1).toUpperCase()}${column.javaField.substring(1)}, req.getKeyword())
-    #end
-#end
-                .orderByDesc(BaseDO::getCreateTime));
+    default PageResult<${ClassName}> selectPage(${ClassName}PageReq reqVO) {
+        return selectPage(reqVO, new LambdaQueryWrapperX<${ClassName}>()
+            #listCondition()
+                .orderByDesc(${ClassName}::get${AttrName}));## 大多数情况下，id 倒序
     }
 
+    default Long countByIds(List<${pkColumn.javaType}> ${pkColumn.javaField}s}) {
+        return selectCount(new LambdaQueryWrapperX<${ClassName}>().in(${ClassName}::get${AttrName}, ${pkColumn.javaField}s}));
+    }
 }
 
 

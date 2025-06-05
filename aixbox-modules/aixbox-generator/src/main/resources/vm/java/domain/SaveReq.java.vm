@@ -2,29 +2,28 @@ package ${packageName}.domain.vo.request;
 
 
 import lombok.Data;
-import org.wildfly.common.annotation.NotNull;
-#foreach ($import in $importList)
-import ${import};
-#end
 
 /**
- * ${functionName} 新增参数
+ * ${functionName}新增参数
  */
 @Data
 public class ${ClassName}SaveReq {
 
-#foreach ($column in $columns)
-    #set($skipFields = ["updateTime", "creator", "updater", "deleted", "createTime"])
-    #set($isSkipField = $skipFields.contains($column.javaField))
-    #set($isPk = $column.isPk==1)
-    #if($isSkipField || $isPk)
-        ## 跳过这些字段
-    #else
-    /**
-    * $column.columnComment
-    */
-    private #if($column.javaType == 'Date')LocalDateTime#else${column.javaType}#end $column.javaField;
+    #foreach ($column in $columns)
+        #if(!$table.isSuperColumn($column.javaField) && $column.insert)
+            /**
+             * $column.columnComment
+             */
+            #if($column.required)
+                #if($column.javaType == 'String')
+                @NotBlank(message = "$column.columnComment不能为空")
+                #else
+                @NotNull(message = "$column.columnComment不能为空")
+                #end
+            #end
+            private $column.javaType $column.javaField;
+
+        #end
     #end
-#end
 
 }
