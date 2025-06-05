@@ -1,23 +1,15 @@
 package com.aixbox.demo.controller.admin;
 
-
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageParam;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.excel.utils.ExcelUtil;
-import com.aixbox.demo.domain.entity.DemoTest;
-import com.aixbox.demo.domain.vo.request.DemoTestPageReq;
-import com.aixbox.demo.domain.vo.request.DemoTestSaveReq;
-import com.aixbox.demo.domain.vo.request.DemoTestUpdateReq;
-import com.aixbox.demo.domain.vo.response.DemoTestResp;
-import com.aixbox.demo.service.DemoTestService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +19,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.aixbox.demo.domain.entity.DemoTest;
+import com.aixbox.demo.domain.vo.request.DemoTestPageReq;
+import com.aixbox.demo.domain.vo.request.DemoTestSaveReq;
+import com.aixbox.demo.domain.vo.request.DemoTestUpdateReq;
+import com.aixbox.demo.domain.vo.response.DemoTestResp;
+import com.aixbox.demo.service.DemoTestService;
 
 import java.util.Arrays;
 import java.util.List;

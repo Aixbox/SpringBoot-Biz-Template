@@ -61,6 +61,25 @@ public class StrUtils extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
+     * 驼峰转下划线命名
+     * @param input DemoTest
+     * @return DEMO_TEST
+     */
+    public static String camelToUnderscoreUpper(String input) {
+        if (input == null || input.isEmpty()) return input;
+
+        return input
+                // 在大写字母前插入下划线（首字母除外）
+                .replaceAll("([A-Z])", "_$1")
+                // 处理连续下划线（如 ABCDef → _A_B_C_Def）
+                .replaceAll("_+", "_")
+                // 转换为全大写
+                .toUpperCase()
+                // 去除开头的多余下划线
+                .replaceAll("^_", "");
+    }
+
+    /**
      * 去空格
      */
     public static String trim(String str) {

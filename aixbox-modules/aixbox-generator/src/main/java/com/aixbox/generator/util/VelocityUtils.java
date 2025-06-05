@@ -76,6 +76,7 @@ public class VelocityUtils {
         velocityContext.put("columns", genTable.getColumns());
         velocityContext.put("table", genTable);
         velocityContext.put("dicts", getDicts(genTable));
+        velocityContext.put("CLASS_NAME", StrUtils.camelToUnderscoreUpper(genTable.getClassName()));
         setMenuVelocityContext(velocityContext, genTable);
         if (GenConstants.TPL_TREE.equals(tplCategory)) {
             setTreeVelocityContext(velocityContext, genTable);
