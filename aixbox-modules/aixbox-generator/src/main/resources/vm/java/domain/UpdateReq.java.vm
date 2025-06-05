@@ -13,7 +13,7 @@ import org.wildfly.common.annotation.NotNull;
 public class ${ClassName}UpdateReq {
 
     #foreach ($column in $columns)
-        #if(!$table.isSuperColumn($column.javaField) && $column.edit)
+        #if($column.edit)
             /**
              * $column.columnComment
              */

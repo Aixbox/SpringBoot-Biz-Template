@@ -328,7 +328,14 @@ public class GenTableServiceImpl implements GenTableService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateGenTable(GenTable genTable) {
-        genTableMapper.updateById(genTable);
+        String options = JsonUtils.toJsonString(genTable.getParams());
+        genTable.setOptions(options);
+        int row = genTableMapper.updateById(genTable);
+        if (row > 0) {
+            for (GenTableColumn cenTableColumn : genTable.getColumns()) {
+                genTableColumnMapper.updateById(cenTableColumn);
+            }
+        }
     }
 
     /**
@@ -502,10 +509,11 @@ public class GenTableServiceImpl implements GenTableService {
         List<String> templates = VelocityUtils.getTemplateList(table.getTplCategory());
         for (String template : templates) {
             // 渲染模板
+            String fileName = VelocityUtils.getFileName(template, table);
             StringWriter sw = new StringWriter();
             Template tpl = Velocity.getTemplate(template, Constants.UTF8);
             tpl.merge(context, sw);
-            dataMap.put(template, sw.toString());
+            dataMap.put(fileName, sw.toString());
         }
         return dataMap;
     }

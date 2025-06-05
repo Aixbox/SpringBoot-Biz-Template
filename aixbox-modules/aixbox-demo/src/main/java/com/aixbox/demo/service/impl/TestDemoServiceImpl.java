@@ -7,8 +7,8 @@ import com.aixbox.demo.domain.vo.request.TestDemoPageReqVO;
 import com.aixbox.demo.domain.vo.request.TestDemoSaveReqVO;
 import com.aixbox.demo.domain.vo.request.TestDemoUpdateReqVO;
 import com.aixbox.demo.domain.entity.TestDemo;
-import com.aixbox.demo.service.TestDemoService;
 import com.aixbox.demo.mapper.TestDemoMapper;
+import com.aixbox.demo.service.TestDemoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

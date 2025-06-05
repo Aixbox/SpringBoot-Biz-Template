@@ -7,20 +7,15 @@ import org.wildfly.common.annotation.NotNull;
 
 
 /**
- * 【请填写功能名称】 更新参数
+ * demo更新参数
  */
 @Data
-@AutoMapper(target = DemoTest.class)
 public class DemoTestUpdateReq {
 
-    /**
-    * id
-    */
-    @NotNull
-    private Long id;
-    /**
-    * 名字
-    */
-    private String name;
-                                        
+            /**
+             * 名字
+             */
+        private String name;
+
+
 }

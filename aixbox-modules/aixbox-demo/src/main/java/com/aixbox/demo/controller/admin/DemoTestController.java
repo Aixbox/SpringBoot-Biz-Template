@@ -1,5 +1,6 @@
 package com.aixbox.demo.controller.admin;
 
+
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageParam;
@@ -27,15 +28,18 @@ import com.aixbox.demo.domain.vo.response.DemoTestResp;
 import com.aixbox.demo.service.DemoTestService;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static com.aixbox.common.core.pojo.CommonResult.success;
 import static com.aixbox.common.core.pojo.CommonResult.toAjax;
-import static com.aixbox.demo.constant.ErrorCodeConstants.DELETE_DEMO_ERROR;
-import static com.aixbox.demo.constant.ErrorCodeConstants.UPDATE_DEMO_ERROR;
+
+//todo 这里的 DELETE_DEMO_ERROR 需要在util添加上下文数据，全大写的函数名
+import static com.aixbox.demo.constant.ErrorCodeConstants.DELETE_DEMO_TEST_ERROR;
+import static com.aixbox.demo.constant.ErrorCodeConstants.UPDATE_DEMO_TEST_ERROR;
 
 /**
- * 【请填写功能名称】 Controller
+ * demo Controller
  */
 @Validated
 @RequiredArgsConstructor
@@ -46,11 +50,11 @@ public class DemoTestController {
     private final DemoTestService demoTestService;
 
     /**
-     * 新增【请填写功能名称】
+     * 新增demo
      * @param addReq 新增参数
-     * @return 新增数据id
+     * @return demo id
      */
-    @SaCheckPermission("system:menu:add")
+    @SaCheckPermission("demo:test:add")
     @PostMapping("/add")
     public CommonResult<Long> add(@Valid @RequestBody DemoTestSaveReq addReq) {
         Long demoTestId = demoTestService.addDemoTest(addReq);
@@ -58,36 +62,36 @@ public class DemoTestController {
     }
 
     /**
-     * 修改【请填写功能名称】
+     * 修改demo
      * @param updateReq 修改参数
      * @return 是否成功
      */
-    @SaCheckPermission("system:menu:update")
+    @SaCheckPermission("demo:test:update")
     @PutMapping("/update")
     public CommonResult<Void> update(@Valid @RequestBody DemoTestUpdateReq updateReq) {
         Boolean result = demoTestService.updateDemoTest(updateReq);
-        return toAjax(result, UPDATE_DEMO_ERROR);
+        return toAjax(result, UPDATE_DEMO_TEST_ERROR);
     }
 
     /**
-     * 删除【请填写功能名称】
+     * 删除demo
      * @param ids 删除id数组
      * @return 是否成功
      */
-    @SaCheckPermission("system:menu:remove")
+    @SaCheckPermission("demo:test:remove")
     @DeleteMapping("/{ids}")
     public CommonResult<Void> remove(@NotEmpty(message = "主键不能为空")
                                      @PathVariable Long[] ids) {
         Boolean result = demoTestService.deleteDemoTest(Arrays.asList(ids));
-        return toAjax(result, DELETE_DEMO_ERROR);
+        return toAjax(result, DELETE_DEMO_TEST_ERROR);
     }
 
     /**
-     * 获取【请填写功能名称】详细信息
-     * @param id 数据id
-     * @return demo对象
+     * 获取demo详细信息
+     * @param id demoid
+     * @return DemoTestResp 对象
      */
-    @SaCheckPermission("system:menu:query")
+    @SaCheckPermission("demo:test:query")
     @GetMapping("/{id}")
     public CommonResult<DemoTestResp> getDemoTest(@PathVariable("id") Long id) {
         DemoTest demoTest = demoTestService.getDemoTest(id);
@@ -97,9 +101,9 @@ public class DemoTestController {
     /**
      * 分页查询demo
      * @param pageReq 分页参数
-     * @return demo分页对象
+     * @return DemoTestResp分页对象
      */
-    @SaCheckPermission("system:menu:list")
+    @SaCheckPermission("demo:test:list")
     @GetMapping("/page")
     public CommonResult<PageResult<DemoTestResp>> getDemoTestPage(@Valid DemoTestPageReq pageReq) {
         PageResult<DemoTest> pageResult = demoTestService.getDemoTestPage(pageReq);
@@ -107,15 +111,15 @@ public class DemoTestController {
     }
 
     /**
-     * 导出菜单权限列表
+     * 导出demo列表
      */
-    @SaCheckPermission("system:menu:export")
+    @SaCheckPermission("demo:test:export")
     @PostMapping("/export")
     public void export(@Valid DemoTestPageReq pageReq, HttpServletResponse response) {
         pageReq.setPageSize(PageParam.PAGE_SIZE_NONE);
         List<DemoTest> list = demoTestService.getDemoTestPage(pageReq).getList();
         List<DemoTestResp> respList = BeanUtils.toBean(list, DemoTestResp.class);
-        ExcelUtil.exportExcel(respList, "菜单权限", DemoTestResp.class, response);
+        ExcelUtil.exportExcel(respList, "demo", DemoTestResp.class, response);
     }
 
 

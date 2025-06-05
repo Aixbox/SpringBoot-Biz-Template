@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 public class ${ClassName}PageReq extends PageParam {
 
     #foreach ($column in $columns)
-        #if(!$table.isSuperColumn($column.javaField) && $column.query)
+        #if($column.query)
             /**
              * $column.columnComment
              */

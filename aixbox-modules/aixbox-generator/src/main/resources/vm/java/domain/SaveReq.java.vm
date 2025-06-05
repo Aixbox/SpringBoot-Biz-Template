@@ -10,7 +10,7 @@ import lombok.Data;
 public class ${ClassName}SaveReq {
 
     #foreach ($column in $columns)
-        #if(!$table.isSuperColumn($column.javaField) && $column.insert)
+        #if($column.insert)
             /**
              * $column.columnComment
              */

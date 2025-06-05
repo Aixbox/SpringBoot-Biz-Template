@@ -2,22 +2,22 @@ package com.aixbox.demo.service.impl;
 
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import com.aixbox.demo.domain.entity.DemoTest;
 import com.aixbox.demo.domain.vo.request.DemoTestPageReq;
 import com.aixbox.demo.domain.vo.request.DemoTestSaveReq;
 import com.aixbox.demo.domain.vo.request.DemoTestUpdateReq;
 import com.aixbox.demo.mapper.DemoTestMapper;
 import com.aixbox.demo.service.DemoTestService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import static com.aixbox.common.core.exception.util.ServiceExceptionUtil.exception;
-import static com.aixbox.demo.constant.ErrorCodeConstants.DEMO_NOT_EXISTS;
+import static com.aixbox.demo.constant.ErrorCodeConstants.DEMO_TEST_NOT_EXISTS;
 
 /**
-* 【请填写功能名称】 Service实现类
+* demoService实现类
 */
 @RequiredArgsConstructor
 @Service
@@ -26,20 +26,20 @@ public class DemoTestServiceImpl implements DemoTestService {
     private final DemoTestMapper demoTestMapper;
 
     /**
-     * 新增【请填写功能名称】
+     * 新增demo
      * @param addReq 新增参数
-     * @return 新增数据id
+     * @return demoid
      */
     @Override
     public Long addDemoTest(DemoTestSaveReq addReq) {
-        DemoTest demoTest = BeanUtils.toBean(addReq, DemoTest.class);
+        DemoTest  demoTest = BeanUtils.toBean(addReq, DemoTest.class);
         validEntityBeforeSave(demoTest);
         demoTestMapper.insert(demoTest);
         return demoTest.getId();
     }
 
     /**
-     * 修改【请填写功能名称】
+     * 修改demo
      * @param updateReq 修改参数
      * @return 是否成功
      */
@@ -51,31 +51,31 @@ public class DemoTestServiceImpl implements DemoTestService {
     }
 
     /**
-     * 删除【请填写功能名称】
-     * @param ids 删除id数组
+     * 删除demo
+     * @param ids demoid数组
      * @return 是否成功
      */
     @Override
     public Boolean deleteDemoTest(List<Long> ids) {
-        validateDemoContactExists(ids);
+        validateDemoTestExists(ids);
         return demoTestMapper.deleteByIds(ids) > 0;
     }
 
     /**
-     * 验证【请填写功能名称】是否存在
-     * @param ids id数组
+     * 验证demo是否存在
+     * @param ids demoid数组
      */
-    private void validateDemoContactExists(List<Long> ids) {
+    private void validateDemoTestExists(List<Long> ids) {
         Long count = demoTestMapper.countByIds(ids);
         if (count != ids.size()) {
-            throw exception(DEMO_NOT_EXISTS);
+            throw exception(DEMO_TEST_NOT_EXISTS);
         }
     }
 
     /**
-     * 获取【请填写功能名称】详细数据
-     * @param id 数据id
-     * @return 【请填写功能名称】对象
+     * 获取demo详细数据
+     * @param id demoid
+     * @return demo对象
      */
     @Override
     public DemoTest getDemoTest(Long id) {
@@ -83,9 +83,9 @@ public class DemoTestServiceImpl implements DemoTestService {
     }
 
     /**
-     * 分页查询【请填写功能名称】
+     * 分页查询demo
      * @param pageReq 分页查询参数
-     * @return 【请填写功能名称】分页对象
+     * @return demo分页对象
      */
     @Override
     public PageResult<DemoTest> getDemoTestPage(DemoTestPageReq pageReq) {

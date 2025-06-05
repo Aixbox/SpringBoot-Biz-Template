@@ -60,8 +60,8 @@ public interface ${ClassName}Mapper extends BaseMapperX<${ClassName}> {
                 .orderByDesc(${ClassName}::get${AttrName}));## 大多数情况下，id 倒序
     }
 
-    default Long countByIds(List<${pkColumn.javaType}> ${pkColumn.javaField}s}) {
-        return selectCount(new LambdaQueryWrapperX<${ClassName}>().in(${ClassName}::get${AttrName}, ${pkColumn.javaField}s}));
+    default Long countByIds(List<${pkColumn.javaType}> ${pkColumn.javaField}s) {
+        return selectCount(new LambdaQueryWrapperX<${ClassName}>().in(${ClassName}::get${AttrName}, ${pkColumn.javaField}s));
     }
 }
 

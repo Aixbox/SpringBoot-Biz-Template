@@ -6,15 +6,22 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * TestDemo 分页参数
+ * demo 分页参数
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class DemoTestPageReq extends PageParam {
 
-    /**
-     * 关键字
-     */
-    private String keyword;
+            /**
+             * 名字
+             */
+        private String name;
+
+            /**
+             * 创建者
+             */
+        private String creator;
+
+
 
 }
