@@ -1,0 +1,50 @@
+package ${packageName}.service;
+
+import com.aixbox.common.core.pojo.PageResult;
+import ${packageName}.domain.entity.${ClassName};
+import ${packageName}.domain.vo.request.${ClassName}PageReq;
+import ${packageName}.domain.vo.request.${ClassName}SaveReq;
+import ${packageName}.domain.vo.request.${ClassName}UpdateReq;
+
+import java.util.List;
+
+/**
+ * ${functionName}Service接口
+ */
+public interface ${ClassName}Service {
+
+    /**
+     * 新增${functionName}
+     * @param addReq 新增参数
+     * @return ${functionName}id
+     */
+     ${pkColumn.javaType} add${ClassName}(${ClassName}SaveReq addReq);
+
+    /**
+     * 修改${functionName}
+     * @param updateReq 修改参数
+     * @return 是否成功
+     */
+    Boolean update${ClassName}(${ClassName}UpdateReq updateReq);
+
+    /**
+     * 删除${functionName}
+     * @param ${pkColumn.javaField}s 删除id数组
+     * @return 是否成功
+     */
+    Boolean delete${ClassName}(List<${pkColumn.javaType}> ${pkColumn.javaField}s);
+
+    /**
+     * 获取${functionName}详细数据
+     * @param ${pkColumn.javaField} 数据id
+     * @return ${functionName}对象
+     */
+     ${ClassName} get${ClassName}(${pkColumn.javaType} ${pkColumn.javaField});
+
+    /**
+     * 分页查询${functionName}
+     * @param pageReq 分页查询参数
+     * @return ${functionName}分页对象
+     */
+    PageResult<${ClassName}> get${ClassName}Page(${ClassName}PageReq pageReq);
+}

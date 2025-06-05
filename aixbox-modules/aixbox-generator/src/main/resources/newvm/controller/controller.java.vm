@@ -56,8 +56,8 @@ public class ${ClassName}Controller {
      */
     @SaCheckPermission("${permissionPrefix}:add")
     @PostMapping("/add")
-    public CommonResult<Long> add(@Valid @RequestBody ${ClassName}SaveReq addReq) {
-        Long ${className}Id = ${className}Service.add${ClassName}(addReq);
+    public CommonResult<${pkColumn.javaType}> add(@Valid @RequestBody ${ClassName}SaveReq addReq) {
+        ${pkColumn.javaType} ${className}Id = ${className}Service.add${ClassName}(addReq);
         return success(${className}Id);
     }
 
@@ -75,26 +75,26 @@ public class ${ClassName}Controller {
 
     /**
      * 删除${functionName}
-     * @param ids 删除id数组
+     * @param ${pkColumn.javaField}s 删除id数组
      * @return 是否成功
      */
     @SaCheckPermission("${permissionPrefix}:remove")
     @DeleteMapping("/{ids}")
     public CommonResult<Void> remove(@NotEmpty(message = "主键不能为空")
-                                     @PathVariable Long[] ids) {
-        Boolean result = ${className}Service.delete${ClassName}(Collections.singletonList(ids));
+                                     @PathVariable ${pkColumn.javaType}[] ${pkColumn.javaField}s) {
+        Boolean result = ${className}Service.delete${ClassName}(Collections.singletonList(${pkColumn.javaField}s));
         return toAjax(result, DELETE_${CLASS_NAME}_ERROR);
     }
 
     /**
      * 获取${functionName}详细信息
-     * @param id 数据id
+     * @param ${pkColumn.javaField} ${functionName}id
      * @return ${ClassName}Resp 对象
      */
     @SaCheckPermission("${permissionPrefix}:query")
     @GetMapping("/{id}")
-    public CommonResult<${ClassName}Resp> get${ClassName}(@PathVariable("id") Long id) {
-        ${ClassName} ${className} = ${className}Service.get${ClassName}(id);
+    public CommonResult<${ClassName}Resp> get${ClassName}(@PathVariable("id") ${pkColumn.javaType} ${pkColumn.javaField}) {
+        ${ClassName} ${className} = ${className}Service.get${ClassName}(${pkColumn.javaField});
         return success(BeanUtils.toBean(${className}, ${ClassName}Resp.class));
     }
 
