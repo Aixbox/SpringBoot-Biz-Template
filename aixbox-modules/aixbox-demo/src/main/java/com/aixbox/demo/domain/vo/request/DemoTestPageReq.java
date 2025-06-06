@@ -40,7 +40,7 @@ public class DemoTestPageReq extends PageParam {
             /**
              * 是否
              */
-        private Long isOrNot;
+        private Boolean isOrNot;
 
 
 

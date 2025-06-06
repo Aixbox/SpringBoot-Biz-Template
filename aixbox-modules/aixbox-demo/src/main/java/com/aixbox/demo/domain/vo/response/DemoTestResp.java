@@ -51,7 +51,7 @@ public class DemoTestResp {
              */
             @ExcelProperty(value = "是否", converter = ExcelDictConvert.class)
             @ExcelDictFormat(dictType = "sys_yes_no")
-            private Long isOrNot;
+            private Boolean isOrNot;
 
 
 

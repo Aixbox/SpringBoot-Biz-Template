@@ -33,7 +33,7 @@ public class DemoTest extends BaseDO {
             /**
              * 是否
              */
-            private Long isOrNot;
+            private Boolean isOrNot;
 
 
 

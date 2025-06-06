@@ -35,7 +35,7 @@ public class DemoTestUpdateReq {
             /**
              * 是否
              */
-        private Long isOrNot;
+        private Boolean isOrNot;
 
 
 }

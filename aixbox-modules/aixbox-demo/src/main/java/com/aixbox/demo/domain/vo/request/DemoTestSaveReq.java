@@ -27,7 +27,7 @@ public class DemoTestSaveReq {
             /**
              * 是否
              */
-            private Long isOrNot;
+            private Boolean isOrNot;
 
 
 }
