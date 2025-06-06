@@ -2,7 +2,7 @@
 import type { VbenFormProps } from '@vben/common-ui';
 
 import type { VxeGridProps } from '#/adapter/vxe-table';
-import type { SysConfig } from '#/api/system/config/model';
+import type { ${ClassName} } from '#/api/${moduleName}/${businessName}/model';
 
 import { Page, useVbenModal } from '@vben/common-ui';
 import { getVxePopupContainer } from '@vben/utils';
@@ -11,15 +11,14 @@ import { Modal, Popconfirm, Space } from 'ant-design-vue';
 
 import { useVbenVxeGrid, vxeCheckboxChecked } from '#/adapter/vxe-table';
 import {
-  configExport,
-  configList,
-  configRefreshCache,
-  configRemove,
-} from '#/api/system/config';
+    ${businessName}Export,
+    ${businessName}List,
+    ${businessName}Remove,
+} from '#/api/${moduleName}/${businessName}';
 import { commonDownloadExcel } from '#/utils/file/download';
 
 import { columns, querySchema } from './data';
-import configModal from './test-modal.vue';
+import ${businessName}Modal from './${businessName}-modal.vue';
 
 const formOptions: VbenFormProps = {
   commonConfig: {

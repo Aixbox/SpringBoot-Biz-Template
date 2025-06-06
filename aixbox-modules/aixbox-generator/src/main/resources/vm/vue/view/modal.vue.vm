@@ -6,7 +6,7 @@ import { $t } from '@vben/locales';
 import { cloneDeep } from '@vben/utils';
 
 import { useVbenForm } from '#/adapter/form';
-import { configAdd, configInfo, configUpdate } from '#/api/system/config';
+import { ${businessName}Add, ${businessName}Info, ${businessName}Update } from '#/api/${moduleName}/${businessName}';
 import { defaultFormValueGetter, useBeforeCloseDiff } from '#/utils/popup';
 
 import { modalSchema } from './data';
@@ -48,7 +48,7 @@ const [BasicModal, modalApi] = useVbenModal({
     isUpdate.value = !!id;
 
     if (isUpdate.value && id) {
-      const record = await configInfo(id);
+      const record = await ${businessName}Info(id);
       await formApi.setValues(record);
     }
     await markInitialized();
@@ -65,7 +65,7 @@ async function handleConfirm() {
       return;
     }
     const data = cloneDeep(await formApi.getValues());
-    await (isUpdate.value ? configUpdate(data) : configAdd(data));
+    await (isUpdate.value ? ${businessName}Update(data) : ${businessName}Add(data));
     resetInitialized();
     emit('reload');
     modalApi.close();
