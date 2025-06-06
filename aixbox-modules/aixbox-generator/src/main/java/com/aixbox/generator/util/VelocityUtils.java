@@ -76,12 +76,25 @@ public class VelocityUtils {
         velocityContext.put("columns", genTable.getColumns());
         velocityContext.put("table", genTable);
         velocityContext.put("dicts", getDicts(genTable));
+        velocityContext.put("dictEnums", getDictEnums(genTable));
         velocityContext.put("CLASS_NAME", StrUtils.camelToUnderscoreUpper(genTable.getClassName()));
         setMenuVelocityContext(velocityContext, genTable);
         if (GenConstants.TPL_TREE.equals(tplCategory)) {
             setTreeVelocityContext(velocityContext, genTable);
         }
         return velocityContext;
+    }
+
+    private static HashSet<String> getDictEnums(GenTable genTable) {
+        List<GenTableColumn> columns = genTable.getColumns();
+        HashSet<String> dictList = new HashSet<>();
+        for (GenTableColumn column : columns) {
+            String dictType = column.getDictType();
+            if (StringUtils.isNotEmpty(dictType)) {
+                dictList.add(dictType);
+            }
+        }
+        return dictList;
     }
 
     /**
@@ -289,6 +302,7 @@ public class VelocityUtils {
         templates.add("vm/vue/view/data.ts.vm");
         templates.add("vm/vue/view/index.vue.vm");
         templates.add("vm/vue/view/modal.vue.vm");
+        templates.add("vm/vue/view/dictEnum.ts.vm");
         DbType dbType = JdbcUtils.getDbType();
         //todo 要修改为自己的vm文件
         //if (ObjectUtil.equals(dbType, DbType.ORACLE)) {
@@ -351,7 +365,7 @@ public class VelocityUtils {
         } else if (template.contains("ServiceImpl.java.vm")) {
             fileName = StrUtils.format("{}/service/impl/{}ServiceImpl.java", javaPath, className);
         } else if (template.contains("ErrorCodeConstants.java.vm")) {
-            fileName = StrUtils.format("{}/constant/ErrorCodeConstants.java", javaPath, className);
+            fileName = StrUtils.format("{}/constant/errorCode.java", javaPath, className);
         } else if (template.contains("h2.sql.vm")) {
             fileName = StrUtils.format("sql/{}H2.sql", className);
         } else if (template.contains("index.ts.vm")) {
@@ -359,11 +373,15 @@ public class VelocityUtils {
         } else if (template.contains("model.d.ts.vm")) {
             fileName = StrUtils.format("{}/api/{}/{}/model.d.ts", vuePath, moduleName, businessName);
         } else if (template.contains("data.ts.vm")) {
-            fileName = StrUtils.format("{}/view/{}/{}/data.ts", vuePath, moduleName, businessName);
+            fileName = StrUtils.format("{}/views/{}/{}/data.ts", vuePath, moduleName, businessName);
         } else if (template.contains("index.vue.vm")) {
-            fileName = StrUtils.format("{}/view/{}/{}/index.vue", vuePath, moduleName, businessName);
+            fileName = StrUtils.format("{}/views/{}/{}/index.vue", vuePath, moduleName,
+                    businessName);
         } else if (template.contains("modal.vue.vm")) {
-            fileName = StrUtils.format("{}/view/{}/{}/{}-model.vue", vuePath, moduleName,
+            fileName = StrUtils.format("{}/views/{}/{}/{}-model.vue", vuePath, moduleName,
+                    businessName, businessName);
+        } else if (template.contains("dictEnum.ts.vm")) {
+            fileName = StrUtils.format("{}/enums/dictEnum.ts", vuePath, moduleName,
                     businessName, businessName);
         }
 

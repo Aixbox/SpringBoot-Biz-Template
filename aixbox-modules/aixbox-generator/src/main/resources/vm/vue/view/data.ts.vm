@@ -12,7 +12,7 @@ import { renderDict } from '#/utils/render';
 export const querySchema: FormSchemaGetter = () => [
 #foreach($column in $columns)
   #if($column.query)
-    #set($dictType=$column.dictType)
+    #set($dictType=$column.dictType.toUpperCase())
     #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
     #set($parentheseIndex=$column.columnComment.indexOf("（"))
     #if($parentheseIndex != -1)

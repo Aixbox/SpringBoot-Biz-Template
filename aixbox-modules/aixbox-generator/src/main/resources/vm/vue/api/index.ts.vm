@@ -23,7 +23,7 @@ export function ${businessName}List(params?: PageParam) {
 }
 
 export function ${businessName}Info(${businessName}Id: ID) {
-  return requestClient.get<${ClassName}>(`\${Api.root}/\${${businessName}Id}`);
+  return requestClient.get<${ClassName}>(`#[[${Api.root}]]#/${${businessName}Id}`);
 }
 
 /**
@@ -55,5 +55,5 @@ export function ${businessName}Add(data: Partial<${ClassName}>) {
  * @param ${businessName}Ids ids
  */
 export function ${businessName}Remove(${businessName}Ids: IDS) {
-  return requestClient.deleteWithMsg<void>(`\${Api.root}/\${${businessName}Ids}`);
+  return requestClient.deleteWithMsg<void>(`#[[${Api.root}]]#/${${businessName}Ids}`);
 }
