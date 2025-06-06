@@ -1,8 +1,8 @@
 export const DictEnum = {
     //TODO 下面的枚举手动添加到 packages\@core\base\shared\src\constants\dict-enum.ts 文件中
     #foreach ($dictType in $dictEnums)
-        #set($DictType=$column.dictType.toUpperCase())
-            $DictType: '$dictType',
+        #set($DictType=$dictType.toUpperCase())
+            ${DictType}: '$dictType',
     #end
 
 } as const;

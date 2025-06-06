@@ -30,7 +30,6 @@ public class DemoTestPageReq extends PageParam {
             /**
              * 创建时间
              */
-        @NotNull(message = "创建时间不能为空")
         private LocalDate[] createTime;
 
             /**

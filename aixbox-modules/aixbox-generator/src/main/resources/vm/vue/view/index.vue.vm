@@ -125,7 +125,7 @@ function handleDownloadExcel() {
             v-access:code="['${moduleName}:${businessName}:export']"
             @click="handleDownloadExcel"
           >
-            {{ \$t('pages.common.export') }}
+            {{ #[[$t]]#('pages.common.export') }}
           </a-button>
           <a-button
             :disabled="!vxeCheckboxChecked(tableApi)"
@@ -134,14 +134,14 @@ function handleDownloadExcel() {
             v-access:code="['${moduleName}:${businessName}:remove']"
             @click="handleMultiDelete"
           >
-            {{ \$t('pages.common.delete') }}
+            {{ #[[$t]]#('pages.common.delete') }}
           </a-button>
           <a-button
             type="primary"
             v-access:code="['${moduleName}:${businessName}:add']"
             @click="handleAdd"
           >
-            {{ \$t('pages.common.add') }}
+            {{ #[[$t]]#('pages.common.add') }}
           </a-button>
         </Space>
       </template>
@@ -151,7 +151,7 @@ function handleDownloadExcel() {
             v-access:code="['${moduleName}:${businessName}:edit']"
             @click.stop="handleEdit(row)"
           >
-            {{ \$t('pages.common.edit') }}
+            {{ #[[$t]]#('pages.common.edit') }}
           </ghost-button>
           <Popconfirm
             :get-popup-container="getVxePopupContainer"
@@ -164,12 +164,12 @@ function handleDownloadExcel() {
               v-access:code="['${moduleName}:${businessName}:remove']"
               @click.stop=""
             >
-              {{ \$t('pages.common.delete') }}
+              {{ #[[$t]]#('pages.common.delete') }}
             </ghost-button>
           </Popconfirm>
         </Space>
       </template>
     </BasicTable>
-    <ConfigModal @reload="tableApi.query()" />
+    <${BusinessName}Modal @reload="tableApi.query()" />
   </Page>
 </template>

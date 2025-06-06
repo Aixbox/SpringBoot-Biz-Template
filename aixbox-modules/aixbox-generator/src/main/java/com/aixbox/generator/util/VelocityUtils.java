@@ -378,7 +378,7 @@ public class VelocityUtils {
             fileName = StrUtils.format("{}/views/{}/{}/index.vue", vuePath, moduleName,
                     businessName);
         } else if (template.contains("modal.vue.vm")) {
-            fileName = StrUtils.format("{}/views/{}/{}/{}-model.vue", vuePath, moduleName,
+            fileName = StrUtils.format("{}/views/{}/{}/{}-modal.vue", vuePath, moduleName,
                     businessName, businessName);
         } else if (template.contains("dictEnum.ts.vm")) {
             fileName = StrUtils.format("{}/enums/dictEnum.ts", vuePath, moduleName,

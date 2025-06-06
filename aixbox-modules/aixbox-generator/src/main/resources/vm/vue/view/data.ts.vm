@@ -77,11 +77,11 @@ export const columns: VxeGridProps['columns'] = [
             if (typeof row.${javaField} === 'string' && row.${javaField}.includes(',')) {
               return row.${javaField}
                       .split(',')
-                      .map((item) => renderDict(item.trim(), DictEnum.${column.dictType}))
+                      .map((item) => renderDict(item.trim(), DictEnum.${column.dictType.toUpperCase()}))
                       .join(', ');
             }
           #else
-            return renderDict(row.${javaField}, DictEnum.${column.dictType});
+            return renderDict(row.${javaField}, DictEnum.${column.dictType.toUpperCase()});
           #end
 
 
@@ -101,7 +101,7 @@ export const columns: VxeGridProps['columns'] = [
 export const modalSchema: FormSchemaGetter = () => [
 #foreach($column in $columns)
   #if($column.insert || $column.edit)
-    #set($dictType=$column.dictType)
+    #set($dictType=$column.dictType.toUpperCase())
     #set($javaField=$column.javaField)
     #set($parentheseIndex=$column.columnComment.indexOf("（"))
     #if($parentheseIndex != -1)
