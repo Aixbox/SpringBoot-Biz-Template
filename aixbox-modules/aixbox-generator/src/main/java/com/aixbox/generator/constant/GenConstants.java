@@ -68,31 +68,31 @@ public interface GenConstants {
     /**
      * BO对象 不需要添加字段
      */
-    String[] COLUMNNAME_NOT_ADD = {"create_dept", "create_by", "create_time", "del_flag", "update_by",
-        "update_time", "version", "tenant_id"};
+    String[] COLUMNNAME_NOT_ADD = {"id", "create_dept", "creator", "create_time", "deleted",
+            "updater", "update_time", "version", "tenant_id"};
 
     /**
      * BO对象 不需要编辑字段
      */
-    String[] COLUMNNAME_NOT_EDIT = {"create_dept", "create_by", "create_time", "del_flag", "update_by",
-        "update_time", "version", "tenant_id"};
+    String[] COLUMNNAME_NOT_EDIT = {"id", "create_dept", "creator", "create_time", "deleted",
+            "updater", "update_time", "version", "tenant_id"};
 
     /**
      * VO对象 不需要返回字段
      */
-    String[] COLUMNNAME_NOT_LIST = {"create_dept", "create_by", "create_time", "del_flag", "update_by",
-        "update_time", "version", "tenant_id"};
+    String[] COLUMNNAME_NOT_LIST = {"create_dept", "creator", "deleted",
+            "updater", "update_time", "version", "tenant_id"};
 
     /**
      * BO对象 不需要查询字段
      */
-    String[] COLUMNNAME_NOT_QUERY = {"id", "create_dept", "create_by", "create_time", "del_flag", "update_by",
-        "update_time", "remark", "version", "tenant_id"};
+    String[] COLUMNNAME_NOT_QUERY = {"id", "create_dept", "creator", "deleted",
+            "updater", "update_time", "remark", "version", "tenant_id"};
 
     /**
      * Entity基类字段
      */
-    String[] BASE_ENTITY = {"createDept", "creator", "createTime", "updater", "updateTime",
+    String[] BASE_ENTITY = {"createDept", "creator", "createTime", "deleted", "updateTime",
             "tenantId", "deleted"};
 
     /**
@@ -168,7 +168,7 @@ public interface GenConstants {
     /**
      * 时间类型
      */
-    String TYPE_DATE = "Date";
+    String TYPE_DATE = "LocalDate";
 
     /**
      * 模糊查询

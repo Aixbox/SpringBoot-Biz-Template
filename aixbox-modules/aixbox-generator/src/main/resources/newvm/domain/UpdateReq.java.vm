@@ -4,7 +4,9 @@ import com.aixbox.demo.domain.entity.DemoTest;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import org.wildfly.common.annotation.NotNull;
-
+#foreach ($import in $importList)
+import ${import};
+#end
 
 /**
  * ${functionName}更新参数

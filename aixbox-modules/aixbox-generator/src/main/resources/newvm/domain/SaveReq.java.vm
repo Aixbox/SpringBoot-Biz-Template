@@ -2,6 +2,9 @@ package ${packageName}.domain.vo.request;
 
 
 import lombok.Data;
+#foreach ($import in $importList)
+import ${import};
+#end
 
 /**
  * ${functionName}新增参数

@@ -25,6 +25,9 @@ public interface DemoTestMapper extends BaseMapperX<DemoTest> {
         return selectPage(reqVO, new LambdaQueryWrapperX<DemoTest>()
                     .likeIfPresent(DemoTest::getName, reqVO.getName())
                     .eqIfPresent(DemoTest::getCreator, reqVO.getCreator())
+                    .betweenIfPresent(DemoTest::getCreateTime, reqVO.getCreateTime())
+                    .eqIfPresent(DemoTest::getSex, reqVO.getSex())
+                    .eqIfPresent(DemoTest::getIsOrNot, reqVO.getIsOrNot())
                 .orderByDesc(DemoTest::getId));    }
 
     default Long countByIds(List<Long> ids) {

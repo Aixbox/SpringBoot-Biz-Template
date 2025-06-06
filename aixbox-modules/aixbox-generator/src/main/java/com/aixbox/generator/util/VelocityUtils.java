@@ -106,14 +106,17 @@ public class VelocityUtils {
         HashSet<String> importList = new HashSet<>();
         for (GenTableColumn column : columns) {
             if (!column.isSuperColumn() && GenConstants.TYPE_DATE.equals(column.getJavaType())) {
-                importList.add("java.util.Date");
-                importList.add("com.fasterxml.jackson.annotation.JsonFormat");
+                importList.add("java.time.LocalDate");
             } else if (!column.isSuperColumn() && GenConstants.TYPE_BIGDECIMAL.equals(column.getJavaType())) {
                 importList.add("java.math.BigDecimal");
             } else if (!column.isSuperColumn() && "imageUpload".equals(column.getHtmlType())) {
                 //todo 后期如果进入这个逻辑，修改成自己的类
                 importList.add("org.dromara.common.translation.annotation.Translation");
                 importList.add("org.dromara.common.translation.constant.TransConstant");
+            } else if (column.isRequired() && GenConstants.TYPE_STRING.equals(column.getJavaType())) {
+                importList.add("jakarta.validation.constraints.NotBlank");
+            } else if (column.isRequired() && !GenConstants.TYPE_STRING.equals(column.getJavaType())) {
+                importList.add("jakarta.validation.constraints.NotNull");
             }
         }
         return importList;
@@ -358,7 +361,7 @@ public class VelocityUtils {
             fileName = StrUtils.format("{}/view/{}/{}/data.ts", vuePath, moduleName, businessName);
         } else if (template.contains("index.vue.vm")) {
             fileName = StrUtils.format("{}/view/{}/{}/index.vue", vuePath, moduleName, businessName);
-        } else if (template.contains("model.vue.vm")) {
+        } else if (template.contains("modal.vue.vm")) {
             fileName = StrUtils.format("{}/view/{}/{}/{}-model.vue", vuePath, moduleName,
                     businessName, businessName);
         }

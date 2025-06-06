@@ -2,8 +2,13 @@ package com.aixbox.demo.domain.vo.request;
 
 
 import com.aixbox.common.core.pojo.PageParam;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * demo 分页参数
@@ -21,6 +26,22 @@ public class DemoTestPageReq extends PageParam {
              * 创建者
              */
         private String creator;
+
+            /**
+             * 创建时间
+             */
+        @NotNull(message = "创建时间不能为空")
+        private LocalDate[] createTime;
+
+            /**
+             * 性别
+             */
+        private Long sex;
+
+            /**
+             * 是否
+             */
+        private Long isOrNot;
 
 
 

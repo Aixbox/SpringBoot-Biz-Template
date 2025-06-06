@@ -23,20 +23,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectGenTableById" parameterType="Long" resultMap="GenTableResult">
         <include refid="genSelect"/>
-        where t.table_id = #{tableId} order by c.sort
+        where t.table_id = #{tableId} and t.deleted = 0 and c.deleted = 0 order by c.sort
     </select>
 
     <select id="selectGenTableByName" parameterType="String" resultMap="GenTableResult">
         <include refid="genSelect"/>
-        where t.table_name = #{tableName} order by c.sort
+        where t.table_name = #{tableName} and t.deleted = 0 and c.deleted = 0 order by c.sort
     </select>
 
     <select id="selectGenTableAll" parameterType="String" resultMap="GenTableResult">
         <include refid="genSelect"/>
-        order by c.sort
+        and t.deleted = 0 and c.deleted = 0 order by c.sort
     </select>
 
     <select id="selectTableNameList" resultType="java.lang.String">
-        select table_name from gen_table where data_name = #{dataName,jdbcType=VARCHAR}
+        select table_name from gen_table where data_name = #{dataName,jdbcType=VARCHAR} and deleted = 0
     </select>
 </mapper>

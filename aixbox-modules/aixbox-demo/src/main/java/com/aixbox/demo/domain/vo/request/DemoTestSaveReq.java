@@ -14,5 +14,20 @@ public class DemoTestSaveReq {
              */
             private String name;
 
+            /**
+             * 创建者
+             */
+            private String creator;
+
+            /**
+             * 性别
+             */
+            private Long sex;
+
+            /**
+             * 是否
+             */
+            private Long isOrNot;
+
 
 }
