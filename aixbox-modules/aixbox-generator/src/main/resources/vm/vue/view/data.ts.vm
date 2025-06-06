@@ -1,0 +1,209 @@
+import type { FormSchemaGetter } from '#/adapter/form';
+import type { VxeGridProps } from '#/adapter/vxe-table';
+
+import { DictEnum } from '@vben/constants';
+import { getPopupContainer } from '@vben/utils';
+
+import { getDictOptions } from '#/utils/dict';
+import { renderDict } from '#/utils/render';
+
+
+
+export const querySchema: FormSchemaGetter = () => [
+#foreach($column in $columns)
+  #if($column.query)
+    #set($dictType=$column.dictType)
+    #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
+    #set($parentheseIndex=$column.columnComment.indexOf("（"))
+    #if($parentheseIndex != -1)
+      #set($comment=$column.columnComment.substring(0, $parentheseIndex))
+    #else
+      #set($comment=$column.columnComment)
+    #end
+    #if($column.htmlType == "input" || $column.htmlType == "textarea")
+    {
+      component: 'Input',
+      fieldName: '${column.javaField}',
+      label: '${comment}',
+    },
+    #elseif(($column.htmlType == "select" || $column.htmlType == "radio") && "" != $dictType)
+    {
+      component: 'Select',
+      componentProps: {
+      getPopupContainer,
+      options: getDictOptions(DictEnum.${dictType}),
+    },
+      fieldName: '${column.javaField}',
+      label: '${comment}',
+    },
+    #elseif($column.htmlType == "datetime" && $column.queryType != "BETWEEN")
+    {
+      component: 'DatePicker',
+      fieldName: '${column.javaField}',
+      label: '${comment}',
+    },
+    #elseif($column.htmlType == "datetime" && $column.queryType == "BETWEEN")
+    {
+      component: 'RangePicker',
+      fieldName: '${column.javaField}',
+      label: '${comment}',
+    },
+    #end
+  #end
+#end
+
+];
+
+export const columns: VxeGridProps['columns'] = [
+  { type: 'checkbox', width: 60 },
+#foreach($column in $columns)
+  #set($javaField=$column.javaField)
+  #set($parentheseIndex=$column.columnComment.indexOf("（"))
+  #if($parentheseIndex != -1)
+    #set($comment=$column.columnComment.substring(0, $parentheseIndex))
+  #else
+    #set($comment=$column.columnComment)
+  #end
+  #if($column.list && $column.htmlType == "imageUpload")
+    //todo 图片类型
+  #elseif($column.list && $column.dictType && "" != $column.dictType)
+    #if($column.htmlType == "checkbox")
+      //todo 渲染多个
+      {
+        title: '${comment}',
+        field: '${javaField}',
+        width: 120,
+        slots: {
+          default: ({ row }) => {
+            return renderDict(row.${javaField}, DictEnum.${column.dictType});
+          },
+        },
+      },
+    #else
+            {
+              title: '${comment}',
+              field: '${javaField}',
+              width: 120,
+              slots: {
+                default: ({ row }) => {
+                  return renderDict(row.${javaField}, DictEnum.${column.dictType});
+                },
+              },
+            },
+    #end
+  #elseif($column.list && "" != $javaField)
+    {
+      title: '${comment}',
+      field: '${javaField}',
+    },
+  #end
+#end
+];
+
+export const modalSchema: FormSchemaGetter = () => [
+#foreach($column in $columns)
+  #if($column.insert || $column.edit)
+    #set($dictType=$column.dictType)
+    #set($javaField=$column.javaField)
+    #set($parentheseIndex=$column.columnComment.indexOf("（"))
+    #if($parentheseIndex != -1)
+      #set($comment=$column.columnComment.substring(0, $parentheseIndex))
+    #else
+      #set($comment=$column.columnComment)
+    #end
+    #if($column.pk)
+  {
+    component: 'Input',
+    dependencies: {
+      show: () => false,
+      triggerFields: [''],
+    },
+    fieldName: '${javaField}',
+    label: '${comment}',
+  },
+    #elseif($column.htmlType == "input")
+  {
+    component: 'Input',
+    fieldName: '${javaField}',
+    label: '${comment}',
+    #if($column.required)
+    rules: 'required',
+    #end
+  },
+    #elseif($column.htmlType == "textarea")
+  {
+    component: 'Textarea',
+    formItemClass: 'items-start',
+    fieldName: '${javaField}',
+    label: '${comment}',
+    componentProps: {
+      autoSize: true,
+    },
+    #if($column.required)
+    rules: 'required',
+    #end
+  },
+    #elseif($column.htmlType == "select" && "" != $dictType)
+  {
+    component: 'Select',
+    componentProps: {
+      getPopupContainer,
+      options: getDictOptions(DictEnum.${dictType}),
+    },
+    fieldName: '${javaField}',
+    label: '${comment}',
+    #if($column.required)
+    rules: 'required',
+    #end
+  },
+    #elseif($column.htmlType == "radio" && "" != $dictType)
+  {
+    component: 'RadioGroup',
+    componentProps: {
+      buttonStyle: 'solid',
+      options: getDictOptions(DictEnum.${dictType}),
+      optionType: 'button',
+    },
+    #if($column.required)
+    defaultValue: '',
+    #end
+    fieldName: '${javaField}',
+    label: '${comment}',
+    #if($column.required)
+    rules: 'required',
+    #end
+  },
+    #elseif($column.htmlType == "datetime")
+  {
+    component: 'DatePicker',
+    fieldName: '${javaField}',
+    label: '${comment}',
+    #if($column.required)
+    rules: 'required',
+    #end
+  },
+    #elseif($column.htmlType == "checkbox" && "" != $dictType)
+  {
+    component: 'CheckboxGroup',
+    componentProps: {
+      options: getDictOptions(DictEnum.${dictType}),
+    },
+    fieldName: '${javaField}',
+    label: '${comment}',
+    #if($column.required)
+    rules: 'required',
+    #end
+  },
+    #elseif($column.htmlType == "imageUpload")
+  {
+    component: 'Upload',
+    fieldName: '${javaField}',
+    label: '${comment}',
+    #if($column.required)
+    rules: 'required',
+    #end
+  },
+    #end
+  #end
+#end
+];
