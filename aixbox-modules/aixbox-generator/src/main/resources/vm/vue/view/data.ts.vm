@@ -67,30 +67,28 @@ export const columns: VxeGridProps['columns'] = [
   #if($column.list && $column.htmlType == "imageUpload")
     //todo 图片类型
   #elseif($column.list && $column.dictType && "" != $column.dictType)
-    #if($column.htmlType == "checkbox")
-      //todo 渲染多个
-      {
-        title: '${comment}',
-        field: '${javaField}',
-        width: 120,
-        slots: {
-          default: ({ row }) => {
+    {
+      title: '${comment}',
+      field: '${javaField}',
+      width: 120,
+      slots: {
+        default: ({ row }) => {
+          #if($column.htmlType == "checkbox")
+            if (typeof row.${javaField} === 'string' && row.${javaField}.includes(',')) {
+              return row.${javaField}
+                      .split(',')
+                      .map((item) => renderDict(item.trim(), DictEnum.${column.dictType}))
+                      .join(', ');
+            }
+          #else
             return renderDict(row.${javaField}, DictEnum.${column.dictType});
-          },
+          #end
+
+
         },
       },
-    #else
-            {
-              title: '${comment}',
-              field: '${javaField}',
-              width: 120,
-              slots: {
-                default: ({ row }) => {
-                  return renderDict(row.${javaField}, DictEnum.${column.dictType});
-                },
-              },
-            },
-    #end
+    },
+
   #elseif($column.list && "" != $javaField)
     {
       title: '${comment}',
