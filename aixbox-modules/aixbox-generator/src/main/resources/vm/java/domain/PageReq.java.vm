@@ -4,6 +4,9 @@ package ${packageName}.domain.vo.request;
 import com.aixbox.common.core.pojo.PageParam;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+#foreach ($import in $importList)
+import ${import};
+#end
 
 /**
  * ${functionName} 分页参数
@@ -24,7 +27,12 @@ public class ${ClassName}PageReq extends PageParam {
                 @NotNull(message = "$column.columnComment不能为空")
                 #end
             #end
-        private $column.javaType $column.javaField;
+            #if (${column.queryType} == "BETWEEN")##情况八，Between 的时候
+            private ${column.javaType}[] $column.javaField;
+            #else
+            private $column.javaType $column.javaField;
+            #end
+
 
         #end
     #end

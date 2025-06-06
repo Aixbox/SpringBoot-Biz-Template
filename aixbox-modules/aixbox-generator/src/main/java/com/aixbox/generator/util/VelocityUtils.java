@@ -96,6 +96,7 @@ public class VelocityUtils {
     }
 
     /**
+     * todo 这里区分开编辑、查询、新增等不同类的导入包函数
      * 根据列类型获取导入包
      *
      * @param genTable 业务表对象
@@ -105,7 +106,7 @@ public class VelocityUtils {
         List<GenTableColumn> columns = genTable.getColumns();
         HashSet<String> importList = new HashSet<>();
         for (GenTableColumn column : columns) {
-            if (!column.isSuperColumn() && GenConstants.TYPE_DATE.equals(column.getJavaType())) {
+            if (GenConstants.TYPE_DATE.equals(column.getJavaType())) {
                 importList.add("java.time.LocalDate");
             } else if (!column.isSuperColumn() && GenConstants.TYPE_BIGDECIMAL.equals(column.getJavaType())) {
                 importList.add("java.math.BigDecimal");

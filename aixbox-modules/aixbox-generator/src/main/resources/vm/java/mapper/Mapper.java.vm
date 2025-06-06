@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Mapper;
 import ${packageName}.domain.entity.${ClassName};
 import ${packageName}.domain.vo.request.${ClassName}PageReq;
 
+import java.util.List;
+
 
 ## 字段模板
 #macro(listCondition)
