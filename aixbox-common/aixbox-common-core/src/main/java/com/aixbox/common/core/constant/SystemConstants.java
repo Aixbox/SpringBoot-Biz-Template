@@ -20,12 +20,12 @@ public interface SystemConstants {
     /**
      * 是否为系统默认（是）
      */
-    String YES = "Y";
+    Boolean YES = true;
 
     /**
      * 是否为系统默认（否）
      */
-    String NO = "N";
+    Boolean NO = false;
 
     /**
      * 是否菜单外链（是）

@@ -41,7 +41,7 @@ public class SysConfigUpdateReq {
     /**
     * 系统内置（Y是 N否）
     */
-    private String configType;
+    private Boolean configType;
     /**
     * 备注
     */

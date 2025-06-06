@@ -88,7 +88,7 @@ public class SysConfigServiceImpl implements SysConfigService {
     public Boolean deleteSysConfig(List<Long> ids) {
         for (Long configId : ids) {
             SysConfig config = sysConfigMapper.selectById(configId);
-            if (StrUtils.equals(SystemConstants.YES, config.getConfigType())) {
+            if (config.getConfigType()) {
                 throw new ServiceException(String.format("内置参数【%1$s】不能删除 ", config.getConfigKey()));
             }
             CacheUtils.evict(CacheNames.SYS_CONFIG, config.getConfigKey());

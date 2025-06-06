@@ -38,7 +38,7 @@ public class SysConfigResp {
     */
     @ExcelProperty(value = "系统内置", converter = ExcelDictConvert.class)
     @ExcelDictFormat(dictType = "sys_yes_no")
-    private String configType;
+    private Boolean configType;
     /**
     * 备注
     */
