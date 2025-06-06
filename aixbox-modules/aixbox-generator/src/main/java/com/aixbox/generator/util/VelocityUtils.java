@@ -280,7 +280,11 @@ public class VelocityUtils {
         templates.add("vm/java/service/ServiceImpl.java.vm");
         templates.add("vm/java/test/ServiceImplTest.java.vm");
         templates.add("vm/java/constant/ErrorCodeConstants.java.vm");
-        templates.add("vm/sql/h2.sql.vm");
+        templates.add("vm/vue/api/index.ts.vm");
+        templates.add("vm/vue/api/model.d.ts.vm");
+        templates.add("vm/vue/view/data.ts.vm");
+        templates.add("vm/vue/view/index.vue.vm");
+        templates.add("vm/vue/view/modal.vue.vm");
         DbType dbType = JdbcUtils.getDbType();
         //todo 要修改为自己的vm文件
         //if (ObjectUtil.equals(dbType, DbType.ORACLE)) {
@@ -319,7 +323,7 @@ public class VelocityUtils {
 
         String javaPath = PROJECT_PATH + "/" + StringUtils.replace(packageName, ".", "/");
         String mybatisPath = MYBATIS_PATH + "/" + moduleName;
-        String vuePath = "vue";
+        String vuePath = "vue/src";
 
         //todo 文件路径修改成自己的路径
         if (template.contains("Controller.java.vm")) {
@@ -346,6 +350,17 @@ public class VelocityUtils {
             fileName = StrUtils.format("{}/constant/ErrorCodeConstants.java", javaPath, className);
         } else if (template.contains("h2.sql.vm")) {
             fileName = StrUtils.format("sql/{}H2.sql", className);
+        } else if (template.contains("index.ts.vm")) {
+            fileName = StrUtils.format("{}/api/{}/{}/index.ts", vuePath, moduleName, businessName);
+        } else if (template.contains("model.d.ts.vm")) {
+            fileName = StrUtils.format("{}/api/{}/{}/model.d.ts", vuePath, moduleName, businessName);
+        } else if (template.contains("data.ts.vm")) {
+            fileName = StrUtils.format("{}/view/{}/{}/data.ts", vuePath, moduleName, businessName);
+        } else if (template.contains("index.vue.vm")) {
+            fileName = StrUtils.format("{}/view/{}/{}/index.vue", vuePath, moduleName, businessName);
+        } else if (template.contains("model.vue.vm")) {
+            fileName = StrUtils.format("{}/view/{}/{}/{}-model.vue", vuePath, moduleName,
+                    businessName, businessName);
         }
 
 
