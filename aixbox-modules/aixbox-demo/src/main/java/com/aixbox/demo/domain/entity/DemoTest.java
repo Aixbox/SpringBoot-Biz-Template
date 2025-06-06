@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 /**
  * demo对象
  */
-@TableName(value ="demo表")
+@TableName(value ="demo_test")
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class DemoTest extends BaseDO {
