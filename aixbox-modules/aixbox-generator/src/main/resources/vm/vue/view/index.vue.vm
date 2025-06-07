@@ -32,10 +32,18 @@ const formOptions: VbenFormProps = {
   // 日期选择格式化
   fieldMappingTime: [
   #foreach ($column in $columns)
-    #if($column.htmlType == "datetime" && $column.queryType == "BETWEEN")
+    #if($column.htmlType == "datetime" && $column.queryType == "BETWEEN" && ${column.javaField}
+    == "LocalDateTime")
       [
         '$column.javaField',
-        ['params[beginTime]', 'params[endTime]'],
+        ['$column.javaField[0]', '$column.javaField[1]'],
+        ['YYYY-MM-DD', 'YYYY-MM-DD'],
+      ],
+    #elseif ($column.htmlType == "datetime" && $column.queryType == "BETWEEN" && ${column.javaField}
+    == "LocalDate")
+      [
+        '$column.javaField',
+        ['$column.javaField[0]', '$column.javaField[1]'],
         ['YYYY-MM-DD 00:00:00', 'YYYY-MM-DD 23:59:59'],
       ],
     #end
