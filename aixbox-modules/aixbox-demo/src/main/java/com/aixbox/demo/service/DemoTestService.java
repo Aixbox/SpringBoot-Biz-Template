@@ -9,42 +9,42 @@ import com.aixbox.demo.domain.vo.request.DemoTestUpdateReq;
 import java.util.List;
 
 /**
- * demoService接口
+ * 测试Service接口
  */
 public interface DemoTestService {
 
     /**
-     * 新增demo
+     * 新增测试
      * @param addReq 新增参数
-     * @return demoid
+     * @return 测试id
      */
      Long addDemoTest(DemoTestSaveReq addReq);
 
     /**
-     * 修改demo
+     * 修改测试
      * @param updateReq 修改参数
      * @return 是否成功
      */
     Boolean updateDemoTest(DemoTestUpdateReq updateReq);
 
     /**
-     * 删除demo
+     * 删除测试
      * @param ids 删除id数组
      * @return 是否成功
      */
     Boolean deleteDemoTest(List<Long> ids);
 
     /**
-     * 获取demo详细数据
+     * 获取测试详细数据
      * @param id 数据id
-     * @return demo对象
+     * @return 测试对象
      */
      DemoTest getDemoTest(Long id);
 
     /**
-     * 分页查询demo
+     * 分页查询测试
      * @param pageReq 分页查询参数
-     * @return demo分页对象
+     * @return 测试分页对象
      */
     PageResult<DemoTest> getDemoTestPage(DemoTestPageReq pageReq);
 }

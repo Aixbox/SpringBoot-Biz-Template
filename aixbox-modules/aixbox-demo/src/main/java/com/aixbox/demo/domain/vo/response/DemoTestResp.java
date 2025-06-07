@@ -5,11 +5,12 @@ import com.aixbox.common.excel.convert.ExcelDictConvert;
 import lombok.Data;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
-
-import java.util.Date;
+import jakarta.validation.constraints.NotBlank;
+import java.time.LocalDate;
+import jakarta.validation.constraints.NotNull;
 
 /**
- * demo返回参数
+ * 测试返回参数
  */
 @Data
 @ExcelIgnoreUnannotated
@@ -25,19 +26,7 @@ public class DemoTestResp {
              * 名字
              */
             @ExcelProperty(value = "名字")
-            private String name;
-
-            /**
-             * 创建者
-             */
-            @ExcelProperty(value = "创建者")
-            private String creator;
-
-            /**
-             * 创建时间
-             */
-            @ExcelProperty(value = "创建时间")
-            private Date createTime;
+            private String inputType;
 
             /**
              * 性别
@@ -47,11 +36,46 @@ public class DemoTestResp {
             private Long sex;
 
             /**
+             * 创建时间
+             */
+            @ExcelProperty(value = "创建时间")
+            private LocalDate createTime;
+
+            /**
+             * int类型
+             */
+            @ExcelProperty(value = "int类型")
+            private String integerType;
+
+            /**
+             * 文本域类型
+             */
+            @ExcelProperty(value = "文本域类型")
+            private String textareaType;
+
+            /**
+             * 选择类型
+             */
+            @ExcelProperty(value = "选择类型")
+            private String selectType;
+
+                /**
+                 * 选择类型Url
+                 */
+                private String selectTypeUrl;
+            /**
              * 是否
              */
             @ExcelProperty(value = "是否", converter = ExcelDictConvert.class)
             @ExcelDictFormat(dictType = "sys_yes_no")
-            private Boolean isOrNot;
+            private Boolean radioIsOrNot;
+
+            /**
+             * 复选框类型
+             */
+            @ExcelProperty(value = "复选框类型", converter = ExcelDictConvert.class)
+            @ExcelDictFormat(dictType = "sys_device_type")
+            private String checkboxType;
 
 
 

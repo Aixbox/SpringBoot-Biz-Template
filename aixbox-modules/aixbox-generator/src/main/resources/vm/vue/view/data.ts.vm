@@ -5,7 +5,7 @@ import { DictEnum } from '@vben/constants';
 import { getPopupContainer } from '@vben/utils';
 
 import { getDictOptions } from '#/utils/dict';
-import { renderDict } from '#/utils/render';
+import { renderDict, renderDictTags } from '#/utils/render';
 
 
 
@@ -27,15 +27,23 @@ export const querySchema: FormSchemaGetter = () => [
       label: '${comment}',
     },
     #elseif(($column.htmlType == "select" || $column.htmlType == "radio") && "" != $dictType)
-    {
-      component: 'Select',
-      componentProps: {
-      getPopupContainer,
-      options: getDictOptions(DictEnum.${dictType}),
-    },
-      fieldName: '${column.javaField}',
-      label: '${comment}',
-    },
+      {
+        component: 'Select',
+        componentProps: {
+          getPopupContainer,
+      #if($column.javaType == "Integer")
+          options: getDictOptions(DictEnum.${dictType}, true),
+      #elseif($column.javaType == "Boolean")
+          options: getDictOptions(DictEnum.${dictType}, false, true),
+      #else
+          options: getDictOptions(DictEnum.${dictType}),
+      #end
+        },
+        fieldName: '${column.javaField}',
+        label: '${comment}',
+      },
+
+
     #elseif($column.htmlType == "datetime" && $column.queryType != "BETWEEN")
     {
       component: 'DatePicker',
@@ -75,13 +83,26 @@ export const columns: VxeGridProps['columns'] = [
         default: ({ row }) => {
           #if($column.htmlType == "checkbox")
             if (typeof row.${javaField} === 'string' && row.${javaField}.includes(',')) {
-              return row.${javaField}
+              const values = row.${javaField}
                       .split(',')
-                      .map((item) => renderDict(item.trim(), DictEnum.${column.dictType.toUpperCase()}))
-                      .join(', ');
+                      .map((item: any) => item.trim());
+              return renderDictTags(
+                      values,
+                      getDictOptions(DictEnum.${column.dictType.toUpperCase()}),
+                      false,
+              );
             }
+            return row.${javaField} || '';
           #else
-            return renderDict(row.${javaField}, DictEnum.${column.dictType.toUpperCase()});
+            #if($column.javaType == "Integer")
+              return renderDict(row.${javaField}, DictEnum.${column.dictType.toUpperCase()}, true);
+            #elseif($column.java Type == "Boolean")
+              return renderDict(row.${javaField}, DictEnum.${column.dictType.toUpperCase()},
+                      false, true);
+            #else
+              return renderDict(row.${javaField}, DictEnum.${column.dictType.toUpperCase()});
+            #end
+
           #end
 
 

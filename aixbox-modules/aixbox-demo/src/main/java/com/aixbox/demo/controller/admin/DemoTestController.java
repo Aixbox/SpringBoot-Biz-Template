@@ -39,7 +39,7 @@ import static com.aixbox.demo.constant.ErrorCodeConstants.DELETE_DEMO_TEST_ERROR
 import static com.aixbox.demo.constant.ErrorCodeConstants.UPDATE_DEMO_TEST_ERROR;
 
 /**
- * demo Controller
+ * 测试 Controller
  */
 @Validated
 @RequiredArgsConstructor
@@ -50,9 +50,9 @@ public class DemoTestController {
     private final DemoTestService demoTestService;
 
     /**
-     * 新增demo
+     * 新增测试
      * @param addReq 新增参数
-     * @return demo id
+     * @return 测试 id
      */
     @SaCheckPermission("demo:test:add")
     @PostMapping("/add")
@@ -62,7 +62,7 @@ public class DemoTestController {
     }
 
     /**
-     * 修改demo
+     * 修改测试
      * @param updateReq 修改参数
      * @return 是否成功
      */
@@ -74,7 +74,7 @@ public class DemoTestController {
     }
 
     /**
-     * 删除demo
+     * 删除测试
      * @param ids 删除id数组
      * @return 是否成功
      */
@@ -87,8 +87,8 @@ public class DemoTestController {
     }
 
     /**
-     * 获取demo详细信息
-     * @param id demoid
+     * 获取测试详细信息
+     * @param id 测试id
      * @return DemoTestResp 对象
      */
     @SaCheckPermission("demo:test:query")
@@ -99,7 +99,7 @@ public class DemoTestController {
     }
 
     /**
-     * 分页查询demo
+     * 分页查询测试
      * @param pageReq 分页参数
      * @return DemoTestResp分页对象
      */
@@ -111,7 +111,7 @@ public class DemoTestController {
     }
 
     /**
-     * 导出demo列表
+     * 导出测试列表
      */
     @SaCheckPermission("demo:test:export")
     @PostMapping("/export")
@@ -119,7 +119,7 @@ public class DemoTestController {
         pageReq.setPageSize(PageParam.PAGE_SIZE_NONE);
         List<DemoTest> list = demoTestService.getDemoTestPage(pageReq).getList();
         List<DemoTestResp> respList = BeanUtils.toBean(list, DemoTestResp.class);
-        ExcelUtil.exportExcel(respList, "demo", DemoTestResp.class, response);
+        ExcelUtil.exportExcel(respList, "测试", DemoTestResp.class, response);
     }
 
 

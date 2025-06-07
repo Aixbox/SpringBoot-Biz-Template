@@ -19,6 +19,16 @@ const title = computed(() => {
 });
 
 const [BasicForm, formApi] = useVbenForm({
+arrayToStringFields: [
+  #foreach($column in $columns)
+    #if($column.insert || $column.edit)
+      #set($dictType=$column.dictType.toUpperCase())
+      #if($column.htmlType == "checkbox" && "" != $dictType)
+        '${javaField}',
+      #end
+    #end
+  #end
+],
   commonConfig: {
     labelWidth: 80,
   },
@@ -64,7 +74,7 @@ async function handleConfirm() {
     if (!valid) {
       return;
     }
-    const data = cloneDeep(await formApi.getValues());
+    const data = cloneDeep(await formApi.submitForm());
     await (isUpdate.value ? ${businessName}Update(data) : ${businessName}Add(data));
     resetInitialized();
     emit('reload');

@@ -17,7 +17,7 @@ import static com.aixbox.common.core.exception.util.ServiceExceptionUtil.excepti
 import static com.aixbox.demo.constant.ErrorCodeConstants.DEMO_TEST_NOT_EXISTS;
 
 /**
-* demoService实现类
+* 测试Service实现类
 */
 @RequiredArgsConstructor
 @Service
@@ -26,9 +26,9 @@ public class DemoTestServiceImpl implements DemoTestService {
     private final DemoTestMapper demoTestMapper;
 
     /**
-     * 新增demo
+     * 新增测试
      * @param addReq 新增参数
-     * @return demoid
+     * @return 测试id
      */
     @Override
     public Long addDemoTest(DemoTestSaveReq addReq) {
@@ -39,7 +39,7 @@ public class DemoTestServiceImpl implements DemoTestService {
     }
 
     /**
-     * 修改demo
+     * 修改测试
      * @param updateReq 修改参数
      * @return 是否成功
      */
@@ -51,8 +51,8 @@ public class DemoTestServiceImpl implements DemoTestService {
     }
 
     /**
-     * 删除demo
-     * @param ids demoid数组
+     * 删除测试
+     * @param ids 测试id数组
      * @return 是否成功
      */
     @Override
@@ -62,8 +62,8 @@ public class DemoTestServiceImpl implements DemoTestService {
     }
 
     /**
-     * 验证demo是否存在
-     * @param ids demoid数组
+     * 验证测试是否存在
+     * @param ids 测试id数组
      */
     private void validateDemoTestExists(List<Long> ids) {
         Long count = demoTestMapper.countByIds(ids);
@@ -73,9 +73,9 @@ public class DemoTestServiceImpl implements DemoTestService {
     }
 
     /**
-     * 获取demo详细数据
-     * @param id demoid
-     * @return demo对象
+     * 获取测试详细数据
+     * @param id 测试id
+     * @return 测试对象
      */
     @Override
     public DemoTest getDemoTest(Long id) {
@@ -83,9 +83,9 @@ public class DemoTestServiceImpl implements DemoTestService {
     }
 
     /**
-     * 分页查询demo
+     * 分页查询测试
      * @param pageReq 分页查询参数
-     * @return demo分页对象
+     * @return 测试分页对象
      */
     @Override
     public PageResult<DemoTest> getDemoTestPage(DemoTestPageReq pageReq) {

@@ -2,45 +2,72 @@ package com.aixbox.demo.domain.vo.request;
 
 
 import com.aixbox.common.core.pojo.PageParam;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
+import jakarta.validation.constraints.NotNull;
 
 /**
- * demo 分页参数
+ * 测试 分页参数
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class DemoTestPageReq extends PageParam {
 
             /**
+             * id
+             */
+            private Long id;
+
+
+            /**
              * 名字
              */
-        private String name;
+            private String inputType;
 
-            /**
-             * 创建者
-             */
-        private String creator;
-
-            /**
-             * 创建时间
-             */
-        private LocalDate[] createTime;
 
             /**
              * 性别
              */
-        private Long sex;
+            private Long sex;
+
+
+            /**
+             * 创建时间
+             */
+            private LocalDate[] createTime;
+
+
+            /**
+             * int类型
+             */
+            private String integerType;
+
+
+            /**
+             * 文本域类型
+             */
+            private String textareaType;
+
+
+            /**
+             * 选择类型
+             */
+            private String selectType;
+
 
             /**
              * 是否
              */
-        private Boolean isOrNot;
+            private Boolean radioIsOrNot;
+
+
+            /**
+             * 复选框类型
+             */
+            private String checkboxType;
+
 
 
 

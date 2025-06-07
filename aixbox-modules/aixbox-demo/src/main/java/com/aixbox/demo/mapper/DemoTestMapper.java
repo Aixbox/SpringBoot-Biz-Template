@@ -11,8 +11,10 @@ import com.aixbox.demo.domain.vo.request.DemoTestPageReq;
 import java.util.List;
 
 
+
+
 /**
-* demo Mapper接口
+* 测试 Mapper接口
 */
 @Mapper
 public interface DemoTestMapper extends BaseMapperX<DemoTest> {
@@ -23,11 +25,15 @@ public interface DemoTestMapper extends BaseMapperX<DemoTest> {
     */
     default PageResult<DemoTest> selectPage(DemoTestPageReq reqVO) {
         return selectPage(reqVO, new LambdaQueryWrapperX<DemoTest>()
-                    .likeIfPresent(DemoTest::getName, reqVO.getName())
-                    .eqIfPresent(DemoTest::getCreator, reqVO.getCreator())
-                    .betweenIfPresent(DemoTest::getCreateTime, reqVO.getCreateTime())
+                    .eqIfPresent(DemoTest::getId, reqVO.getId())
+                    .likeIfPresent(DemoTest::getInputType, reqVO.getInputType())
                     .eqIfPresent(DemoTest::getSex, reqVO.getSex())
-                    .eqIfPresent(DemoTest::getIsOrNot, reqVO.getIsOrNot())
+                    .betweenIfPresent(DemoTest::getCreateTime, reqVO.getCreateTime())
+                    .eqIfPresent(DemoTest::getIntegerType, reqVO.getIntegerType())
+                    .eqIfPresent(DemoTest::getTextareaType, reqVO.getTextareaType())
+                    .eqIfPresent(DemoTest::getSelectType, reqVO.getSelectType())
+                    .eqIfPresent(DemoTest::getRadioIsOrNot, reqVO.getRadioIsOrNot())
+                    .eqIfPresent(DemoTest::getCheckboxType, reqVO.getCheckboxType())
                 .orderByDesc(DemoTest::getId));    }
 
     default Long countByIds(List<Long> ids) {

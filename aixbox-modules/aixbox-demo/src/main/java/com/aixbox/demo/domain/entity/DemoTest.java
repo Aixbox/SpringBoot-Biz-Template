@@ -6,8 +6,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+
 /**
- * demo对象
+ * 测试对象
  */
 @TableName(value ="demo_test")
 @Data
@@ -23,7 +24,7 @@ public class DemoTest extends BaseDO {
             /**
              * 名字
              */
-            private String name;
+            private String inputType;
 
             /**
              * 性别
@@ -31,9 +32,34 @@ public class DemoTest extends BaseDO {
             private Long sex;
 
             /**
+             * 更新者
+             */
+            private String updater;
+
+            /**
+             * int类型
+             */
+            private String integerType;
+
+            /**
+             * 文本域类型
+             */
+            private String textareaType;
+
+            /**
+             * 选择类型
+             */
+            private String selectType;
+
+            /**
              * 是否
              */
-            private Boolean isOrNot;
+            private Boolean radioIsOrNot;
+
+            /**
+             * 复选框类型
+             */
+            private String checkboxType;
 
 
 

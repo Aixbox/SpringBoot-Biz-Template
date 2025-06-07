@@ -125,8 +125,8 @@ public class VelocityUtils {
                 importList.add("java.math.BigDecimal");
             } else if (!column.isSuperColumn() && "imageUpload".equals(column.getHtmlType())) {
                 //todo 后期如果进入这个逻辑，修改成自己的类
-                importList.add("org.dromara.common.translation.annotation.Translation");
-                importList.add("org.dromara.common.translation.constant.TransConstant");
+                //importList.add("org.dromara.common.translation.annotation.Translation");
+                //importList.add("org.dromara.common.translation.constant.TransConstant");
             } else if (column.isRequired() && GenConstants.TYPE_STRING.equals(column.getJavaType())) {
                 importList.add("jakarta.validation.constraints.NotBlank");
             } else if (column.isRequired() && !GenConstants.TYPE_STRING.equals(column.getJavaType())) {

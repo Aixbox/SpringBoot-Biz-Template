@@ -2,22 +2,26 @@ package com.aixbox.demo.domain.vo.request;
 
 
 import lombok.Data;
+import jakarta.validation.constraints.NotBlank;
+import java.time.LocalDate;
+import jakarta.validation.constraints.NotNull;
 
 /**
- * demo新增参数
+ * 测试新增参数
  */
 @Data
 public class DemoTestSaveReq {
 
             /**
-             * 名字
+             * id
              */
-            private String name;
+            private Long id;
 
             /**
-             * 创建者
+             * 名字
              */
-            private String creator;
+                @NotBlank(message = "名字不能为空")
+            private String inputType;
 
             /**
              * 性别
@@ -25,9 +29,29 @@ public class DemoTestSaveReq {
             private Long sex;
 
             /**
+             * int类型
+             */
+            private String integerType;
+
+            /**
+             * 文本域类型
+             */
+            private String textareaType;
+
+            /**
+             * 选择类型
+             */
+            private String selectType;
+
+            /**
              * 是否
              */
-            private Boolean isOrNot;
+            private Boolean radioIsOrNot;
+
+            /**
+             * 复选框类型
+             */
+            private String checkboxType;
 
 
 }
