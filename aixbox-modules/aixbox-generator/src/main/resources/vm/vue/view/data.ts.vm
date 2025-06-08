@@ -126,7 +126,11 @@ export const columns: VxeGridProps['columns'] = [
   },
 ];
 
+#if($popupComponent == "drawer")
+export const drawerSchema: FormSchemaGetter = () => [
+#else
 export const modalSchema: FormSchemaGetter = () => [
+#end
 #foreach($column in $columns)
   #if($column.insert || $column.edit)
     #set($dictType=$column.dictType.toUpperCase())

@@ -56,6 +56,8 @@ public class VelocityUtils {
         String packageName = genTable.getPackageName();
         String tplCategory = genTable.getTplCategory();
         String functionName = genTable.getFunctionName();
+        String options = genTable.getOptions();
+        Dict optionsDict = JsonUtils.parseMap(options);
 
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("tplCategory", genTable.getTplCategory());
@@ -78,6 +80,7 @@ public class VelocityUtils {
         velocityContext.put("dicts", getDicts(genTable));
         velocityContext.put("dictEnums", getDictEnums(genTable));
         velocityContext.put("CLASS_NAME", StrUtils.camelToUnderscoreUpper(genTable.getClassName()));
+        velocityContext.put("popupComponent", optionsDict.get("popupComponent")); //弹窗组件类型
         setMenuVelocityContext(velocityContext, genTable);
         if (GenConstants.TPL_TREE.equals(tplCategory)) {
             setTreeVelocityContext(velocityContext, genTable);

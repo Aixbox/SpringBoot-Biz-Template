@@ -4,7 +4,11 @@ import type { VbenFormProps } from '@vben/common-ui';
 import type { VxeGridProps } from '#/adapter/vxe-table';
 import type { ${ClassName} } from '#/api/${moduleName}/${businessName}/model';
 
+#if($popupComponent == "drawer")
+import { Page, useVbenDrawer } from '@vben/common-ui';
+#else
 import { Page, useVbenModal } from '@vben/common-ui';
+#end
 import { getVxePopupContainer } from '@vben/utils';
 
 import { Modal, Popconfirm, Space } from 'ant-design-vue';
@@ -18,7 +22,12 @@ import {
 import { commonDownloadExcel } from '#/utils/file/download';
 
 import { columns, querySchema } from './data';
+#if($popupComponent == "drawer")
+import ${businessName}Modal from './${businessName}-drawer.vue';
+#else
 import ${businessName}Modal from './${businessName}-modal.vue';
+#end
+
 
 const formOptions: VbenFormProps = {
   commonConfig: {
@@ -84,6 +93,23 @@ const [BasicTable, tableApi] = useVbenVxeGrid({
   formOptions,
   gridOptions,
 });
+
+
+#if($popupComponent == "drawer")
+const [${BusinessName}Drawer, drawerApi] = useVbenDrawer({
+  connectedComponent: ${businessName}Drawer,
+});
+
+function handleAdd() {
+  drawerApi.setData({});
+  drawerApi.open();
+}
+
+async function handleEdit(record: ${ClassName}) {
+  drawerApi.setData({ id: record.${pkColumn.javaField} });
+  drawerApi.open();
+}
+#else
 const [${BusinessName}Modal, modalApi] = useVbenModal({
   connectedComponent: ${businessName}Modal,
 });
@@ -97,6 +123,7 @@ async function handleEdit(record: ${ClassName}) {
   modalApi.setData({ id: record.${pkColumn.javaField} });
   modalApi.open();
 }
+#end
 
 async function handleDelete(row: ${ClassName}) {
   await ${businessName}Remove([row.${pkColumn.javaField}]);
@@ -178,6 +205,10 @@ function handleDownloadExcel() {
         </Space>
       </template>
     </BasicTable>
-    <${BusinessName}Modal @reload="tableApi.query()" />
+    #if($popupComponent == "drawer")
+      <${BusinessName}Drawer @reload="tableApi.query()" />
+    #else
+      <${BusinessName}Modal @reload="tableApi.query()" />
+    #end
   </Page>
 </template>
