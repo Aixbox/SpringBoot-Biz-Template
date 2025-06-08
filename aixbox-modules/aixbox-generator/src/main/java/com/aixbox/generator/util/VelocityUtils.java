@@ -308,6 +308,8 @@ public class VelocityUtils {
         templates.add("vm/vue/view/data.ts.vm");
         templates.add("vm/vue/view/index.vue.vm");
         templates.add("vm/vue/view/dictEnum.ts.vm");
+        templates.add("vm/sql/sql.vm");
+        templates.add("vm/sql/h2.sql.vm");
         if ("drawer".equals(optionsDict.get(GenConstants.POPUP_COMPONENT))) {
             templates.add("vm/vue/view/drawer.vue.vm");
         } else {
@@ -375,7 +377,7 @@ public class VelocityUtils {
         } else if (template.contains("ServiceImpl.java.vm")) {
             fileName = StrUtils.format("{}/service/impl/{}ServiceImpl.java", javaPath, className);
         } else if (template.contains("ErrorCodeConstants.java.vm")) {
-            fileName = StrUtils.format("{}/constant/errorCode.java", javaPath, className);
+            fileName = StrUtils.format("{}/constant/ErrorCodeFile.java", javaPath, className);
         } else if (template.contains("h2.sql.vm")) {
             fileName = StrUtils.format("sql/{}H2.sql", className);
         } else if (template.contains("index.ts.vm")) {
@@ -396,6 +398,8 @@ public class VelocityUtils {
         } else if (template.contains("drawer.vue.vm")) {
             fileName = StrUtils.format("{}/views/{}/{}/{}-drawer.vue", vuePath, moduleName,
                     businessName, businessName);
+        } else if (template.contains("sql.vm")) {
+            fileName = businessName + "Menu.sql";
         }
 
 
