@@ -80,7 +80,7 @@ public class VelocityUtils {
         velocityContext.put("dicts", getDicts(genTable));
         velocityContext.put("dictEnums", getDictEnums(genTable));
         velocityContext.put("CLASS_NAME", StrUtils.camelToUnderscoreUpper(genTable.getClassName()));
-        velocityContext.put("popupComponent", optionsDict.get("popupComponent")); //弹窗组件类型
+        velocityContext.put("popupComponent", optionsDict.get(GenConstants.POPUP_COMPONENT));
         setMenuVelocityContext(velocityContext, genTable);
         if (GenConstants.TPL_TREE.equals(tplCategory)) {
             setTreeVelocityContext(velocityContext, genTable);
@@ -286,7 +286,10 @@ public class VelocityUtils {
      *
      * @return 模板列表
      */
-    public static List<String> getTemplateList(String tplCategory) {
+    public static List<String> getTemplateList(GenTable table) {
+        String options = table.getOptions();
+        Dict optionsDict = JsonUtils.parseMap(options);
+
         List<String> templates = new ArrayList<>();
         templates.add("vm/java/controller/Controller.java.vm");
         templates.add("vm/java/domain/entity.java.vm");
@@ -304,8 +307,12 @@ public class VelocityUtils {
         templates.add("vm/vue/api/model.d.ts.vm");
         templates.add("vm/vue/view/data.ts.vm");
         templates.add("vm/vue/view/index.vue.vm");
-        templates.add("vm/vue/view/modal.vue.vm");
         templates.add("vm/vue/view/dictEnum.ts.vm");
+        if ("drawer".equals(optionsDict.get(GenConstants.POPUP_COMPONENT))) {
+            templates.add("vm/vue/view/drawer.vue.vm");
+        } else {
+            templates.add("vm/vue/view/modal.vue.vm");
+        }
         DbType dbType = JdbcUtils.getDbType();
         //todo 要修改为自己的vm文件
         //if (ObjectUtil.equals(dbType, DbType.ORACLE)) {
@@ -380,11 +387,14 @@ public class VelocityUtils {
         } else if (template.contains("index.vue.vm")) {
             fileName = StrUtils.format("{}/views/{}/{}/index.vue", vuePath, moduleName,
                     businessName);
+        } else if (template.contains("dictEnum.ts.vm")) {
+            fileName = StrUtils.format("{}/enums/dictEnum.ts", vuePath, moduleName,
+                    businessName, businessName);
         } else if (template.contains("modal.vue.vm")) {
             fileName = StrUtils.format("{}/views/{}/{}/{}-modal.vue", vuePath, moduleName,
                     businessName, businessName);
-        } else if (template.contains("dictEnum.ts.vm")) {
-            fileName = StrUtils.format("{}/enums/dictEnum.ts", vuePath, moduleName,
+        } else if (template.contains("drawer.vue.vm")) {
+            fileName = StrUtils.format("{}/views/{}/{}/{}-drawer.vue", vuePath, moduleName,
                     businessName, businessName);
         }
 

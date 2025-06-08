@@ -184,4 +184,9 @@ public interface GenConstants {
      * 需要
      */
     String REQUIRE = "1";
+
+    /**
+     * 弹窗组件类型
+     */
+    String POPUP_COMPONENT = "popupComponent";
 }

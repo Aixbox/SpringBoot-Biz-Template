@@ -150,6 +150,7 @@ export const modalSchema: FormSchemaGetter = () => [
     },
     fieldName: '${javaField}',
     label: '${comment}',
+
   },
     #elseif($column.htmlType == "input")
   {
@@ -159,6 +160,13 @@ export const modalSchema: FormSchemaGetter = () => [
     #if($column.required)
     rules: 'required',
     #end
+    #if($column.insert == 0)
+      dependencies: {
+        show: (values) => !!values.id,
+        triggerFields: ['id'],
+      },
+    #end
+
   },
     #elseif($column.htmlType == "textarea")
   {
@@ -172,6 +180,12 @@ export const modalSchema: FormSchemaGetter = () => [
     #if($column.required)
     rules: 'required',
     #end
+    #if($column.insert == 0)
+      dependencies: {
+        show: (values) => !!values.id,
+        triggerFields: ['id'],
+      },
+    #end
   },
     #elseif($column.htmlType == "select" && "" != $dictType)
   {
@@ -184,6 +198,12 @@ export const modalSchema: FormSchemaGetter = () => [
     label: '${comment}',
     #if($column.required)
     rules: 'required',
+    #end
+    #if($column.insert == 0)
+      dependencies: {
+        show: (values) => !!values.id,
+        triggerFields: ['id'],
+      },
     #end
   },
     #elseif($column.htmlType == "radio" && "" != $dictType)
@@ -202,6 +222,12 @@ export const modalSchema: FormSchemaGetter = () => [
     #if($column.required)
     rules: 'required',
     #end
+    #if($column.insert == 0)
+      dependencies: {
+        show: (values) => !!values.id,
+        triggerFields: ['id'],
+      },
+    #end
   },
     #elseif($column.htmlType == "datetime")
   {
@@ -210,6 +236,12 @@ export const modalSchema: FormSchemaGetter = () => [
     label: '${comment}',
     #if($column.required)
     rules: 'required',
+    #end
+    #if($column.insert == 0)
+      dependencies: {
+        show: (values) => !!values.id,
+        triggerFields: ['id'],
+      },
     #end
   },
     #elseif($column.htmlType == "checkbox" && "" != $dictType)
@@ -223,6 +255,12 @@ export const modalSchema: FormSchemaGetter = () => [
     #if($column.required)
     rules: 'required',
     #end
+    #if($column.insert == 0)
+      dependencies: {
+        show: (values) => !!values.id,
+        triggerFields: ['id'],
+      },
+    #end
   },
     #elseif($column.htmlType == "imageUpload")
   {
@@ -231,6 +269,12 @@ export const modalSchema: FormSchemaGetter = () => [
     label: '${comment}',
     #if($column.required)
     rules: 'required',
+    #end
+    #if($column.insert == 0)
+      dependencies: {
+        show: (values) => !!values.id,
+        triggerFields: ['id'],
+      },
     #end
   },
     #end
