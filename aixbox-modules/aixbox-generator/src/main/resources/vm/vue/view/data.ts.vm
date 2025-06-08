@@ -31,7 +31,7 @@ export const querySchema: FormSchemaGetter = () => [
         component: 'Select',
         componentProps: {
           getPopupContainer,
-      #if($column.javaType == "Integer")
+      #if($column.javaType == "Integer" || $column.javaType == "Long")
           options: getDictOptions(DictEnum.${dictType}, true),
       #elseif($column.javaType == "Boolean")
           options: getDictOptions(DictEnum.${dictType}, false, true),
@@ -94,9 +94,9 @@ export const columns: VxeGridProps['columns'] = [
             }
             return row.${javaField} || '';
           #else
-            #if($column.javaType == "Integer")
+            #if($column.javaType == "Integer" || $column.javaType == "Long")
               return renderDict(row.${javaField}, DictEnum.${column.dictType.toUpperCase()}, true);
-            #elseif($column.java Type == "Boolean")
+            #elseif($column.javaType == "Boolean")
               return renderDict(row.${javaField}, DictEnum.${column.dictType.toUpperCase()},
                       false, true);
             #else
@@ -117,6 +117,13 @@ export const columns: VxeGridProps['columns'] = [
     },
   #end
 #end
+  {
+    title: '操作',
+    field: 'action',
+    fixed: 'right',
+    width: 150,
+    slots: { default: 'action' },
+  },
 ];
 
 export const modalSchema: FormSchemaGetter = () => [
