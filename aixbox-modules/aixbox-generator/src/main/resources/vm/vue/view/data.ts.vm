@@ -82,7 +82,7 @@ export const columns: VxeGridProps['columns'] = [
       slots: {
         default: ({ row }) => {
           #if($column.htmlType == "checkbox")
-            if (typeof row.${javaField} === 'string' && row.${javaField}.includes(',')) {
+            if (typeof row.${javaField} === 'string') {
               const values = row.${javaField}
                       .split(',')
                       .map((item: any) => item.trim());
