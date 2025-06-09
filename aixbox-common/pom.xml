@@ -24,6 +24,7 @@
         <module>aixbox-common-social</module>
         <module>aixbox-common-excel</module>
         <module>aixbox-common-sse</module>
+        <module>aixbox-common-oss</module>
     </modules>
 
     <properties>
