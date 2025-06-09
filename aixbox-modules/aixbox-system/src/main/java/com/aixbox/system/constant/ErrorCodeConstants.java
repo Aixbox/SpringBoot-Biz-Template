@@ -99,5 +99,15 @@ public interface ErrorCodeConstants {
     ErrorCode UPDATE_CLIENT_STATUS_ERROR = new ErrorCode(1_002_008_000, "修改客户端状态失败");
     ErrorCode DELETE_CLIENT_ERROR = new ErrorCode(1_002_008_000, "删除客户端失败");
 
+    // ========== oss对象存储模块 模块 1-002-009-??? ==========
+    ErrorCode UPDATE_SYS_OSS_ERROR = new ErrorCode(1_002_009_000, "修改oss对象存储失败");
+    ErrorCode DELETE_SYS_OSS_ERROR = new ErrorCode(1_002_009_001, "删除oss对象存储失败");
+    ErrorCode SYS_OSS_NOT_EXISTS = new ErrorCode(1_002_009_002, "oss对象存储不存在");
+
+    // ========== 对象存储配置模块 模块 1-002-010-??? ==========
+    ErrorCode UPDATE_SYS_OSS_CONFIG_ERROR = new ErrorCode(1_002_010_000, "修改对象存储配置失败");
+    ErrorCode DELETE_SYS_OSS_CONFIG_ERROR = new ErrorCode(1_002_010_001, "删除对象存储配置失败");
+    ErrorCode SYS_OSS_CONFIG_NOT_EXISTS = new ErrorCode(1_002_010_002, "对象存储配置不存在");
+
 
 }

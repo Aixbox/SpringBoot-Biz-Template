@@ -1,4 +1,4 @@
-package ${packageName}.constant;
+package com.aixbox.system.constant;
 
 
 import com.aixbox.common.core.exception.ErrorCode;
@@ -12,8 +12,5 @@ import com.aixbox.common.core.exception.ErrorCode;
 public interface ErrorCodeFile {
 
     // TODO 待办：请将下面的错误码复制到模块的 ErrorCodeConstants 类中。注意，请给“TODO 补充编号”设置一个错误码编号！！！
-    // ========== ${functionName}模块 模块 1-002-000-??? ==========
-    ErrorCode UPDATE_${CLASS_NAME}_ERROR = new ErrorCode(1_002_000_000, "修改${functionName}失败");
-    ErrorCode DELETE_${CLASS_NAME}_ERROR = new ErrorCode(1_002_000_001, "删除${functionName}失败");
-    ErrorCode ${CLASS_NAME}_NOT_EXISTS = new ErrorCode(1_002_000_002, "${functionName}不存在");
+
 }
