@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +35,6 @@ import java.util.List;
 import static com.aixbox.common.core.pojo.CommonResult.success;
 import static com.aixbox.common.core.pojo.CommonResult.toAjax;
 
-//todo 这里的 DELETE_DEMO_ERROR 需要在util添加上下文数据，全大写的函数名
 import static com.aixbox.system.constant.ErrorCodeConstants.DELETE_SYS_OSS_CONFIG_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_SYS_OSS_CONFIG_ERROR;
 
@@ -120,6 +120,15 @@ public class SysOssConfigController {
         List<SysOssConfig> list = sysOssConfigService.getSysOssConfigPage(pageReq).getList();
         List<SysOssConfigResp> respList = BeanUtils.toBean(list, SysOssConfigResp.class);
         ExcelUtil.exportExcel(respList, "对象存储配置", SysOssConfigResp.class, response);
+    }
+
+    /**
+     * 状态修改
+     */
+    @SaCheckPermission("system:ossConfig:edit")
+    @PutMapping("/changeStatus")
+    public CommonResult<Void> changeStatus(@RequestBody SysOssConfigUpdateReq bo) {
+        return toAjax(sysOssConfigService.updateOssConfigStatus(bo), UPDATE_SYS_OSS_CONFIG_ERROR);
     }
 
 

@@ -47,4 +47,9 @@ public interface SysOssConfigService {
      * @return 对象存储配置分页对象
      */
     PageResult<SysOssConfig> getSysOssConfigPage(SysOssConfigPageReq pageReq);
+
+    /**
+     * 启用停用状态
+     */
+    int updateOssConfigStatus(SysOssConfigUpdateReq bo);
 }
