@@ -65,6 +65,11 @@
             <artifactId>aixbox-common-oss</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.aixbox</groupId>
+            <artifactId>aixbox-common-sse</artifactId>
+        </dependency>
+
 
     </dependencies>
 
