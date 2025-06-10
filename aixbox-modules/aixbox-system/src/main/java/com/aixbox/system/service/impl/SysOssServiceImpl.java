@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.exception.ServiceException;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.StrUtils;
+import com.aixbox.common.core.utils.StreamUtils;
 import com.aixbox.common.core.utils.file.FileUtils;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.core.utils.object.MapstructUtils;
@@ -16,6 +17,8 @@ import com.aixbox.system.domain.vo.response.SysOssResp;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import com.aixbox.system.domain.entity.SysOss;
@@ -37,6 +40,7 @@ import static com.aixbox.system.constant.ErrorCodeConstants.SYS_OSS_NOT_EXISTS;
 /**
 * OSS对象存储Service实现类
 */
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class SysOssServiceImpl implements SysOssService {
@@ -76,6 +80,11 @@ public class SysOssServiceImpl implements SysOssService {
     @Override
     public Boolean deleteSysOss(List<Long> ids) {
         validateSysOssExists(ids);
+        List<SysOss> list = sysOssMapper.selectByIds(ids);
+        for (SysOss sysOss : list) {
+            OssClient storage = OssFactory.instance(sysOss.getService());
+            storage.delete(sysOss.getUrl());
+        }
         return sysOssMapper.deleteByIds(ids) > 0;
     }
 
@@ -97,7 +106,16 @@ public class SysOssServiceImpl implements SysOssService {
      */
     @Override
     public SysOss getSysOss(Long id) {
-        return sysOssMapper.selectById(id);
+        SysOss sysOss = sysOssMapper.selectById(id);
+        if (ObjectUtil.isNotNull(sysOss)) {
+            try {
+                return this.matchingUrl(sysOss);
+            } catch (Exception ignored) {
+                // 如果oss异常无法连接则将数据直接返回
+                log.error("oss异常");
+            }
+        }
+        return sysOss;
     }
 
     /**
@@ -107,7 +125,10 @@ public class SysOssServiceImpl implements SysOssService {
      */
     @Override
     public PageResult<SysOss> getSysOssPage(SysOssPageReq pageReq) {
-        return sysOssMapper.selectPage(pageReq);
+        PageResult<SysOss> result = sysOssMapper.selectPage(pageReq);
+        List<SysOss> filterResult = StreamUtils.toList(result.getList(), this::matchingUrl);
+        result.setList(filterResult);
+        return result;
     }
 
     /**
@@ -160,8 +181,7 @@ public class SysOssServiceImpl implements SysOssService {
         oss.setOriginalName(originalfileName);
         oss.setService(configKey);
         sysOssMapper.insert(oss);
-        SysOssResp sysOssVo = MapstructUtils.convert(oss, SysOssResp.class);
-        return this.matchingUrl(sysOssVo);
+        return BeanUtils.toBean(this.matchingUrl(oss), SysOssResp.class);
     }
 
     /**
@@ -170,7 +190,7 @@ public class SysOssServiceImpl implements SysOssService {
      * @param oss OSS对象
      * @return oss 匹配Url的OSS对象
      */
-    private SysOssResp matchingUrl(SysOssResp oss) {
+    private SysOss matchingUrl(SysOss oss) {
         OssClient storage = OssFactory.instance(oss.getService());
         // 仅修改桶类型为 private 的URL，临时URL时长为120s
         if (AccessPolicyType.PRIVATE == storage.getAccessPolicy()) {

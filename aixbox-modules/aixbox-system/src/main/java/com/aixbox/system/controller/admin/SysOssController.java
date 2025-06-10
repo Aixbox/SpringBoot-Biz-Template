@@ -87,31 +87,6 @@ public class SysOssController {
         return success(uploadVo);
     }
 
-
-    /**
-     * 新增OSS对象存储
-     * @param addReq 新增参数
-     * @return OSS对象存储 id
-     */
-    @SaCheckPermission("system:oss:add")
-    @PostMapping("/add")
-    public CommonResult<Long> add(@Valid @RequestBody SysOssSaveReq addReq) {
-        Long sysOssId = sysOssService.addSysOss(addReq);
-        return success(sysOssId);
-    }
-
-    /**
-     * 修改OSS对象存储
-     * @param updateReq 修改参数
-     * @return 是否成功
-     */
-    @SaCheckPermission("system:oss:update")
-    @PutMapping("/update")
-    public CommonResult<Void> update(@Valid @RequestBody SysOssUpdateReq updateReq) {
-        Boolean result = sysOssService.updateSysOss(updateReq);
-        return toAjax(result, UPDATE_SYS_OSS_ERROR);
-    }
-
     /**
      * 删除OSS对象存储
      * @param ids 删除id数组
