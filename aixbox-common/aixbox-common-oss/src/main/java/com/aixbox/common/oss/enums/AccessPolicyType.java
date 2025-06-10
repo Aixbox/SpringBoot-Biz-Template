@@ -43,4 +43,13 @@ public enum AccessPolicyType {
      */
     private final ObjectCannedACL objectCannedACL;
 
+    public static AccessPolicyType getByType(String type) {
+        for (AccessPolicyType value : values()) {
+            if (value.getType().equals(type)) {
+                return value;
+            }
+        }
+        throw new RuntimeException("'type' not found By " + type);
+    }
+
 }

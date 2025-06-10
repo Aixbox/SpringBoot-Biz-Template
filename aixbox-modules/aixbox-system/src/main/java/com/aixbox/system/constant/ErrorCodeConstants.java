@@ -103,6 +103,8 @@ public interface ErrorCodeConstants {
     ErrorCode UPDATE_SYS_OSS_ERROR = new ErrorCode(1_002_009_000, "修改oss对象存储失败");
     ErrorCode DELETE_SYS_OSS_ERROR = new ErrorCode(1_002_009_001, "删除oss对象存储失败");
     ErrorCode SYS_OSS_NOT_EXISTS = new ErrorCode(1_002_009_002, "oss对象存储不存在");
+    ErrorCode UPLOAD_FILE_EMPTY = new ErrorCode(1_002_009_003, "上传文件不能为空");
+    ErrorCode FILE_NOT_EXISTS = new ErrorCode(1_002_009_005, "文件数据不存在!");
 
     // ========== 对象存储配置模块 模块 1-002-010-??? ==========
     ErrorCode UPDATE_SYS_OSS_CONFIG_ERROR = new ErrorCode(1_002_010_000, "修改对象存储配置失败");

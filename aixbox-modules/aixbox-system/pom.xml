@@ -60,6 +60,11 @@
             <artifactId>aixbox-common-excel</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.aixbox</groupId>
+            <artifactId>aixbox-common-oss</artifactId>
+        </dependency>
+
 
     </dependencies>
 

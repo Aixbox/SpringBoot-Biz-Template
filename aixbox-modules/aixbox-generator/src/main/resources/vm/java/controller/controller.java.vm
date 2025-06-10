@@ -34,7 +34,6 @@ import java.util.List;
 import static com.aixbox.common.core.pojo.CommonResult.success;
 import static com.aixbox.common.core.pojo.CommonResult.toAjax;
 
-//todo 这里的 DELETE_DEMO_ERROR 需要在util添加上下文数据，全大写的函数名
 import static ${packageName}.constant.ErrorCodeConstants.DELETE_${CLASS_NAME}_ERROR;
 import static ${packageName}.constant.ErrorCodeConstants.UPDATE_${CLASS_NAME}_ERROR;
 

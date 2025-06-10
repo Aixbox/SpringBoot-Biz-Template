@@ -5,7 +5,11 @@ import com.aixbox.system.domain.entity.SysOss;
 import com.aixbox.system.domain.vo.request.SysOssPageReq;
 import com.aixbox.system.domain.vo.request.SysOssSaveReq;
 import com.aixbox.system.domain.vo.request.SysOssUpdateReq;
+import com.aixbox.system.domain.vo.response.SysOssResp;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -47,4 +51,20 @@ public interface SysOssService {
      * @return OSS对象存储分页对象
      */
     PageResult<SysOss> getSysOssPage(SysOssPageReq pageReq);
+
+    /**
+     * 文件下载方法，支持一次性下载完整文件
+     *
+     * @param ossId    OSS对象ID
+     * @param response HttpServletResponse对象，用于设置响应头和向客户端发送文件内容
+     */
+    void download(Long ossId, HttpServletResponse response) throws IOException;
+
+    /**
+     * 上传 MultipartFile 到对象存储服务，并保存文件信息到数据库
+     *
+     * @param file 要上传的 MultipartFile 对象
+     * @return 上传成功后的 SysOssVo 对象，包含文件信息
+     */
+    SysOssResp upload(MultipartFile file);
 }

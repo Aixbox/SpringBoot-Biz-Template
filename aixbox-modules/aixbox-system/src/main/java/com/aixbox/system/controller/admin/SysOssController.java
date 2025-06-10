@@ -2,15 +2,19 @@ package com.aixbox.system.controller.admin;
 
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageParam;
 import com.aixbox.common.core.pojo.PageResult;
 import com.aixbox.common.core.utils.object.BeanUtils;
 import com.aixbox.common.excel.utils.ExcelUtil;
+import com.aixbox.system.domain.vo.response.SysOssUploadResp;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import com.aixbox.system.domain.entity.SysOss;
 import com.aixbox.system.domain.vo.request.SysOssPageReq;
@@ -26,17 +31,20 @@ import com.aixbox.system.domain.vo.request.SysOssSaveReq;
 import com.aixbox.system.domain.vo.request.SysOssUpdateReq;
 import com.aixbox.system.domain.vo.response.SysOssResp;
 import com.aixbox.system.service.SysOssService;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static com.aixbox.common.core.exception.util.ServiceExceptionUtil.exception;
 import static com.aixbox.common.core.pojo.CommonResult.success;
 import static com.aixbox.common.core.pojo.CommonResult.toAjax;
 
-//todo 这里的 DELETE_DEMO_ERROR 需要在util添加上下文数据，全大写的函数名
 import static com.aixbox.system.constant.ErrorCodeConstants.DELETE_SYS_OSS_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_SYS_OSS_ERROR;
+import static com.aixbox.system.constant.ErrorCodeConstants.UPLOAD_FILE_EMPTY;
 
 /**
  * OSS对象存储 Controller
@@ -48,6 +56,37 @@ import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_SYS_OSS_ERROR
 public class SysOssController {
 
     private final SysOssService sysOssService;
+
+    /**
+     * 下载OSS对象
+     *
+     * @param ossId OSS对象ID
+     */
+    @SaCheckPermission("system:oss:download")
+    @GetMapping("/download/{ossId}")
+    public void download(@PathVariable Long ossId, HttpServletResponse response) throws IOException {
+        sysOssService.download(ossId, response);
+    }
+
+    /**
+     * 上传OSS对象存储
+     *
+     * @param file 文件
+     */
+    @SaCheckPermission("system:oss:upload")
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public CommonResult<SysOssUploadResp> upload(@RequestPart("file") MultipartFile file) {
+        if (ObjectUtil.isNull(file)) {
+            throw exception(UPLOAD_FILE_EMPTY);
+        }
+        SysOssResp oss = sysOssService.upload(file);
+        SysOssUploadResp uploadVo = new SysOssUploadResp();
+        uploadVo.setUrl(oss.getUrl());
+        uploadVo.setFileName(oss.getOriginalName());
+        uploadVo.setOssId(oss.getId().toString());
+        return success(uploadVo);
+    }
+
 
     /**
      * 新增OSS对象存储

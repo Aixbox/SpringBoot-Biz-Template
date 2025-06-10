@@ -9,6 +9,7 @@ import com.aixbox.common.core.utils.date.DateUtils;
 import com.aixbox.common.core.utils.file.FileUtils;
 import com.aixbox.common.oss.constant.OssConstant;
 import com.aixbox.common.oss.entity.UploadResult;
+import com.aixbox.common.oss.enums.AccessPolicyType;
 import com.aixbox.common.oss.exception.OssException;
 import com.aixbox.common.oss.properties.OssProperties;
 import org.apache.commons.lang3.StringUtils;
@@ -481,6 +482,22 @@ public class OssClient {
      */
     public boolean checkPropertiesSame(OssProperties properties) {
         return this.properties.equals(properties);
+    }
+
+    /**
+     * 获取当前桶权限类型
+     *
+     * @return 当前桶权限类型code
+     */
+    public AccessPolicyType getAccessPolicy() {
+        return AccessPolicyType.getByType(properties.getAccessPolicy());
+    }
+
+    /**
+     * 服务商
+     */
+    public String getConfigKey() {
+        return configKey;
     }
 
 }
