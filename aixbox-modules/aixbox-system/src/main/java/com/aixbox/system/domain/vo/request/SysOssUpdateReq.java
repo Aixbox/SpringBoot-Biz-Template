@@ -1,6 +1,5 @@
 package com.aixbox.system.domain.vo.request;
 
-import com.aixbox.demo.domain.entity.DemoTest;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import jakarta.validation.constraints.NotBlank;

@@ -1,7 +1,5 @@
 package ${packageName}.domain.vo.request;
 
-import com.aixbox.demo.domain.entity.DemoTest;
-import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 #foreach ($import in $importList)
 import ${import};

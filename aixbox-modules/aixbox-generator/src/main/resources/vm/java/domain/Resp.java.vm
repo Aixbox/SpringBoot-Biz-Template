@@ -3,6 +3,8 @@ package ${packageName}.domain.vo.response;
 import lombok.Data;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
+import com.aixbox.common.excel.annotation.ExcelDictFormat;
+import com.aixbox.common.excel.convert.ExcelDictConvert;
 #foreach ($import in $importList)
 import ${import};
 #end
