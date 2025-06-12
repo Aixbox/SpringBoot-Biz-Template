@@ -52,7 +52,7 @@ import static com.aixbox.system.constant.ErrorCodeConstants.UPLOAD_FILE_EMPTY;
 @Validated
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/system/oss")
+@RequestMapping("/resource/oss")
 public class SysOssController {
 
     private final SysOssService sysOssService;
