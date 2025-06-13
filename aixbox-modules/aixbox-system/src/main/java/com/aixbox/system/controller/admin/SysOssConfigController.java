@@ -44,7 +44,7 @@ import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_SYS_OSS_CONFI
 @Validated
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/resource/oss-config")
+@RequestMapping("/resource/oss/config")
 public class SysOssConfigController {
 
     private final SysOssConfigService sysOssConfigService;

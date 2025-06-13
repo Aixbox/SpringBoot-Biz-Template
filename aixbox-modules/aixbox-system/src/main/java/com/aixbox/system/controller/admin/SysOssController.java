@@ -102,13 +102,14 @@ public class SysOssController {
 
     /**
      * 获取OSS对象存储详细信息
-     * @param id OSS对象存储id
+     * @param ids OSS对象存储id
      * @return SysOssResp 对象
      */
     @SaCheckPermission("system:oss:query")
-    @GetMapping("/{id}")
-    public CommonResult<SysOssResp> getSysOss(@PathVariable("id") Long id) {
-        SysOss sysOss = sysOssService.getSysOss(id);
+    @GetMapping("/listByIds/{ids}")
+    public CommonResult<List<SysOssResp>> getSysOss(@NotEmpty(message = "主键不能为空")
+                                                  @PathVariable Long[] ids) {
+        List<SysOss> sysOss = sysOssService.getSysOss(Arrays.asList(ids));
         return success(BeanUtils.toBean(sysOss, SysOssResp.class));
     }
 

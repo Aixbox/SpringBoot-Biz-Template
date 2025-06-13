@@ -31,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.aixbox.common.core.exception.util.ServiceExceptionUtil.exception;
@@ -101,21 +102,24 @@ public class SysOssServiceImpl implements SysOssService {
 
     /**
      * 获取OSS对象存储详细数据
-     * @param id OSS对象存储id
+     * @param ids OSS对象存储id
      * @return OSS对象存储对象
      */
     @Override
-    public SysOss getSysOss(Long id) {
-        SysOss sysOss = sysOssMapper.selectById(id);
-        if (ObjectUtil.isNotNull(sysOss)) {
-            try {
-                return this.matchingUrl(sysOss);
-            } catch (Exception ignored) {
-                // 如果oss异常无法连接则将数据直接返回
-                log.error("oss异常");
+    public List<SysOss> getSysOss(List<Long> ids) {
+        List<SysOss> list = new ArrayList<>();
+        for (Long id : ids) {
+            SysOss vo = sysOssMapper.selectById(id);
+            if (ObjectUtil.isNotNull(vo)) {
+                try {
+                    list.add(this.matchingUrl(vo));
+                } catch (Exception ignored) {
+                    // 如果oss异常无法连接则将数据直接返回
+                    list.add(vo);
+                }
             }
         }
-        return sysOss;
+        return list;
     }
 
     /**

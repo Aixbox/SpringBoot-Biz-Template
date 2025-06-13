@@ -40,10 +40,10 @@ public interface SysOssService {
 
     /**
      * 获取OSS对象存储详细数据
-     * @param id 数据id
+     * @param ids 数据id
      * @return OSS对象存储对象
      */
-     SysOss getSysOss(Long id);
+    List<SysOss> getSysOss(List<Long> ids);
 
     /**
      * 分页查询OSS对象存储
