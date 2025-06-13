@@ -6,8 +6,14 @@ import cn.hutool.core.util.ObjectUtil;
 import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.common.core.pojo.PageParam;
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.common.core.utils.StrUtils;
+import com.aixbox.common.core.utils.ValidatorUtils;
 import com.aixbox.common.core.utils.object.BeanUtils;
+import com.aixbox.common.core.validation.AddGroup;
+import com.aixbox.common.core.validation.EditGroup;
+import com.aixbox.common.core.validation.QueryGroup;
 import com.aixbox.common.excel.utils.ExcelUtil;
+import com.aixbox.system.domain.bo.MultipartBo;
 import com.aixbox.system.domain.vo.response.SysOssUploadResp;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -43,6 +49,8 @@ import static com.aixbox.common.core.pojo.CommonResult.success;
 import static com.aixbox.common.core.pojo.CommonResult.toAjax;
 
 import static com.aixbox.system.constant.ErrorCodeConstants.DELETE_SYS_OSS_ERROR;
+import static com.aixbox.system.constant.ErrorCodeConstants.INVALID_OSS_STATUS;
+import static com.aixbox.system.constant.ErrorCodeConstants.ORIGINAL_NAME_EMPTY;
 import static com.aixbox.system.constant.ErrorCodeConstants.UPDATE_SYS_OSS_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.UPLOAD_FILE_EMPTY;
 
@@ -135,6 +143,37 @@ public class SysOssController {
         List<SysOss> list = sysOssService.getSysOssPage(pageReq).getList();
         List<SysOssResp> respList = BeanUtils.toBean(list, SysOssResp.class);
         ExcelUtil.exportExcel(respList, "OSS对象存储", SysOssResp.class, response);
+    }
+
+    /**
+     * 分片上传
+     */
+    @SaCheckPermission("system:oss:multipart")
+    @PostMapping(value = "/multipart")
+    public CommonResult<?> multipart(@RequestBody MultipartBo multipartBo) {
+        return switch (multipartBo.getOssStatus()) {
+            case "initiate" -> {
+                if (StrUtils.isNotEmpty(multipartBo.getOriginalName()) && StrUtils.isNotEmpty(multipartBo.getMd5Digest())) {
+                    ValidatorUtils.validate(multipartBo);
+                    yield success(sysOssService.initiateMultipart(multipartBo));
+                } else {
+                    throw exception(ORIGINAL_NAME_EMPTY);
+                }
+            }
+            case "upload" -> {
+                ValidatorUtils.validate(multipartBo, AddGroup.class);
+                yield success(sysOssService.uploadPart(multipartBo));
+            }
+            case "query" -> {
+                ValidatorUtils.validate(multipartBo, QueryGroup.class);
+                yield success(sysOssService.uploadPartList(multipartBo));
+            }
+            case "complete" -> {
+                ValidatorUtils.validate(multipartBo, EditGroup.class);
+                yield success(sysOssService.completeMultipartUpload(multipartBo));
+            }
+            default -> throw exception(INVALID_OSS_STATUS);
+        };
     }
 
 

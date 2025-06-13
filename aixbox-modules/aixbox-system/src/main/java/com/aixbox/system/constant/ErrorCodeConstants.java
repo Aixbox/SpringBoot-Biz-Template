@@ -111,5 +111,10 @@ public interface ErrorCodeConstants {
     ErrorCode DELETE_SYS_OSS_CONFIG_ERROR = new ErrorCode(1_002_010_001, "删除对象存储配置失败");
     ErrorCode SYS_OSS_CONFIG_NOT_EXISTS = new ErrorCode(1_002_010_002, "对象存储配置不存在");
 
+    // ========== 对象存储配置模块 模块 1-002-011-??? ==========
+    ErrorCode INVALID_OSS_STATUS = new ErrorCode(1_002_011_000, "Invalid OSS status");
+    ErrorCode ORIGINAL_NAME_EMPTY = new ErrorCode(1_002_011_001, "Original name and MD5 digest " +
+            "cannot be empty");
+
 
 }

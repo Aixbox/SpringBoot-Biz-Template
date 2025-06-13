@@ -1,6 +1,7 @@
 package com.aixbox.common.oss.core;
 
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.IdUtil;
 import com.aixbox.common.core.constant.Constants;
@@ -8,6 +9,7 @@ import com.aixbox.common.core.utils.StrUtils;
 import com.aixbox.common.core.utils.date.DateUtils;
 import com.aixbox.common.core.utils.file.FileUtils;
 import com.aixbox.common.oss.constant.OssConstant;
+import com.aixbox.common.oss.entity.PartUploadResult;
 import com.aixbox.common.oss.entity.UploadResult;
 import com.aixbox.common.oss.enums.AccessPolicyType;
 import com.aixbox.common.oss.exception.OssException;
@@ -22,7 +24,9 @@ import software.amazon.awssdk.http.nio.netty.NettyNioAsyncHttpClient;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Configuration;
+import software.amazon.awssdk.services.s3.model.CompletedPart;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.model.Part;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.transfer.s3.S3TransferManager;
 import software.amazon.awssdk.transfer.s3.model.CompletedFileUpload;
@@ -44,7 +48,9 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * S3 存储协议 所有兼容S3协议的云厂商均支持
@@ -499,5 +505,124 @@ public class OssClient {
     public String getConfigKey() {
         return configKey;
     }
+
+    /**
+     * 创建分片上传任务
+     *
+     * @param suffix 对象键的后缀
+     * @return 包含上传后的文件信息
+     */
+    public UploadResult initiateMultipart(String suffix) {
+        return initiateMultipartUpload(getPath(properties.getPrefix(), suffix));
+    }
+
+    /**
+     * 创建分片上传任务
+     *
+     * @param key 在 Amazon S3 中的对象键
+     * @return 包含上传后的文件信息
+     */
+    public UploadResult initiateMultipartUpload(String key) {
+        try {
+            String uploadId = client.createMultipartUpload(
+                    x -> x.bucket(properties.getBucketName())
+                          .key(key)
+                          .build()
+            ).join().uploadId();
+            return UploadResult.builder().filename(key).uploadId(uploadId).build();
+        } catch (Exception e) {
+            // 捕获异常并抛出自定义异常
+            throw new OssException("创建分片上传任务失败，请检查配置信息:[" + e.getMessage() + "]");
+        }
+    }
+
+    /**
+     * 生成预签名的分片上传 URL
+     *
+     * @param key        在 Amazon S3 中的对象键
+     * @param uploadId   分片上传任务的 Upload ID
+     * @param partNumber 分片编号（从1开始递增）
+     * @param second     签名持续时间（秒）
+     * @return 预签名 URL 字符串
+     */
+    public String uploadPartFutures(String key, String uploadId, Integer partNumber, Integer second) {
+        URL url = presigner.presignUploadPart(
+                x -> x.signatureDuration(Duration.ofSeconds(second))
+                      .uploadPartRequest(
+                              y -> y.bucket(properties.getBucketName())
+                                    .key(key)
+                                    .uploadId(uploadId)
+                                    .partNumber(partNumber)
+                                    .build()
+                      ).build()
+        ).url();
+        return url.toString();
+    }
+
+    /**
+     * 获取指定对象分片上传的分片列表
+     *
+     * @param key              在 Amazon S3 中的对象键
+     * @param uploadId         分片上传任务的 Upload ID
+     * @param maxParts         最大返回的分片数（默认为1000）
+     * @param partNumberMarker 分片编号的标记，用于分页查询（默认为0，表示从第一个分片开始查询）
+     * @return 包含分片上传结果信息的 PartUploadResult 对象列表
+     */
+    public List<PartUploadResult> listParts(String key, String uploadId, Integer maxParts, Integer partNumberMarker) {
+        try {
+            List<Part> parts = client.listParts(
+                    x -> x.bucket(properties.getBucketName())
+                          .key(key)
+                          .uploadId(uploadId)
+                          .maxParts(maxParts != null ? maxParts : 1000)
+                          .partNumberMarker(partNumberMarker != null ? partNumberMarker : 0)
+                          .build()).join().parts();
+            return parts.stream()
+                        .map(x -> PartUploadResult.builder()
+                                                  .partNumber(x.partNumber())
+                                                  .eTag(x.eTag())
+                                                  .build())
+                        .collect(Collectors.toList());
+        } catch (Exception e) {
+            // 捕获异常并抛出自定义异常
+            throw new OssException("获取分片列表失败，请检查配置信息:[" + e.getMessage() + "]");
+        }
+    }
+
+    /**
+     * 完成分片上传任务
+     *
+     * @param key               在 Amazon S3 中的对象键
+     * @param uploadId          分片上传任务的 Upload ID
+     * @param partUploadResults 已完成的分片列表（必须是唯一且按照递增顺序排列，严格检查是否漏传）
+     * @return 包含上传后的文件信息
+     */
+    public UploadResult completeMultipartUpload(String key, String uploadId, List<PartUploadResult> partUploadResults) {
+        if (CollUtil.isEmpty(partUploadResults)) {
+            throw new OssException("分片列表不能为空");
+        }
+        List<CompletedPart> completedParts = partUploadResults.stream()
+                                                              .map(x -> CompletedPart.builder()
+                                                                                     .partNumber(x.getPartNumber())
+                                                                                     .eTag(x.getETag())
+                                                                                     .build())
+                                                              .collect(Collectors.toList());
+        try {
+            String eTag = client.completeMultipartUpload(
+                    x -> x.bucket(properties.getBucketName())
+                          .key(key)
+                          .uploadId(uploadId)
+                          .multipartUpload(y -> y.parts(completedParts)
+                                                 .build())
+                          .build()
+            ).join().eTag();
+            // 提取上传结果中的 ETag，并构建一个自定义的 UploadResult 对象
+            return UploadResult.builder().url(getUrl() + StrUtils.SLASH + key).filename(key).eTag(eTag).build();
+        } catch (Exception e) {
+            // 捕获异常并抛出自定义异常
+            throw new OssException("合并文件失败，请检查配置信息:[" + e.getMessage() + "]");
+        }
+    }
+
 
 }

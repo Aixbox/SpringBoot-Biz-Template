@@ -1,10 +1,12 @@
 package com.aixbox.system.service;
 
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.system.domain.bo.MultipartBo;
 import com.aixbox.system.domain.entity.SysOss;
 import com.aixbox.system.domain.vo.request.SysOssPageReq;
 import com.aixbox.system.domain.vo.request.SysOssSaveReq;
 import com.aixbox.system.domain.vo.request.SysOssUpdateReq;
+import com.aixbox.system.domain.vo.response.MultipartVo;
 import com.aixbox.system.domain.vo.response.SysOssResp;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
@@ -67,4 +69,36 @@ public interface SysOssService {
      * @return 上传成功后的 SysOssVo 对象，包含文件信息
      */
     SysOssResp upload(MultipartFile file);
+
+    /**
+     * 初始化分片上传任务
+     *
+     * @param multipartBo 初始化分片的参数对象
+     * @return 分片上传对象信息
+     */
+    MultipartVo initiateMultipart(MultipartBo multipartBo);
+
+    /**
+     * 上传文件的分段（分片上传）
+     *
+     * @param multipartBo 分段上传的参数对象
+     * @return 分片上传成功后的对象信息
+     */
+    MultipartVo uploadPart(MultipartBo multipartBo);
+
+    /**
+     * 获取上传分段进度
+     *
+     * @param multipartBo 分片上传对象信息
+     * @return 分片上传对象信息
+     */
+    MultipartVo uploadPartList(MultipartBo multipartBo);
+
+    /**
+     * 合并分段
+     *
+     * @param multipartBo 分片上传对象信息
+     * @return OSS对象存储视图对象
+     */
+    SysOssResp completeMultipartUpload(MultipartBo multipartBo);
 }

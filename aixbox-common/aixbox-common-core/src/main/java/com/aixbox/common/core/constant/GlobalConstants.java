@@ -31,4 +31,14 @@ public interface GlobalConstants {
      * 三方认证 redis key
      */
     String SOCIAL_AUTH_CODE_KEY = GLOBAL_REDIS_KEY + "social_auth_codes:";
+
+    /**
+     * OSS断点续传
+     */
+    String OSS_CONTINUATION = GLOBAL_REDIS_KEY + "oss_continuation:";
+
+    /**
+     * OSS分片上传
+     */
+    String OSS_MULTIPART = GLOBAL_REDIS_KEY + "oss_multipart:";
 }
