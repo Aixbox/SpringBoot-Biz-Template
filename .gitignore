@@ -56,3 +56,4 @@ application-my.yaml
 .xcodemap
 *.zip
 .fastRequest
+application-dev.yaml

@@ -2,7 +2,7 @@ spring:
   application:
     name: aixbox-admin
   profiles:
-    active: local
+    active: dev
   mvc:
     format:
       date-time: yyyy-MM-dd HH:mm:ss

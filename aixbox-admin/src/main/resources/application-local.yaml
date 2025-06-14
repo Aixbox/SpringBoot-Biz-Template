@@ -39,19 +39,19 @@ spring:
         master:
           url: jdbc:mysql://127.0.0.1:3306/spring-template?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true&rewriteBatchedStatements=true # MySQL Connector/J 8.X 连接的示例
           username: root
-          password: 123456
+          password: asdsadadqwed
 
 --- # redis 单机配置(单机与集群只能开启一个另一个需要注释掉)
 spring.data:
   redis:
     # 地址
-    host: 117.72.117.222
+    host: 127.0.0.1
     # 端口，默认为6379
-    port: 13000
+    port: 3000
     # 数据库索引
     database: 3
     # redis 密码必须配置
-    password: redis_hTbCMk
+    password: asdasd1qweqef
     # 连接超时时间
     timeout: 10s
     # 是否开启ssl
