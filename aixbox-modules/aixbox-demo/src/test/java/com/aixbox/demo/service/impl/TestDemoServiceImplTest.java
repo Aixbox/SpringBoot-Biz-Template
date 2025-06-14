@@ -6,6 +6,7 @@ import com.aixbox.demo.domain.vo.request.TestDemoPageReqVO;
 import com.aixbox.demo.domain.vo.request.TestDemoSaveReqVO;
 import com.aixbox.demo.domain.vo.request.TestDemoUpdateReqVO;
 import com.aixbox.common.core.pojo.PageResult;
+import com.aixbox.demo.mapper.TestDemoMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
