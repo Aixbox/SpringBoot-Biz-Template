@@ -11,7 +11,15 @@ import { Page, useVbenModal } from '@vben/common-ui';
 #end
 import { getVxePopupContainer } from '@vben/utils';
 
-import { Modal, Popconfirm, Space } from 'ant-design-vue';
+import { Modal, Popconfirm,
+  #foreach($column in $columns)
+    #if($column.list && $column.htmlType == "imageUpload")
+      Image,
+      Spin,
+    #end
+  #end
+
+  Space } from 'ant-design-vue';
 
 import { useVbenVxeGrid, vxeCheckboxChecked } from '#/adapter/vxe-table';
 import {
@@ -21,12 +29,20 @@ import {
 } from '#/api/${moduleName}/${businessName}';
 import { commonDownloadExcel } from '#/utils/file/download';
 
-import { columns, querySchema } from './data';
+import { columns,
+  #foreach($column in $columns)
+    #if($column.list && $column.htmlType == "imageUpload")
+      fallbackImageBase64,
+    #end
+  #end
+
+  querySchema } from './data';
 #if($popupComponent == "drawer")
 import ${businessName}Modal from './${businessName}-drawer.vue';
 #else
 import ${businessName}Modal from './${businessName}-modal.vue';
 #end
+
 
 
 const formOptions: VbenFormProps = {
@@ -180,6 +196,35 @@ function handleDownloadExcel() {
           </a-button>
         </Space>
       </template>
+
+      #foreach($column in $columns)
+      #set($javaField=$column.javaField)
+      #set($parentheseIndex=$column.columnComment.indexOf("（"))
+      #if($parentheseIndex != -1)
+      #set($comment=$column.columnComment.substring(0, $parentheseIndex))
+      #else
+      #set($comment=$column.columnComment)
+      #end
+      #if($column.list && $column.htmlType == "imageUpload")
+      <template #url="{ row }">
+        <!-- placeholder为图片未加载时显示的占位图 -->
+        <!-- fallback为图片加载失败时显示 -->
+        <!-- 需要设置key属性 否则切换翻页会有延迟 -->
+        <Image
+                :key="row.id"
+                :src="row.${javaField}"
+                height="50px"
+                :fallback="fallbackImageBase64"
+        >
+          <template #placeholder>
+            <div class="flex size-full items-center justify-center">
+              <Spin />
+            </div>
+          </template>
+        </Image>
+      </template>
+      #end
+      #end
       <template #action="{ row }">
         <Space>
           <ghost-button
