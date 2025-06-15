@@ -264,7 +264,7 @@ export const modalSchema: FormSchemaGetter = () => [
   },
     #elseif($column.htmlType == "imageUpload")
   {
-    component: 'Upload',
+    component: 'ImageUpload',
     fieldName: '${javaField}',
     label: '${comment}',
     #if($column.required)
@@ -277,6 +277,21 @@ export const modalSchema: FormSchemaGetter = () => [
       },
     #end
   },
+    #elseif($column.htmlType == "fileUpload")
+      {
+        component: 'FileUpload',
+        fieldName: '${javaField}',
+        label: '${comment}',
+        #if($column.required)
+          rules: 'required',
+        #end
+        #if($column.insert == 0)
+          dependencies: {
+            show: (values) => !!values.id,
+            triggerFields: ['id'],
+          },
+        #end
+      },
     #end
   #end
 #end
