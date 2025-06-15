@@ -1,10 +1,10 @@
 
-## 复制到clean.sql文件末尾
+-- 复制到clean.sql文件末尾
 
 DELETE FROM "${tableName}";
 
 
-## 复制到create_table.sql文件末尾，如有需要到数据库复制DDL语句使用ai转为h2数据库的语法
+-- 复制到create_table.sql文件末尾，如有需要到数据库复制DDL语句使用ai转为h2数据库的语法
 
 CREATE TABLE IF NOT EXISTS "${tableName}" (
 

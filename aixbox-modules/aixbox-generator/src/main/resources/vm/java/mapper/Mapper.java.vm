@@ -50,6 +50,7 @@ import java.util.List;
 */
 @Mapper
 public interface ${ClassName}Mapper extends BaseMapperX<${ClassName}> {
+
 #set($AttrName=$pkColumn.javaField.substring(0,1).toUpperCase() + ${pkColumn.javaField.substring(1)})
     /**
     * 分页查询
@@ -65,6 +66,7 @@ public interface ${ClassName}Mapper extends BaseMapperX<${ClassName}> {
     default Long countByIds(List<${pkColumn.javaType}> ${pkColumn.javaField}s) {
         return selectCount(new LambdaQueryWrapperX<${ClassName}>().in(${ClassName}::get${AttrName}, ${pkColumn.javaField}s));
     }
+
 }
 
 

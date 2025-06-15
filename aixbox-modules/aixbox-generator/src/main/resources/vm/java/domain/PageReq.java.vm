@@ -17,16 +17,14 @@ public class ${ClassName}PageReq extends PageParam {
 
     #foreach ($column in $columns)
         #if($column.query)
-            /**
-             * $column.columnComment
-             */
-            #if (${column.queryType} == "BETWEEN")##情况八，Between 的时候
-            private ${column.javaType}[] $column.javaField;
-            #else
-            private $column.javaType $column.javaField;
-            #end
-
-
+    /**
+     * $column.columnComment
+     */
+    #if (${column.queryType} == "BETWEEN")##情况八，Between 的时候
+    private ${column.javaType}[] $column.javaField;
+    #else
+    private $column.javaType $column.javaField;
+    #end
         #end
     #end
 

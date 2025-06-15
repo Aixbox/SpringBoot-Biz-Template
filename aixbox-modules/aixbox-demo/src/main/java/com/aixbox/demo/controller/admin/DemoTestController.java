@@ -34,7 +34,6 @@ import java.util.List;
 import static com.aixbox.common.core.pojo.CommonResult.success;
 import static com.aixbox.common.core.pojo.CommonResult.toAjax;
 
-//todo 这里的 DELETE_DEMO_ERROR 需要在util添加上下文数据，全大写的函数名
 import static com.aixbox.demo.constant.ErrorCodeConstants.DELETE_DEMO_TEST_ERROR;
 import static com.aixbox.demo.constant.ErrorCodeConstants.UPDATE_DEMO_TEST_ERROR;
 
@@ -44,18 +43,19 @@ import static com.aixbox.demo.constant.ErrorCodeConstants.UPDATE_DEMO_TEST_ERROR
 @Validated
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/demo/test")
+@RequestMapping("/demo/test" )
 public class DemoTestController {
 
     private final DemoTestService demoTestService;
 
     /**
      * 新增测试
+     *
      * @param addReq 新增参数
      * @return 测试 id
      */
-    @SaCheckPermission("demo:test:add")
-    @PostMapping("/add")
+    @SaCheckPermission("demo:test:add" )
+    @PostMapping("/add" )
     public CommonResult<Long> add(@Valid @RequestBody DemoTestSaveReq addReq) {
         Long demoTestId = demoTestService.addDemoTest(addReq);
         return success(demoTestId);
@@ -63,11 +63,12 @@ public class DemoTestController {
 
     /**
      * 修改测试
+     *
      * @param updateReq 修改参数
      * @return 是否成功
      */
-    @SaCheckPermission("demo:test:update")
-    @PutMapping("/update")
+    @SaCheckPermission("demo:test:update" )
+    @PutMapping("/update" )
     public CommonResult<Void> update(@Valid @RequestBody DemoTestUpdateReq updateReq) {
         Boolean result = demoTestService.updateDemoTest(updateReq);
         return toAjax(result, UPDATE_DEMO_TEST_ERROR);
@@ -75,12 +76,13 @@ public class DemoTestController {
 
     /**
      * 删除测试
+     *
      * @param ids 删除id数组
      * @return 是否成功
      */
-    @SaCheckPermission("demo:test:remove")
-    @DeleteMapping("/{ids}")
-    public CommonResult<Void> remove(@NotEmpty(message = "主键不能为空")
+    @SaCheckPermission("demo:test:remove" )
+    @DeleteMapping("/{ids}" )
+    public CommonResult<Void> remove(@NotEmpty(message = "主键不能为空" )
                                      @PathVariable Long[] ids) {
         Boolean result = demoTestService.deleteDemoTest(Arrays.asList(ids));
         return toAjax(result, DELETE_DEMO_TEST_ERROR);
@@ -88,23 +90,25 @@ public class DemoTestController {
 
     /**
      * 获取测试详细信息
+     *
      * @param id 测试id
      * @return DemoTestResp 对象
      */
-    @SaCheckPermission("demo:test:query")
-    @GetMapping("/{id}")
-    public CommonResult<DemoTestResp> getDemoTest(@PathVariable("id") Long id) {
+    @SaCheckPermission("demo:test:query" )
+    @GetMapping("/{id}" )
+    public CommonResult<DemoTestResp> getDemoTest(@PathVariable("id" ) Long id) {
         DemoTest demoTest = demoTestService.getDemoTest(id);
         return success(BeanUtils.toBean(demoTest, DemoTestResp.class));
     }
 
     /**
      * 分页查询测试
+     *
      * @param pageReq 分页参数
      * @return DemoTestResp分页对象
      */
-    @SaCheckPermission("demo:test:list")
-    @GetMapping("/page")
+    @SaCheckPermission("demo:test:list" )
+    @GetMapping("/page" )
     public CommonResult<PageResult<DemoTestResp>> getDemoTestPage(@Valid DemoTestPageReq pageReq) {
         PageResult<DemoTest> pageResult = demoTestService.getDemoTestPage(pageReq);
         return success(BeanUtils.toBean(pageResult, DemoTestResp.class));
@@ -113,15 +117,13 @@ public class DemoTestController {
     /**
      * 导出测试列表
      */
-    @SaCheckPermission("demo:test:export")
-    @PostMapping("/export")
+    @SaCheckPermission("demo:test:export" )
+    @PostMapping("/export" )
     public void export(@Valid DemoTestPageReq pageReq, HttpServletResponse response) {
         pageReq.setPageSize(PageParam.PAGE_SIZE_NONE);
         List<DemoTest> list = demoTestService.getDemoTestPage(pageReq).getList();
         List<DemoTestResp> respList = BeanUtils.toBean(list, DemoTestResp.class);
-        ExcelUtil.exportExcel(respList, "测试", DemoTestResp.class, response);
+        ExcelUtil.exportExcel(respList, "测试" , DemoTestResp.class, response);
     }
-
-
 
 }

@@ -1,7 +1,5 @@
 package com.aixbox.demo.domain.vo.request;
 
-import com.aixbox.demo.domain.entity.DemoTest;
-import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
@@ -16,6 +14,7 @@ public class DemoTestUpdateReq {
             /**
              * id
              */
+                @NotNull(message = "id不能为空")
         private Long id;
 
             /**

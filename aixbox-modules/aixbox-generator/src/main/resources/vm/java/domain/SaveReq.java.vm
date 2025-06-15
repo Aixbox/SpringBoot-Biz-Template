@@ -14,17 +14,17 @@ public class ${ClassName}SaveReq {
 
     #foreach ($column in $columns)
         #if($column.insert)
-            /**
-             * $column.columnComment
-             */
-            #if($column.required)
-                #if($column.javaType == 'String')
-                @NotBlank(message = "$column.columnComment不能为空")
-                #else
-                @NotNull(message = "$column.columnComment不能为空")
-                #end
-            #end
-            private $column.javaType $column.javaField;
+    /**
+     * $column.columnComment
+     */
+    #if($column.required)
+    #if($column.javaType == 'String')
+    @NotBlank(message = "$column.columnComment不能为空")
+    #else
+    @NotNull(message = "$column.columnComment不能为空")
+    #end
+    #end
+    private $column.javaType $column.javaField;
 
         #end
     #end

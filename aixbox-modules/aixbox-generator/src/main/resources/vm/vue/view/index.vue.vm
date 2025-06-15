@@ -11,39 +11,38 @@ import { Page, useVbenModal } from '@vben/common-ui';
 #end
 import { getVxePopupContainer } from '@vben/utils';
 
-import { Modal, Popconfirm,
+import {
+  Modal,
+  Popconfirm,
   #foreach($column in $columns)
     #if($column.list && $column.htmlType == "imageUpload")
-      Image,
-      Spin,
+  Image,
+  Spin,
     #end
   #end
-
   Space } from 'ant-design-vue';
 
 import { useVbenVxeGrid, vxeCheckboxChecked } from '#/adapter/vxe-table';
 import {
-    ${businessName}Export,
-    ${businessName}List,
-    ${businessName}Remove,
+  ${businessName}Export,
+  ${businessName}List,
+  ${businessName}Remove,
 } from '#/api/${moduleName}/${businessName}';
 import { commonDownloadExcel } from '#/utils/file/download';
 
-import { columns,
+import {
+  columns,
   #foreach($column in $columns)
     #if($column.list && $column.htmlType == "imageUpload")
-      fallbackImageBase64,
+  fallbackImageBase64,
     #end
   #end
-
   querySchema } from './data';
 #if($popupComponent == "drawer")
-import ${businessName}Modal from './${businessName}-drawer.vue';
+import ${businessName}Drawer from './${businessName}-drawer.vue';
 #else
 import ${businessName}Modal from './${businessName}-modal.vue';
 #end
-
-
 
 const formOptions: VbenFormProps = {
   commonConfig: {
@@ -73,7 +72,6 @@ const formOptions: VbenFormProps = {
       ],
     #end
   #end
-
   ],
 };
 
@@ -109,7 +107,6 @@ const [BasicTable, tableApi] = useVbenVxeGrid({
   formOptions,
   gridOptions,
 });
-
 
 #if($popupComponent == "drawer")
 const [${BusinessName}Drawer, drawerApi] = useVbenDrawer({
@@ -196,7 +193,6 @@ function handleDownloadExcel() {
           </a-button>
         </Space>
       </template>
-
       #foreach($column in $columns)
       #set($javaField=$column.javaField)
       #set($parentheseIndex=$column.columnComment.indexOf("（"))
@@ -207,14 +203,11 @@ function handleDownloadExcel() {
       #end
       #if($column.list && $column.htmlType == "imageUpload")
       <template #url="{ row }">
-        <!-- placeholder为图片未加载时显示的占位图 -->
-        <!-- fallback为图片加载失败时显示 -->
-        <!-- 需要设置key属性 否则切换翻页会有延迟 -->
         <Image
-                :key="row.id"
-                :src="row.${javaField}"
-                height="50px"
-                :fallback="fallbackImageBase64"
+          :key="row.id"
+          :src="row.${javaField}"
+          height="50px"
+          :fallback="fallbackImageBase64"
         >
           <template #placeholder>
             <div class="flex size-full items-center justify-center">
@@ -251,9 +244,9 @@ function handleDownloadExcel() {
       </template>
     </BasicTable>
     #if($popupComponent == "drawer")
-      <${BusinessName}Drawer @reload="tableApi.query()" />
+    <${BusinessName}Drawer @reload="tableApi.query()" />
     #else
-      <${BusinessName}Modal @reload="tableApi.query()" />
+    <${BusinessName}Modal @reload="tableApi.query()" />
     #end
   </Page>
 </template>

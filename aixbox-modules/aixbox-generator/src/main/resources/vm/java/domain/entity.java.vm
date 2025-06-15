@@ -19,13 +19,13 @@ public class ${ClassName} extends BaseDO {
 
     #foreach ($column in $columns)
         #if(!$table.isSuperColumn($column.javaField))
-            /**
-             * $column.columnComment
-             */
-            #if($column.isPk==1)
-            @TableId(value = "$column.columnName")
-            #end
-            private $column.javaType $column.javaField;
+    /**
+     * $column.columnComment
+     */
+    #if($column.isPk==1)
+    @TableId(value = "$column.columnName")
+    #end
+    private $column.javaType $column.javaField;
 
         #end
     #end

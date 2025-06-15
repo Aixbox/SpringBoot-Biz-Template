@@ -1,10 +1,10 @@
 package com.aixbox.demo.domain.vo.response;
 
-import com.aixbox.common.excel.annotation.ExcelDictFormat;
-import com.aixbox.common.excel.convert.ExcelDictConvert;
 import lombok.Data;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
+import com.aixbox.common.excel.annotation.ExcelDictFormat;
+import com.aixbox.common.excel.convert.ExcelDictConvert;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import jakarta.validation.constraints.NotNull;
@@ -62,6 +62,7 @@ public class DemoTestResp {
                 /**
                  * 选择类型Url
                  */
+                @Translation(type = TransConstant.OSS_ID_TO_URL, mapper = "selectType")
                 private String selectTypeUrl;
             /**
              * 是否
