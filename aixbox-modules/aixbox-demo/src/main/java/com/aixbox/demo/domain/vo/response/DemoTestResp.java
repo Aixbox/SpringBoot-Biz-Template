@@ -62,7 +62,6 @@ public class DemoTestResp {
                 /**
                  * 选择类型Url
                  */
-                @Translation(type = TransConstant.OSS_ID_TO_URL, mapper = "selectType")
                 private String selectTypeUrl;
             /**
              * 是否

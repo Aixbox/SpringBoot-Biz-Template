@@ -1,1 +1,2 @@
 com.aixbox.common.web.config.WebAutoConfiguration
+com.aixbox.common.captcha.config.CaptchaResourceConfig

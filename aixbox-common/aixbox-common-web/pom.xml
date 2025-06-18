@@ -40,6 +40,11 @@
             <artifactId>aixbox-common-json</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cloud.tianai.captcha</groupId>
+            <artifactId>tianai-captcha-springboot-starter</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
