@@ -1,14 +1,21 @@
 package com.aixbox.system.service.strategy;
 
 
+import cloud.tianai.captcha.application.ImageCaptchaApplication;
+import cloud.tianai.captcha.spring.plugins.secondary.SecondaryVerificationApplication;
 import cn.dev33.satoken.stp.SaLoginModel;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.crypto.digest.BCrypt;
+import com.aixbox.common.captcha.config.properties.CaptchaProperties;
+import com.aixbox.common.captcha.enums.CaptchaType;
+import com.aixbox.common.core.constant.Constants;
+import com.aixbox.common.core.constant.GlobalConstants;
 import com.aixbox.common.core.constant.SystemConstants;
 import com.aixbox.common.core.domain.model.LoginUser;
 import com.aixbox.common.core.utils.ValidatorUtils;
 import com.aixbox.common.core.utils.json.JsonUtils;
+import com.aixbox.common.redis.utils.RedisUtils;
 import com.aixbox.common.security.utils.LoginHelper;
 import com.aixbox.system.domain.entity.SysClient;
 import com.aixbox.system.domain.entity.SysUser;
@@ -23,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import static com.aixbox.common.core.exception.util.ServiceExceptionUtil.exception;
+import static com.aixbox.system.constant.ErrorCodeConstants.CAPTCHA_ERROR;
 import static com.aixbox.system.constant.ErrorCodeConstants.USERNAME_DISABLED;
 import static com.aixbox.system.constant.ErrorCodeConstants.USERNAME_NOT_EXIST;
 
@@ -36,6 +44,8 @@ public class PasswordAuthStrategy implements IAuthStrategy {
 
     private final SysUserMapper userMapper;
     private final SysLoginService loginService;
+    private final ImageCaptchaApplication imageCaptchaApplication;
+    private final CaptchaProperties captchaProperties;
 
 
     @Override
@@ -45,12 +55,13 @@ public class PasswordAuthStrategy implements IAuthStrategy {
 
         String username = loginBody.getUsername();
         String password = loginBody.getPassword();
-        String code = loginBody.getCode();
         String uuid = loginBody.getUuid();
 
-        //todo 集成pro的行为验证码功能
-
-
+        boolean captchaEnabled = captchaProperties.getEnabled();
+        // 验证码开关
+        if (captchaEnabled) {
+            validateCaptcha(uuid);
+        }
 
         SysUser user = loadUserByUsername(username);
         loginService.checkLogin(LoginType.PASSWORD, username, () -> !BCrypt.checkpw(password, user.getPassword()));
@@ -76,6 +87,19 @@ public class PasswordAuthStrategy implements IAuthStrategy {
         return loginVo;
 
     }
+
+    /**
+     * 校验验证码
+     * @param uuid     唯一标识
+     */
+    private void validateCaptcha(String uuid) {
+        if (CaptchaType.ACT.getType().equalsIgnoreCase(captchaProperties.getType()) && imageCaptchaApplication instanceof SecondaryVerificationApplication) {
+            if (!((SecondaryVerificationApplication) imageCaptchaApplication).secondaryVerification(uuid)) {
+                throw exception(CAPTCHA_ERROR);
+            }
+        }
+    }
+
 
 
     private SysUser loadUserByUsername(String username) {
