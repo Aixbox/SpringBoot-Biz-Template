@@ -3,12 +3,12 @@ spring:
     name: aixbox-admin
   profiles:
     active: dev
-  mvc:
-    format:
-      date-time: yyyy-MM-dd HH:mm:ss
-  jackson:
-    # 日期格式化
-    date-format: yyyy-MM-dd HH:mm:ss
+#  mvc:
+#    format:
+#      date-time: yyyy-MM-dd HH:mm:ss
+#  jackson:
+#    # 日期格式化
+#    date-format: yyyy-MM-dd HH:mm:ss
 
 aixbox:
   info:

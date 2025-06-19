@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
@@ -33,6 +34,7 @@ import static com.aixbox.common.core.pojo.CommonResult.success;
 @Validated
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/auth/captcha")
 public class CaptchaController {
 
     private final CaptchaProperties captchaProperties;
@@ -45,7 +47,7 @@ public class CaptchaController {
     /**
      * 生成行为验证码
      */
-    @PostMapping("/auth/captcha")
+    @PostMapping
     public CaptchaResponse<ImageCaptchaVO> getCaptcha() {
         if (!captchaProperties.getEnabled()) {
             throw new ServiceException("验证码未开启");
@@ -61,7 +63,7 @@ public class CaptchaController {
     /**
      * 校验行为验证码
      */
-    @PostMapping("/auth/verify")
+    @PostMapping("/verify")
     public ApiResponse<?> verify(@RequestBody CaptchaBo data) {
         ApiResponse<?> response = imageCaptchaApplication.matching(data.getId(), data.getData());
         if (response.isSuccess()) {

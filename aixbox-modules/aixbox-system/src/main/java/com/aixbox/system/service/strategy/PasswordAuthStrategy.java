@@ -13,6 +13,7 @@ import com.aixbox.common.core.constant.Constants;
 import com.aixbox.common.core.constant.GlobalConstants;
 import com.aixbox.common.core.constant.SystemConstants;
 import com.aixbox.common.core.domain.model.LoginUser;
+import com.aixbox.common.core.utils.StrUtils;
 import com.aixbox.common.core.utils.ValidatorUtils;
 import com.aixbox.common.core.utils.json.JsonUtils;
 import com.aixbox.common.redis.utils.RedisUtils;
@@ -93,8 +94,8 @@ public class PasswordAuthStrategy implements IAuthStrategy {
      * @param uuid     唯一标识
      */
     private void validateCaptcha(String uuid) {
-        if (CaptchaType.ACT.getType().equalsIgnoreCase(captchaProperties.getType()) && imageCaptchaApplication instanceof SecondaryVerificationApplication) {
-            if (!((SecondaryVerificationApplication) imageCaptchaApplication).secondaryVerification(uuid)) {
+        if (imageCaptchaApplication instanceof SecondaryVerificationApplication) {
+            if (StrUtils.isEmpty(uuid) || !((SecondaryVerificationApplication) imageCaptchaApplication).secondaryVerification(uuid)) {
                 throw exception(CAPTCHA_ERROR);
             }
         }
