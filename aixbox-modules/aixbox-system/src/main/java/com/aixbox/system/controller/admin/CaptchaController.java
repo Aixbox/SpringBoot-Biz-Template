@@ -9,10 +9,12 @@ import cn.dev33.satoken.annotation.SaIgnore;
 import com.aixbox.common.captcha.config.properties.CaptchaProperties;
 import com.aixbox.common.captcha.enums.CaptchaType;
 import com.aixbox.common.core.exception.ServiceException;
+import com.aixbox.common.core.pojo.CommonResult;
 import com.aixbox.system.domain.bo.CaptchaBo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +24,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static com.aixbox.common.core.pojo.CommonResult.error;
 import static com.aixbox.common.core.pojo.CommonResult.success;
+import static com.aixbox.system.constant.ErrorCodeConstants.CAPTCHA_ERROR;
 
 /**
  * 验证码操作处理
@@ -47,8 +51,8 @@ public class CaptchaController {
     /**
      * 生成行为验证码
      */
-    @PostMapping
-    public CaptchaResponse<ImageCaptchaVO> getCaptcha() {
+    @GetMapping
+    public CommonResult<CaptchaResponse<ImageCaptchaVO>> getCaptcha() {
         if (!captchaProperties.getEnabled()) {
             throw new ServiceException("验证码未开启");
         }
@@ -57,19 +61,19 @@ public class CaptchaController {
             type = Arrays.asList(CaptchaTypeConstant.SLIDER, CaptchaTypeConstant.CONCAT, CaptchaTypeConstant.ROTATE, CaptchaTypeConstant.WORD_IMAGE_CLICK)
                          .get(ThreadLocalRandom.current().nextInt(4));
         }
-        return imageCaptchaApplication.generateCaptcha(type);
+        return success(imageCaptchaApplication.generateCaptcha(type));
     }
 
     /**
      * 校验行为验证码
      */
     @PostMapping("/verify")
-    public ApiResponse<?> verify(@RequestBody CaptchaBo data) {
+    public CommonResult<?> verify(@RequestBody CaptchaBo data) {
         ApiResponse<?> response = imageCaptchaApplication.matching(data.getId(), data.getData());
         if (response.isSuccess()) {
-            return ApiResponse.ofSuccess(Collections.singletonMap("id", data.getId()));
+            return success(Collections.singletonMap("id", data.getId()));
         }
-        return response;
+        return error(CAPTCHA_ERROR);
     }
 
 }
